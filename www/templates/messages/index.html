@@ -1,0 +1,21 @@
+<ion-view view-title="Messages">
+  <ion-content>
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="refresh()"></ion-refresher>
+
+    <ion-list>
+      <ion-item ng-if="state.firstLoad == true" class="text-center">
+        <ion-spinner></ion-spinner>
+      </ion-item>
+
+      <ion-item class="item-avatar" ng-class="{'unread': provider.unread}" ng-repeat="provider in providers" ui-sref="app.messages({provider_slug: provider.slug})">
+        <img src="{{provider.logo}}">
+        <h2>{{provider.name}}</h2>
+        <!-- <p ng-hide="provider.unread == 0">{{provider.unread}} new messages</p> -->
+        <p>{{provider.recent_message_body}}</p>
+      </ion-item>
+      <ion-item ng-if="providers.length == 0 && state.firstLoad == false" class="text-center">
+        <h2>No messages present</h2>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

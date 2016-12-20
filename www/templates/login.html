@@ -1,0 +1,74 @@
+<ion-modal-view class="login-modal" ng-controller="loginCtrl">
+  <ion-content has-bouncing="false" class="login-view" scroll="false">
+
+    <div class="error-box" ng-if="state.error">
+      <p>{{state.error}}</p>
+    </div>
+
+    <div class="center-form">
+      <!-- <div>
+        <img src="img/denguechat_logo.png">
+      </div> -->
+
+      <form ng-submit="signup()" ng-if="state.name === 'signup'">
+        <div class="list list-inset">
+          <label class="item item-input">
+            <input type="email" placeholder="Email" ng-model="user.email">
+          </label>
+          <label class="item item-input">
+            <input type="password" placeholder="Password" ng-model="user.password">
+          </label>
+          <label class="item item-input">
+            <input type="password" placeholder="Password confirmation" ng-model="user.password_confirmation">
+          </label>
+        </div>
+
+        <div class="padding">
+          <button class="button button-balanced button-block" type="submit">
+            <span ng-hide="state.loading">Signup</span>
+            <ion-spinner icon="ios-small" class="spinner-stable" ng-show="state.loading"></ion-spinner>
+          </button>
+        </div>
+      </form>
+
+
+      <form ng-submit="login()" ng-if="state.name === 'login'">
+        <div class="list list-inset">
+          <label class="item item-input">
+            <input type="email" placeholder="Email" ng-model="user.email">
+          </label>
+          <label class="item item-input">
+            <input type="password" placeholder="Password" ng-model="user.password">
+          </label>
+        </div>
+
+        <div class="padding">
+          <button class="button button-balanced button-block" type="submit">
+            <span ng-hide="state.loading">Login</span>
+            <ion-spinner icon="ios-small" class="spinner-stable" ng-show="state.loading"></ion-spinner>
+          </button>
+        </div>
+      </form>
+
+
+
+      <div class="padding text-center">
+        <a ng-click="toggleTo('login')" href="#" ng-if="state.name === 'signup'">
+          Already have an account?
+        </a>
+        <a ng-click="toggleTo('signup')" href="#" ng-if="state.name === 'login'">
+          Create an account
+        </a>
+      </div>
+
+      <div class="padding text-center text-light" ng-if="state.name === 'login'">
+        <a onclick="window.open('https://www.denguechat.com/password/new', '_blank', 'location=yes');" href="#">
+          Forgot password?
+        </a>
+      </div>
+
+    </div>
+
+
+  </ion-content>
+</ion-modal-view>

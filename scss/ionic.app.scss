@@ -1,0 +1,239 @@
+/*
+To customize the look and feel of Ionic, you can override the variables
+in ionic's _variables.scss file.
+
+For example, you might change some of the default colors:
+
+$light:                           #fff !default;
+$stable:                          #f8f8f8 !default;
+$positive:                        #387ef5 !default;
+$calm:                            #11c1f3 !default;
+$balanced:                        #33cd5f !default;
+$energized:                       #ffc900 !default;
+$assertive:                       #ef473a !default;
+$royal:                           #886aea !default;
+$dark:                            #444 !default;
+*/
+
+// The path for our ionicons font files, relative to the built CSS in www/css
+$ionicons-font-path: "../lib/ionic/fonts" !default;
+
+// Include all of Ionic
+@import "www/lib/ionic/scss/ionic";
+
+.bottom-form{
+    position:absolute;
+    bottom:0px;
+    display:block;
+    width:100%;
+    background-color:white;
+    button{
+        margin:0px !important;
+    }
+}
+
+.writing-message {
+
+  textarea {
+    vertical-align: middle;
+    width: 100%;
+  }
+
+  .item-input-wrapper {
+    background-color: white;
+    margin-top: 5px;
+  }
+}
+
+
+
+.messages-view {
+  height: calc(100% - 96px);
+  // overflow:scroll;
+
+
+  .timestamp {
+    font-size: 12px;
+    color: #aaa7a7 !important;
+    margin-bottom: 0px;
+  }
+
+  .messages {
+    display: -webkit-box !important;
+    display: -moz-box !important;
+    display: -ms-flexbox !important;
+    display: -webkit-flex !important;
+    display: flex !important;
+    -webkit-align-content: center !important;
+    -ms-flex-line-pack: center !important;
+    align-content: center !important;
+    -webkit-box-align: center !important;
+    -moz-box-align: center !important;
+    -webkit-align-items: center !important;
+    -ms-flex-align: center !important;
+    align-items: center !important;
+
+    .message {
+      -webkit-box-flex: 1 !important;
+      -moz-box-flex: 1 !important;
+      -webkit-flex: 1 1 auto !important;
+      -ms-flex: 1 1 auto !important;
+      flex: 1 1 auto !important;
+      padding: 10px !important;
+      -webkit-transition: all 250ms ease-in-out !important;
+      transition: all 250ms ease-in-out !important;
+      overflow: hidden !important;
+      text-align: left !important;
+      -webkit-transform: translate3d(0, 0, 0) !important;
+      -moz-transform: translate3d(0, 0, 0) !important;
+      transform: translate3d(0, 0, 0) !important;
+    }
+  }
+
+  //This will change
+  .messages.other {
+    .message {
+      -webkit-transform: translate3d(0, 0, 0) !important;
+      -moz-transform: translate3d(0, 0, 0) !important;
+      transform: translate3d(0, 0, 0) !important;
+      text-align: right !important;
+    }
+    .message.slide-right {
+      -webkit-transform: translate3d(120px, 0, 0) !important;
+      -moz-transform: translate3d(120px, 0, 0) !important;
+      transform: translate3d(120px, 0, 0) !important;
+    }
+
+    .message-body {
+      color: #fefeff !important;
+      background-color: #4080ff !important;
+    }
+  }
+
+  .message-body {
+    background: #f1f0f0 !important;
+    display: inline-block !important;
+    color: #4b4f56 !important;
+    padding: 10px !important;
+    border-radius: 10px !important;
+    text-align: left !important;
+    max-width: 240px !important;
+
+    // General CSS
+    a {
+      display: block;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+
+  }
+}
+
+.top-container{
+    height: calc(100% - 96px);
+    overflow:scroll;
+}
+
+.bottom-form{
+  position:absolute;
+  bottom:0px;
+  display:block;
+  width:100%;
+  background-color:white;
+  button{
+    margin:0px !important;
+  }
+
+  .item-input-wrapper {
+    background: white;
+  }
+
+}
+
+//
+
+.unread {
+  h2 {
+    font-weight: bold;
+  }
+
+  p {
+    font-weight: bold;
+  }
+}
+
+
+
+
+@media (min-width: 680px) {
+  .login-modal {
+    top: 0%;
+    right: 0%;
+    bottom: 0%;
+    left: 0%;
+    min-height: 100%;
+    width: 100%;
+  }
+}
+
+
+
+
+.login-view {
+  background: url("../img/background.jpeg") no-repeat center;
+  background-size:cover;
+
+  a {
+    color: $stable;
+  }
+
+  img {
+    width:50%;
+    height:auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+
+  .center-form{
+    width: 290px;
+    // width: 80%;
+    // margin:auto;
+    // top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, 40%);
+
+    label{
+      background-color: rgba(255,255,255,0.7);
+      border-color: rgba(255,255,255,0);
+
+      &.top-input{
+        border-radius: 4px 4px 0px 0px !important;
+      }
+
+      &.bottom-input{
+        border-radius: 0px 0px 4px 4px !important;
+      }
+    }
+
+    .button-positive{
+      opacity:0.9;
+    }
+  }
+
+  .error-box{
+      padding:10px;
+      border:1px solid darken($assertive, 10%);
+      background-color: $assertive;
+      border-radius:0px;
+      margin-bottom:10px;
+
+      p{
+        color:white;
+        margin:0px;
+      }
+  }

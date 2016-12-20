@@ -1,0 +1,79 @@
+<ion-view view-title="{{provider.name}}">
+
+  <ion-content class="messages-view">
+    <ion-item ng-if="state.firstLoad == true" class="text-center">
+      <ion-spinner></ion-spinner>
+    </ion-item>
+
+    <div scroll-glue>
+      <ion-refresher pulling-text="Load more..." on-refresh="loadMore()"></ion-refresher>
+      <div ng-repeat="message in messages track by $index"  ng-class="{other: message.is_participant == true}" class="messages">
+        <div class="message">
+          <span class="message-body">
+            {{message.body}}
+            <a ui-sref="app.event({slug: message.event_id})" ng-if="message.event_id">
+              View event
+            </a>
+            <a ui-sref="app.record({id: message.record_id})" ng-if="message.record_id">
+              View results
+            </a>
+          </span>
+          <p class="timestamp">
+            {{message.timestamp}}
+          </p>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+
+  <ion-footer-bar keyboard-attach class="bar bar-footer item-input-inset writing-message" ng-if="provider.slug == 'clovi'">
+    <label class="item-input-wrapper">
+      <textarea type="text" ng-model="comment.content" placeholder="Write a message..."></textarea>
+    </label>
+    <button class="button button-small button-positive" ng-click="createMessage()" ng-disabled="!comment.content">
+      Send
+    </button>
+  </ion-footer-bar>
+
+
+  <!-- NOTE: This uses Ionic Creator video tutorial chat.  -->
+  <!-- <ion-content scroll="false">
+    <ion-item ng-if="state.firstLoad == true" class="text-center">
+      <ion-spinner></ion-spinner>
+    </ion-item>
+
+    <div class="top-container messages-view" scroll-glue>
+      <ion-refresher pulling-text="Load more..." on-refresh="loadMore()"></ion-refresher>
+      <div ng-repeat="message in messages track by $index"  ng-class="{other: message.is_participant == true}" class="messages">
+        <div class="message">
+          <span class="message-body">
+            {{message.body}}
+            <a ui-sref="app.event({slug: message.event_id})" ng-if="message.event_id">
+              View event
+            </a>
+            <a ui-sref="app.record({id: message.record_id})" ng-if="message.record_id">
+              View results
+            </a>
+          </span>
+          <p class="timestamp">
+            {{message.timestamp}}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-form">
+      <div class="item item-input-inset">
+        <label class="item-input-wrapper">
+          <input type="text" ng-model="comment.content" placeholder="Write a message..." ng-keypress="trackEnterKey($event)">
+        </label>
+        <button class="button button-small button-positive" ng-click="createMessage()" ng-disabled="!comment.content">
+          Send
+        </button>
+      </div>
+    </div>
+
+  </ion-content> -->
+
+
+</ion-view>
