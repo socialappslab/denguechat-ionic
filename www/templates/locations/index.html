@@ -1,0 +1,37 @@
+<ion-view view-title="Locations">
+  <div class="content bar-subheader">
+    <form ng-submit="searchByAddress()">
+      <div class="list">
+        <div class="item item-input-inset">
+          <label class="item-input-wrapper">
+            <i class="icon ion-ios-search placeholder-icon"></i>
+            <input type="text" ng-model="params.search" placeholder="Search by address...">
+          </label>
+          <button type="submit" class="button button-small button-clear button-positive" ng-disabled="params.search.length == 0">
+            Search
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <ion-content class="has-subheader">
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="refresh()"></ion-refresher>
+
+    <ion-list>
+      <ion-item ng-if="state.firstLoad == true || state.loading == true" class="text-center">
+        <ion-spinner></ion-spinner>
+      </ion-item>
+
+      <ion-item class="item-icon-right" ng-repeat="location in locations" ui-sref="app.location({id: location.id})">
+        <h2>{{location.address}}</h2>
+        <p>Last visited on {{location.last_visited_at}}</p>
+        <p>{{location.visits_count}} visits total</p>
+        <i class="icon ion-ios-arrow-right"></i>
+      </ion-item>
+      <ion-item ng-if="locations.length == 0 && state.firstLoad == false && state.loading == false" class="text-center">
+        <h2>No locations found</h2>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

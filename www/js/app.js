@@ -21,6 +21,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
+    if (!navigator.notification) {
+      navigator.notification = window
+    }
   });
 
   //----------------------------------------------------------------------------\
@@ -52,6 +56,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
           $rootScope.modal.show();
         })
       }
+    } else if (response.error.status === 422) {
+      navigator.notification.alert(response.error.data.message, null, "Server not responding", "OK")
     } else if (response.error.status === -1) {
       navigator.notification.alert("We couldn't reach the server. Try again later.", null, "Server not responding", "OK")
     } else {
@@ -80,7 +86,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 })
 .config(function($stateProvider, $urlRouterProvider) {
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/visits')
+  $urlRouterProvider.otherwise('/app/locations')
   $stateProvider
   .state('app', {
     url: '/app',
@@ -106,4 +112,23 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       }
     }
   })
+  .state('app.locations', {
+    url: '/locations',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/locations/index.html',
+        controller: 'locationsCtrl'
+      }
+    }
+  })
+  .state('app.location', {
+    url: '/location/:id',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/locations/show.html',
+        controller: 'locationCtrl'
+      }
+    }
+  })
+
 });
