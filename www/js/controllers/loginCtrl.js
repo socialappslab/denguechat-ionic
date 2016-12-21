@@ -1,19 +1,20 @@
 angular.module('starter.controllers')
-.controller('loginCtrl', function($scope, Participant) {
-  $scope.state = {loading: false, name: "login"}
+.controller('loginCtrl', function($scope, User) {
+  $scope.state = {loading: false, error: null}
   $scope.user  = {}
+  $scope.view  = "login"
 
   $scope.toggleTo = function(name) {
     $scope.state.error = null
-    $scope.state.name  = name
+    $scope.view        = name
   }
 
   $scope.login = function(){
     $scope.state = {loading: true, error: null}
-    Participant.session($scope.user.email, $scope.user.password).then(function(response) {
-      $scope.$emit(clovi.env.auth.success, {token: response.data.device_session.token})
+    User.session($scope.user.username, $scope.user.password).then(function(response) {
+      $scope.$emit(denguechat.env.auth.success, {token: response.data.token})
     }, function(error) {
-      $scope.state.error = error.data.error
+      $scope.state.error = error.data.message
     }).finally(function() {
       $scope.state.loading = false;
     })
@@ -28,11 +29,11 @@ angular.module('starter.controllers')
     $scope.state.loading = true
     $scope.state.error   = true
 
-    Participant.create($scope.user.email, $scope.user.password).then(function(response) {
+    User.create($scope.user.username, $scope.user.password).then(function(response) {
       $scope.login()
     }, function(error) {
-      if (error.data.errors.email)
-        $scope.state.error = "Email " + error.data.errors.email[0]
+      if (error.data.errors.username)
+        $scope.state.error = "Username " + error.data.errors.username[0]
       else if (error.data.errors.password)
           $scope.state.error = "Password " + error.data.errors.password[0]
     }).finally(function() {

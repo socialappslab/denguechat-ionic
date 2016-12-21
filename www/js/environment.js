@@ -1,5 +1,5 @@
-clovi = {};
-clovi.env = {
+denguechat = {};
+denguechat.env = {
   error: "error",
   auth: {
     success: "auth:success",

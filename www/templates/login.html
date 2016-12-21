@@ -6,14 +6,10 @@
     </div>
 
     <div class="center-form">
-      <!-- <div>
-        <img src="img/denguechat_logo.png">
-      </div> -->
-
-      <form ng-submit="signup()" ng-if="state.name === 'signup'">
+      <form ng-submit="signup()" ng-if="view === 'signup'">
         <div class="list list-inset">
           <label class="item item-input">
-            <input type="email" placeholder="Email" ng-model="user.email">
+            <input type="text" placeholder="Username" ng-model="user.username">
           </label>
           <label class="item item-input">
             <input type="password" placeholder="Password" ng-model="user.password">
@@ -32,10 +28,13 @@
       </form>
 
 
-      <form ng-submit="login()" ng-if="state.name === 'login'">
+      <form ng-submit="login()" ng-if="view === 'login'">
         <div class="list list-inset">
+          <!-- <label class="item item-input text-center">
+            <img class="icon ion-image" src="img/denguechat.png"></img>
+          </label> -->
           <label class="item item-input">
-            <input type="email" placeholder="Email" ng-model="user.email">
+            <input type="text" placeholder="Username" ng-model="user.username">
           </label>
           <label class="item item-input">
             <input type="password" placeholder="Password" ng-model="user.password">
@@ -53,15 +52,15 @@
 
 
       <div class="padding text-center">
-        <a ng-click="toggleTo('login')" href="#" ng-if="state.name === 'signup'">
+        <a ng-click="toggleTo('login')" href="#" ng-if="view === 'signup'">
           Already have an account?
         </a>
-        <a ng-click="toggleTo('signup')" href="#" ng-if="state.name === 'login'">
+        <a ng-click="toggleTo('signup')" href="#" ng-if="view === 'login'">
           Create an account
         </a>
       </div>
 
-      <div class="padding text-center text-light" ng-if="state.name === 'login'">
+      <div class="padding text-center text-light" ng-if="view === 'login'">
         <a onclick="window.open('https://www.denguechat.com/password/new', '_blank', 'location=yes');" href="#">
           Forgot password?
         </a>

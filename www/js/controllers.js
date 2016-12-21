@@ -1,11 +1,11 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $state, $ionicHistory, $timeout, Participant) {
+.controller('AppCtrl', function($scope, $state, $ionicHistory, $timeout, User) {
 
   $scope.logout = function() {
-    Participant.logout().then(function() {
+    User.logout().then(function() {
       $ionicHistory.clearCache().then(function(response) {
-        $scope.$emit(clovi.env.auth.failure, {})
+        $scope.$emit(denguechat.env.auth.failure, {})
       })
     })
   };

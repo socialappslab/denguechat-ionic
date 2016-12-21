@@ -9922,7 +9922,7 @@ a.button {
     width: 100%; } }
 
 .login-view {
-  background: url("../img/background.jpeg") no-repeat center;
+  background: url("../img/background.png") no-repeat center;
   background-size: cover; }
   .login-view a {
     color: #f8f8f8; }

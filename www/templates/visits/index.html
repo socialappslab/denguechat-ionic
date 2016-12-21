@@ -1,0 +1,21 @@
+<ion-view view-title="Visits">
+  <ion-content>
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="refresh()"></ion-refresher>
+
+    <ion-list>
+      <ion-item ng-if="state.firstLoad == true" class="text-center">
+        <ion-spinner></ion-spinner>
+      </ion-item>
+
+      <ion-item class="item-icon-right" ng-repeat="visit in visits" ui-sref="app.visit({id: visit.id})">
+        <h2>{{visit.visited_at}}</h2>
+        <p>{{visit.location}}</p>
+        <p>{{visit.inspections}} inspections</p>
+        <i class="icon ion-ios-arrow-right"></i>
+      </ion-item>
+      <ion-item ng-if="visits.length == 0 && state.firstLoad == false" class="text-center">
+        <h2>No visits found</h2>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

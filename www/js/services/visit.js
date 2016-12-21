@@ -6,23 +6,23 @@ is returned via password authentication:
 https://www.firebase.com/docs/web/guide/login/password.html
 */
 angular.module('starter.services')
-.factory('Event', function($http, Participant) {
+.factory('Visit', function($http, User) {
   return {
-    get: function(slug) {
-      if (slug) {
+    get: function(id) {
+      if (id) {
         return $http({
           method: "GET",
-          url:    clovi.env.baseURL + "events/" + slug,
+          url:    denguechat.env.baseURL + "visits/" + id,
           headers: {
-           "Clovi-API-V0-Device-Session-Token": Participant.getToken()
+           "Authorization": "Bearer " + User.getToken()
          }
         })
       } else {
         return $http({
           method: "GET",
-          url:    clovi.env.baseURL + "events",
+          url:    denguechat.env.baseURL + "visits",
           headers: {
-           "Clovi-API-V0-Device-Session-Token": Participant.getToken()
+           "Authorization": "Bearer " + User.getToken()
          }
         })
       }
