@@ -106,4 +106,14 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       }
     }
   })
+  .state('app.locations', {
+    url: '/locations',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/locations/index.html',
+        controller: 'locationsCtrl'
+      }
+    }
+  })
+
 });
