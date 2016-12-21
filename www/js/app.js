@@ -80,7 +80,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 })
 .config(function($stateProvider, $urlRouterProvider) {
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/visits')
+  $urlRouterProvider.otherwise('/app/locations')
   $stateProvider
   .state('app', {
     url: '/app',
