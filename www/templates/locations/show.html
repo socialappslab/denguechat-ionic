@@ -1,14 +1,15 @@
 <ion-view view-title="Location">
-  <ion-content>
-    <ion-refresher pulling-text="Pull to refresh..." on-refresh="refresh()"></ion-refresher>
-
-    <div class="item text-center" ng-if="state.firstLoad == true">
-      <ion-spinner></ion-spinner>
+  <div class="tabs-striped tabs-top">
+    <div class="tabs">
+      <a class="tab-item" ui-sref-active="active" ui-sref="app.location.visits">
+        Visits
+      </a>
+      <a class="tab-item" ui-sref-active="active" ui-sref="app.location.questions">
+        Questions
+      </a>
     </div>
+  </div>
 
-    <div>
-      {{location}}
-    </div>
-
-  </ion-content>
+  <div ui-view name="visits"></div>
+  <div ui-view name="questions"></div>
 </ion-view>

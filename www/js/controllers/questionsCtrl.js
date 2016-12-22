@@ -1,14 +1,14 @@
 angular.module('starter.controllers')
-.controller('locationCtrl', ['$scope', "$state", 'Location', function($scope, $state, Location) {
+.controller('questionsCtrl', ['$scope', "$state", 'Location', function($scope, $state, Location) {
   $scope.location = {};
-  $scope.state    = {firstLoad: true};
-  $scope.params   = {search: ""};
+  $scope.state  = {firstLoad: true};
+  $scope.params = {search: ""};
 
   $scope.refresh = function() {
     $scope.state.loading = true
     Location.get($state.params.id).then(function(response) {
+      console.log(response)
       $scope.location = response.data.location
-      $scope.visits   = response.data.location.visits
     }, function(response) {
       $scope.$emit(denguechat.env.error, {error: response})
     }).finally(function() {
