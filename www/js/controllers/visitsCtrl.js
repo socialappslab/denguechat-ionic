@@ -2,6 +2,19 @@ angular.module('starter.controllers')
 .controller('visitsCtrl', ['$scope', 'Visit', function($scope, Visit) {
   $scope.visits = [];
   $scope.state  = {firstLoad: true};
+  $scope.params = {search: ""};
+
+  $scope.searchByDate = function() {
+    $scope.visits     = []
+    $scope.state.loading = true
+    Visit.search($scope.params.search).then(function(response) {
+      $scope.visits = response.data.visits
+    }, function(response) {
+      $scope.$emit(denguechat.env.error, {error: response})
+    }).finally(function() {
+     $scope.state.loading = false;
+    });
+  }
 
   $scope.refresh = function() {
     Visit.get().then(function(response) {
@@ -24,4 +37,11 @@ angular.module('starter.controllers')
   $scope.$on("$ionicView.loaded", function() {
     $scope.refresh();
   })
+
+  $scope.$watch("params.search", function(newValue, oldValue) {
+    if (newValue == "" || newValue == null) {
+      $scope.refresh()
+    }
+  })
+
 }])

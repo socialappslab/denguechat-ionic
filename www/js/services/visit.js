@@ -8,6 +8,15 @@ https://www.firebase.com/docs/web/guide/login/password.html
 angular.module('starter.services')
 .factory('Visit', function($http, User) {
   return {
+    search: function(query) {
+      return $http({
+        method: "GET",
+        url:    denguechat.env.baseURL + "visits/search?date=" + query,
+        headers: {
+         "Authorization": "Bearer " + User.getToken()
+       }
+      })
+    },
     get: function(id) {
       if (id) {
         return $http({
