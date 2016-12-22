@@ -1,14 +1,17 @@
-<ion-view view-title="Visit">
+<ion-view view-title="{{visit.visited_at}}">
   <ion-content>
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="refresh()"></ion-refresher>
 
     <div class="item text-center" ng-if="state.firstLoad == true">
       <ion-spinner></ion-spinner>
     </div>
-
-    <div>
-      {{visit}}
-    </div>
+    <ion-item class="item-icon-left" ng-repeat="ins in visit.inspections">
+      <i class="icon ion-ios-circle-filled" ng-style="{'color': ins.color}"></i>
+      <h2>{{ins.report.breeding_site.description}}</h2>
+      <p>{{ins.report.field_identifier}}</p>
+      <p>{{ins.report.report}}</p>
+      <!-- <i class="icon ion-ios-arrow-right"></i> -->
+    </ion-item>
 
   </ion-content>
 </ion-view>
