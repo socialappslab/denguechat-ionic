@@ -21,7 +21,7 @@ angular.module('starter.services')
       if (id) {
         return $http({
           method: "GET",
-          url:    denguechat.env.baseURL + "location/" + id,
+          url:    denguechat.env.baseURL + "locations/" + id,
           headers: {
            "Authorization": "Bearer " + User.getToken()
          }
