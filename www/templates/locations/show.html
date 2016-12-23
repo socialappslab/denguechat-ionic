@@ -14,14 +14,14 @@
   </ion-nav-buttons>
 
 
-  <ion-content class="has-subheader">
+  <ion-content class="has-subheader has-footer">
     <ion-slide-box on-slide-changed="changeTimeline($index)" does-continue="false" show-pager="false">
       <ion-slide>
         <ion-list>
-          <div class="item item-balanced text-center" style="font-weight: 500; font-size:17px;" ui-sref="app.visits.new">
+          <!-- <div class="item item-balanced text-center" style="font-weight: 500; font-size:17px;" ui-sref="app.visits.new">
             <i class="icon ion-plus"></i>
             Add a visit
-          </div>
+          </div> -->
 
           <ion-item class="item-icon-right item-icon-left" ng-repeat="visit in visits" ui-sref="app.visit({id: visit.id})">
             <i class="icon ion-ios-circle-filled" ng-style="{'color': visit.color}"></i>
@@ -38,31 +38,32 @@
 
 
       <ion-slide>
-        <div class="list">
-          <div ng-repeat="q in questions">
-            <label class="item item-input item-stacked-label">
-              <span class="input-label">{{q.body}}</span>
-              <input type="text" ng-if="q.type == 'text'">
-              <input type="number" min="0" ng-if="q.type == 'number'">
-              <input type="date" ng-if="q.type == 'date'">
-              <div class="button-bar" ng-if="q.type == 'radio'">
-                <a class="button" ng-model="ac.answer" ng-if="q.type == 'radio'" ng-value="ac.id" ng-repeat="ac in q.answer_choices"  ng-class="{'button-balanced': ac.answer == ac.id}">{{ac.body}}</a>
+        <div class="list" style="overflow-y:scroll; height: 100%;">
+          <div ng-repeat="q in location.questions">
+            <div class="item item-divider" ng-if="!q.parent">
+              {{q.body}}
+            </div>
+
+            <div class="item" ng-if="q.type == 'radio'" ng-show="shouldDisplay(q)">
+              <h2 ng-if="!!q.parent">{{q.body}}</h2>
+              <div class="row">
+                <div class="col">
+                  <div class="text-center">
+                    <button class="button" style="margin-right: 5px;" ng-repeat="ac in q.answer_choices" ng-class="{'button-balanced': ac.id == q.answer}" ng-click="q.answer = ac.id">
+                      {{ac.body}}
+                    </button>
+                  </div>
+                </div>
               </div>
+            </div>
+
+            <label class="item item-input item-stacked-label" ng-if="q.type != 'radio'" ng-show="shouldDisplay(q)">
+              <span class="input-label">{{q.body}}</span>
+              <input type="text" ng-if="q.type == 'text'" ng-model="q.answer">
+              <input type="number" min="0" ng-if="q.type == 'number'" ng-model="q.answer">
+              <input type="date" ng-if="q.type == 'date'" ng-model="q.answer">
             </label>
           </div>
-
-          <label class="item item-input item-floating-label">
-            <span class="input-label">First Name</span>
-            <input type="text" placeholder="First Name">
-          </label>
-          <label class="item item-input item-floating-label">
-            <span class="input-label">Last Name</span>
-            <input type="text" placeholder="Last Name">
-          </label>
-          <label class="item item-input item-floating-label">
-            <span class="input-label">Email</span>
-            <input type="text" placeholder="Email">
-          </label>
         </div>
 
 
@@ -70,6 +71,11 @@
     </ion-slide-box>
 
   </ion-content>
+
+  <div class="bar bar-footer bar-balanced">
+    <div class="title" ng-if="state.pageIndex == 0" ui-sref="app.visits.new">Add a visit</div>
+    <div class="title" ng-click="saveQuestions()" ng-if="state.pageIndex == 1">Save questions</div>
+  </div>
 
   <!-- <div class="tabs-striped tabs-top">
     <div class="tabs">

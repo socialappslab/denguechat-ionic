@@ -17,8 +17,24 @@ angular.module('starter.services')
        }
       })
     },
-    shouldDisplay: function(code) {
-      
+    shouldDisplay: function(question, questions) {
+      if (question.code == "informed_consent")
+        return true
+
+      for (var i=0; i < questions.length; i++) {
+        if (questions[i].code == "informed_consent" && questions[i].answer == 1)
+          return false
+      }
+
+      if (!question.parent)
+        return true
+
+      for (var i=0; i < questions.length; i++) {
+        if (questions[i].code == question.parent.code)
+          parentQ = questions[i]
+      }
+
+      return question.parent.display.indexOf(parentQ.answer) != -1
     }
   };
 })
