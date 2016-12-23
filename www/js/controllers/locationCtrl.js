@@ -1,5 +1,5 @@
 angular.module('starter.controllers')
-.controller('locationCtrl', ['$scope', "$state", 'Location', '$ionicHistory', "$ionicSlideBoxDelegate", function($scope, $state, Location, $ionicHistory, $ionicSlideBoxDelegate) {
+.controller('locationCtrl', ['$scope', "$state", 'Location', '$ionicHistory', "$ionicSlideBoxDelegate", 'LocationQuiz', function($scope, $state, Location, $ionicHistory, $ionicSlideBoxDelegate, LocationQuiz) {
   $scope.location = {};
   $scope.state    = {firstLoad: true, pageIndex: 0};
   $scope.params   = {search: ""};
@@ -12,6 +12,12 @@ angular.module('starter.controllers')
   $scope.transitionToPageIndex = function(pageIndex) {
     $scope.state.pageIndex = pageIndex
     $ionicSlideBoxDelegate.slide(pageIndex);
+  }
+
+  $scope.transitionToPageIndex(1)
+
+  $scope.shouldDisplay = function(q) {
+    return LocationQuiz.shouldDisplay(q, $scope.questions)
   }
 
   $scope.refresh = function() {
