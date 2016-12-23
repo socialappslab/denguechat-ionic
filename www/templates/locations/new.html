@@ -1,0 +1,40 @@
+<ion-view view-title="Add a location">
+  <ion-content class="has-footer">
+    <div class="list">
+      <label class="item item-input">
+        <span class="input-label">Address</span>
+        <input type="text" class="text-right" ng-model="location.address">
+      </label>
+      <label class="item item-input item-select">
+        <div class="input-label">Neighborhood</div>
+        <!-- <select>
+          <option ng-repeat="n in neighborhoods" value="{{n.id}}" ng-model="location.neighborhood_id">{{n.name}}</option>
+        </select> -->
+        <select ng-model="location.neighborhood_id" ng-options="n.id as n.name for n in neighborhoods" disabled="true"></select>
+      </label>
+
+
+      <div class="item row">
+        <div class="col">
+          <label class="item-input">
+            <input type="text" placeholder="Latitude">
+          </label>
+        </div>
+        <div class="col">
+          <label class="item-input">
+            <input type="text" placeholder="Longitude">
+          </label>
+        </div>
+        <div class="col">
+          <button class="button button-block button-small button-stable" ng-click="loadMap()">
+            <i class="icon ion-ios-navigate-outline"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+
+    <div class="bar bar-footer bar-balanced">
+      <div class="title" ng-click="create()">Create</div>
+    </div>
+</ion-view>

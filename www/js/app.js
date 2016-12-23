@@ -121,6 +121,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       }
     }
   })
+  .state('app.locations.new', {
+    url: '/new',
+    views: {
+      'menuContent@app': {
+        templateUrl: 'templates/locations/new.html',
+        controller: 'newLocationCtrl'
+      }
+    }
+  })
   .state('app.location', {
     url: '/location/:id',
     onEnter: ['$state', function($state) {
