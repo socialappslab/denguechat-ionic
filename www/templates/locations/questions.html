@@ -1,32 +1,28 @@
-<ion-view view-title="Add a location">
-  <ion-content>
-    <div class="list">
-      <div ng-repeat="q in questions">
-        <label class="item item-input item-stacked-label">
-          <span class="input-label">{{q.body}}</span>
-          <input type="text" ng-if="q.type == 'text'">
-          <input type="number" min="0" ng-if="q.type == 'number'">
-          <input type="date" ng-if="q.type == 'date'">
-          <div class="button-bar" ng-if="q.type == 'radio'">
-            <a class="button" ng-model="ac.answer" ng-if="q.type == 'radio'" ng-value="ac.id" ng-repeat="ac in q.answer_choices"  ng-class="{'button-balanced': ac.answer == ac.id}">{{ac.body}}</a>
-          </div>
-        </label>
-
-
-      </div>
-
-      <label class="item item-input item-floating-label">
-        <span class="input-label">First Name</span>
-        <input type="text" placeholder="First Name">
-      </label>
-      <label class="item item-input item-floating-label">
-        <span class="input-label">Last Name</span>
-        <input type="text" placeholder="Last Name">
-      </label>
-      <label class="item item-input item-floating-label">
-        <span class="input-label">Email</span>
-        <input type="text" placeholder="Email">
+<ion-content class="has-subheader">
+  <div class="list">
+    <div ng-repeat="q in questions">
+      <label class="item item-input item-stacked-label">
+        <span class="input-label">{{q.body}}</span>
+        <input type="text" ng-if="q.type == 'text'">
+        <input type="number" min="0" ng-if="q.type == 'number'">
+        <input type="date" ng-if="q.type == 'date'">
+        <div class="button-bar" ng-if="q.type == 'radio'">
+          <a class="button" ng-model="ac.answer" ng-if="q.type == 'radio'" ng-value="ac.id" ng-repeat="ac in q.answer_choices"  ng-class="{'button-balanced': ac.answer == ac.id}">{{ac.body}}</a>
+        </div>
       </label>
     </div>
-  </ion-content>
-</ion-view>
+
+    <label class="item item-input item-floating-label">
+      <span class="input-label">First Name</span>
+      <input type="text" placeholder="First Name">
+    </label>
+    <label class="item item-input item-floating-label">
+      <span class="input-label">Last Name</span>
+      <input type="text" placeholder="Last Name">
+    </label>
+    <label class="item item-input item-floating-label">
+      <span class="input-label">Email</span>
+      <input type="text" placeholder="Email">
+    </label>
+  </div>
+</ion-content>
