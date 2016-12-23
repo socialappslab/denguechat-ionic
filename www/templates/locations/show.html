@@ -14,14 +14,14 @@
   </ion-nav-buttons>
 
 
-  <ion-content class="has-subheader">
+  <ion-content class="has-subheader has-footer">
     <ion-slide-box on-slide-changed="changeTimeline($index)" does-continue="false" show-pager="false">
       <ion-slide>
         <ion-list>
-          <div class="item item-balanced text-center" style="font-weight: 500; font-size:17px;" ui-sref="app.visits.new">
+          <!-- <div class="item item-balanced text-center" style="font-weight: 500; font-size:17px;" ui-sref="app.visits.new">
             <i class="icon ion-plus"></i>
             Add a visit
-          </div>
+          </div> -->
 
           <ion-item class="item-icon-right item-icon-left" ng-repeat="visit in visits" ui-sref="app.visit({id: visit.id})">
             <i class="icon ion-ios-circle-filled" ng-style="{'color': visit.color}"></i>
@@ -71,6 +71,11 @@
     </ion-slide-box>
 
   </ion-content>
+
+  <div class="bar bar-footer bar-balanced">
+    <div class="title" ng-if="state.pageIndex == 0" ui-sref="app.visits.new">Add a visit</div>
+    <div class="title" ng-click="saveQuestions()" ng-if="state.pageIndex == 1">Save questions</div>
+  </div>
 
   <!-- <div class="tabs-striped tabs-top">
     <div class="tabs">
