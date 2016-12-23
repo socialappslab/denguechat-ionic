@@ -59,6 +59,15 @@ angular.module('starter.services')
       }).finally(function(response) {
         user.setToken(null);
       })
-    }
+    },
+    current: function() {
+      return $http({
+        method: "GET",
+        url:    denguechat.env.baseURL + "sessions/current",
+        headers: {
+         "Authorization": "Bearer " + this.getToken()
+        }
+      })
+    },
   };
 })
