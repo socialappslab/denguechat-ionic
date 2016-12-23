@@ -1,20 +1,19 @@
 angular.module('starter.controllers')
-.controller('editLocationCtrl', ['$scope', "$state", 'User', 'Location', '$ionicModal', '$rootScope', function($scope, $state, User, Location, $ionicModal, $rootScope) {
+.controller('editLocationCtrl', ['$scope', "$state", 'User', 'Location', '$ionicModal', '$rootScope', '$ionicLoading', function($scope, $state, User, Location, $ionicModal, $rootScope, $ionicLoading) {
   $scope.location      = {};
   $scope.neighborhoods = Location.neighborhoods;
-  $scope.state = {loading: false};
+  $scope.state = {loading: false, viewName: null};
 
   $scope.refresh = function() {
-    $scope.state.loading = true;
-
-    console.log($state.params.id)
+    $ionicLoading.show()
 
     Location.get($state.params.id).then(function(response) {
-      $scope.location  = response.data.location
+      $scope.location       = response.data.location
+      $scope.state.viewName = $scope.location.address
     }, function(response) {
       $scope.$emit(denguechat.env.error, {error: response})
     }).finally(function(){
-      $scope.state.loading = false;
+      $ionicLoading.hide()
     })
   }
   $scope.refresh()
@@ -40,13 +39,13 @@ angular.module('starter.controllers')
 
 
   $scope.update = function() {
-    $scope.state.loading = true;
+    $ionicLoading.show()
 
     Location.update($scope.location).then(function(response) {
     }, function(response) {
       $scope.$emit(denguechat.env.error, {error: response})
     }).finally(function() {
-     $scope.state.loading   = false;
+     $ionicLoading.hide()
     });
   }
 }])
