@@ -20,6 +20,11 @@
     <ion-slide-box on-slide-changed="changeTimeline($index)" does-continue="false" show-pager="false">
       <ion-slide>
         <ion-list>
+          <div class="item item-balanced text-center" style="font-weight: 500; font-size:17px;">
+            <i class="icon ion-plus"></i>
+            Add a visit
+          </div>
+
           <ion-item class="item-icon-right item-icon-left" ng-repeat="visit in visits" ui-sref="app.visit({id: visit.id})">
             <i class="icon ion-ios-circle-filled" ng-style="{'color': visit.color}"></i>
 

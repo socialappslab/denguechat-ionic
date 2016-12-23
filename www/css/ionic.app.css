@@ -9815,6 +9815,9 @@ a.button {
   -webkit-transition-duration: 0s;
   transition-duration: 0s; }
 
+.tabs-top .tab-item {
+  max-width: 50%; }
+
 .bottom-form {
   position: absolute;
   bottom: 0px;
