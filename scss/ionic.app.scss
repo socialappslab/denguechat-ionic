@@ -21,6 +21,12 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
 
+.tabs-top {
+  .tab-item {
+    max-width: 50%;
+  }
+}
+
 .bottom-form{
     position:absolute;
     bottom:0px;

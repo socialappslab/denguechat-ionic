@@ -130,19 +130,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       }
     }
   })
-  .state('app.location', {
-    url: '/location/:id',
-    onEnter: ['$state', function($state) {
-      if ($state.transition) {
-        $state.transition.finally(function() {
-          $state.go('app.location.visits', {})
-        });
-      }
-    }],
+  .state('app.location.edit', {
+    url: '/edit',
     views: {
       'menuContent@app': {
-        templateUrl: 'templates/locations/show.html',
-        controller: 'locationCtrl'
+        templateUrl: 'templates/locations/edit.html',
+        controller: 'editLocationCtrl'
       }
     }
   })

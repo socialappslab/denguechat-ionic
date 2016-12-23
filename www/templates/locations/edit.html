@@ -1,0 +1,37 @@
+<ion-view view-title="Edit {{state.viewName}}">
+  <ion-content class="has-footer" scroll="false">
+    <div class="list">
+      <label class="item item-input">
+        <span class="input-label">Address</span>
+        <input type="text" class="text-right" ng-model="location.address">
+      </label>
+      <label class="item item-input item-select">
+        <div class="input-label">Neighborhood</div>
+        <select ng-model="location.neighborhood_id" ng-options="n.id as n.name for n in neighborhoods"></select>
+      </label>
+
+
+      <div class="item row">
+        <div class="col">
+          <label class="item-input">
+            <input type="text" placeholder="Latitude" ng-model="location.longitude">
+          </label>
+        </div>
+        <div class="col">
+          <label class="item-input">
+            <input type="text" placeholder="Longitude" ng-model="location.longitude">
+          </label>
+        </div>
+        <div class="col">
+          <button class="button button-block button-small button-stable" ng-click="loadMap()">
+            <i class="icon ion-ios-navigate-outline"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+
+    <div class="bar bar-footer bar-balanced">
+      <div class="title" ng-click="update()">Update</div>
+    </div>
+</ion-view>

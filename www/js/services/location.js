@@ -41,6 +41,18 @@ angular.module('starter.services')
        }
       })
     },
+    update: function(location) {
+      return $http({
+        method: "PUT",
+        url:    denguechat.env.baseURL + "locations/" + location.id,
+        data: {
+          location: location
+        },
+        headers: {
+         "Authorization": "Bearer " + User.getToken()
+       }
+      })
+    },
     get: function(id) {
       if (id) {
         return $http({
