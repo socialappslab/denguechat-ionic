@@ -1,5 +1,74 @@
-<ion-view view-title="Location">
+<ion-view view-title="{{location.address}}">
   <div class="tabs-striped tabs-top">
+    <div class="tabs">
+      <a class="tab-item" ng-class="{'active': state.pageIndex === 0}" ng-click="transitionToPageIndex(0)">
+        Visits
+      </a>
+      <a class="tab-item" ng-class="{'active': state.pageIndex === 1}" ng-click="transitionToPageIndex(1)">
+        Questions
+      </a>
+    </div>
+  </div>
+  <ion-nav-buttons side="right">
+    <button class="button button-icon button-clear ion-edit" ui-sref="app.location.edit({id: location.id})"></button>
+  </ion-nav-buttons>
+
+
+  <ion-content class="has-subheader">
+
+
+    <ion-slide-box on-slide-changed="changeTimeline($index)" does-continue="false" show-pager="false">
+      <ion-slide>
+        <ion-list>
+          <ion-item class="item-icon-right item-icon-left" ng-repeat="visit in visits" ui-sref="app.visit({id: visit.id})">
+            <i class="icon ion-ios-circle-filled" ng-style="{'color': visit.color}"></i>
+
+            <h2>{{visit.visited_at}}</h2>
+            <p>{{visit.inspections_count}} inspections</p>
+            <i class="icon ion-ios-arrow-right"></i>
+          </ion-item>
+          <ion-item ng-if="visits.length == 0 && state.firstLoad == false" class="text-center">
+            <h2>No visits found</h2>
+          </ion-item>
+        </ion-list>
+      </ion-slide>
+
+
+      <ion-slide>
+        <div class="list">
+          <div ng-repeat="q in questions">
+            <label class="item item-input item-stacked-label">
+              <span class="input-label">{{q.body}}</span>
+              <input type="text" ng-if="q.type == 'text'">
+              <input type="number" min="0" ng-if="q.type == 'number'">
+              <input type="date" ng-if="q.type == 'date'">
+              <div class="button-bar" ng-if="q.type == 'radio'">
+                <a class="button" ng-model="ac.answer" ng-if="q.type == 'radio'" ng-value="ac.id" ng-repeat="ac in q.answer_choices"  ng-class="{'button-balanced': ac.answer == ac.id}">{{ac.body}}</a>
+              </div>
+            </label>
+          </div>
+
+          <label class="item item-input item-floating-label">
+            <span class="input-label">First Name</span>
+            <input type="text" placeholder="First Name">
+          </label>
+          <label class="item item-input item-floating-label">
+            <span class="input-label">Last Name</span>
+            <input type="text" placeholder="Last Name">
+          </label>
+          <label class="item item-input item-floating-label">
+            <span class="input-label">Email</span>
+            <input type="text" placeholder="Email">
+          </label>
+        </div>
+
+
+      </ion-slide>
+    </ion-slide-box>
+
+  </ion-content>
+
+  <!-- <div class="tabs-striped tabs-top">
     <div class="tabs">
       <a class="tab-item" ui-sref-active="active" ui-sref="app.location.visits">
         Visits
@@ -11,5 +80,5 @@
   </div>
 
   <div ui-view name="visits"></div>
-  <div ui-view name="questions"></div>
+  <div ui-view name="questions"></div> -->
 </ion-view>

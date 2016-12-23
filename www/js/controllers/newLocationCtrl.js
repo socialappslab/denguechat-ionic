@@ -14,19 +14,25 @@ angular.module('starter.controllers')
   }
   $scope.refresh()
 
+  // Map modal.
   $scope.loadMap = function() {
     modal = $ionicModal.fromTemplateUrl('templates/map.html', {
       scope: $scope,
       animation: 'slide-in-up',
       focusFirstInput: true
     }).then(function(modal) {
-      $rootScope.mapModal = modal;
+      $scope.mapModal = modal;
     });
 
     modal.then(function() {
-      $rootScope.mapModal.show();
+      $scope.mapModal.show();
     })
   }
+
+  $scope.closeLogin = function() {
+    $scope.mapModal.hide();
+  };
+
 
   $scope.create = function() {
     $scope.state.loading = true;
