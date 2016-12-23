@@ -1,12 +1,11 @@
 angular.module('starter.controllers')
 .controller('newLocationCtrl', ['$scope', "$state", 'User', 'Location', '$ionicModal', '$rootScope', function($scope, $state, User, Location, $ionicModal, $rootScope) {
-  $scope.neighborhoods = [];
+  $scope.neighborhoods = Location.neighborhoods;
   $scope.location      = {};
   $scope.state = {loading: false};
 
   $scope.refresh = function() {
     User.current().then(function(response) {
-      $scope.neighborhoods            = response.data.user.neighborhoods
       $scope.location.neighborhood_id = response.data.user.neighborhood.id
     }, function(response) {
       $scope.$emit(denguechat.env.error, {error: response})
