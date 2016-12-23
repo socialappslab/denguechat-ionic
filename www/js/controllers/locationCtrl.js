@@ -1,10 +1,13 @@
 angular.module('starter.controllers')
-.controller('locationCtrl', ['$scope', "$state", 'Location', function($scope, $state, Location) {
+.controller('locationCtrl', ['$scope', "$state", 'Location', '$ionicHistory', function($scope, $state, Location, $ionicHistory) {
   $scope.location = {};
   $scope.state    = {firstLoad: true};
   $scope.params   = {search: ""};
 
   $scope.refresh = function() {
+    // TODO
+    // $ionicHistory.removeBackView()
+
     $scope.state.loading = true
     Location.get($state.params.id).then(function(response) {
       $scope.location = response.data.location
