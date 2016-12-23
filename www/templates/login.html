@@ -9,7 +9,7 @@
       <form ng-submit="signup()" ng-if="view === 'signup'">
         <div class="list list-inset">
           <label class="item item-input">
-            <input type="text" placeholder="Username" ng-model="user.username">
+            <input type="text" placeholder="Username" ng-model="user.username" autocapitalize="none">
           </label>
           <label class="item item-input">
             <input type="password" placeholder="Password" ng-model="user.password">
@@ -34,7 +34,7 @@
             <img class="icon ion-image" src="img/denguechat.png"></img>
           </label> -->
           <label class="item item-input">
-            <input type="text" placeholder="Username" ng-model="user.username">
+            <input type="text" placeholder="Username" ng-model="user.username" autocapitalize="none">
           </label>
           <label class="item item-input">
             <input type="password" placeholder="Password" ng-model="user.password">
@@ -61,7 +61,7 @@
       </div>
 
       <div class="padding text-center text-light" ng-if="view === 'login'">
-        <a onclick="window.open('https://www.denguechat.com/password/new', '_blank', 'location=yes');" href="#">
+        <a onclick="window.open('https://www.denguechat.com/password_resets/new', '_blank', 'location=yes');" href="#">
           Forgot password?
         </a>
       </div>
