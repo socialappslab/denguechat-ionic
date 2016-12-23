@@ -14,8 +14,6 @@ angular.module('starter.controllers')
     $ionicSlideBoxDelegate.slide(pageIndex);
   }
 
-  $scope.transitionToPageIndex(1)
-
   $scope.shouldDisplay = function(q) {
     return LocationQuiz.shouldDisplay(q, $scope.questions)
   }
