@@ -146,22 +146,38 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       }
     }
   })
-  .state('app.location.visits', {
-    url: '/visits',
+  .state('app.location', {
+    url: '/location/:id',
+    // onEnter: ['$state', function($state) {
+    //   if ($state.transition) {
+    //     $state.transition.finally(function() {
+    //       $state.go('app.location.visits', {})
+    //     });
+    //   }
+    // }],
     views: {
-      'visits@app.location': {
-        templateUrl: 'templates/locations/visits.html',
+      'menuContent@app': {
+        templateUrl: 'templates/locations/show.html',
         controller: 'locationCtrl'
       }
     }
   })
-  .state('app.location.questions', {
-    url: '/questions',
-    views: {
-      'questions@app.location': {
-        templateUrl: 'templates/locations/questions.html',
-        controller: 'questionsCtrl'
-      }
-    }
-  })
+  // .state('app.location.visits', {
+  //   url: '/visits',
+  //   views: {
+  //     'visits@app.location': {
+  //       templateUrl: 'templates/locations/visits.html',
+  //       controller: 'locationCtrl'
+  //     }
+  //   }
+  // })
+  // .state('app.location.questions', {
+  //   url: '/questions',
+  //   views: {
+  //     'questions@app.location': {
+  //       templateUrl: 'templates/locations/questions.html',
+  //       controller: 'questionsCtrl'
+  //     }
+  //   }
+  // })
 });

@@ -8,6 +8,18 @@ https://www.firebase.com/docs/web/guide/login/password.html
 angular.module('starter.services')
 .factory('Location', function($http, User) {
   return {
+    neighborhoods: [
+      {"id":3,"name":"Tepalcingo"},
+      {"id":4,"name":"Ocachicualli"},
+      {"id":1,"name":"Maré"},
+      {"id":8,"name":"La Quinta"},
+      {"id":5,"name":"Francisco Meza"},
+      {"id":7,"name":"Ariel Darce"},
+      {"id":9,"name":"Josefa Ortiz de Domínguez"},
+      {"id":10,"name":"Galope"},
+      {"id":11,"name":"Tangará"},
+      {"id":12,"name":"Centro Escolar Rafaela Herrera"}
+    ],
     search: function(query) {
       return $http({
         method: "GET",

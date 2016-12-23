@@ -1,12 +1,11 @@
 angular.module('starter.controllers')
 .controller('newLocationCtrl', ['$scope', "$state", 'User', 'Location', '$ionicModal', '$rootScope', function($scope, $state, User, Location, $ionicModal, $rootScope) {
-  $scope.neighborhoods = [];
+  $scope.neighborhoods = Location.neighborhoods;
   $scope.location      = {};
   $scope.state = {loading: false};
 
   $scope.refresh = function() {
     User.current().then(function(response) {
-      $scope.neighborhoods            = response.data.user.neighborhoods
       $scope.location.neighborhood_id = response.data.user.neighborhood.id
     }, function(response) {
       $scope.$emit(denguechat.env.error, {error: response})
@@ -14,19 +13,25 @@ angular.module('starter.controllers')
   }
   $scope.refresh()
 
+  // Map modal.
   $scope.loadMap = function() {
     modal = $ionicModal.fromTemplateUrl('templates/map.html', {
       scope: $scope,
       animation: 'slide-in-up',
       focusFirstInput: true
     }).then(function(modal) {
-      $rootScope.mapModal = modal;
+      $scope.mapModal = modal;
     });
 
     modal.then(function() {
-      $rootScope.mapModal.show();
+      $scope.mapModal.show();
     })
   }
+
+  $scope.closeLogin = function() {
+    $scope.mapModal.hide();
+  };
+
 
   $scope.create = function() {
     $scope.state.loading = true;

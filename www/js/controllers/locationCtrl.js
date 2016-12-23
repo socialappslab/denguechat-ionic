@@ -1,8 +1,18 @@
 angular.module('starter.controllers')
-.controller('locationCtrl', ['$scope', "$state", 'Location', '$ionicHistory', function($scope, $state, Location, $ionicHistory) {
+.controller('locationCtrl', ['$scope', "$state", 'Location', '$ionicHistory', "$ionicSlideBoxDelegate", function($scope, $state, Location, $ionicHistory, $ionicSlideBoxDelegate) {
   $scope.location = {};
-  $scope.state    = {firstLoad: true};
+  $scope.state    = {firstLoad: true, pageIndex: 0};
   $scope.params   = {search: ""};
+  $scope.questions = [];
+
+  $scope.changeTimeline = function(pageIndex) {
+    $scope.state.pageIndex = pageIndex
+  }
+
+  $scope.transitionToPageIndex = function(pageIndex) {
+    $scope.state.pageIndex = pageIndex
+    $ionicSlideBoxDelegate.slide(pageIndex);
+  }
 
   $scope.refresh = function() {
     // TODO
@@ -10,8 +20,9 @@ angular.module('starter.controllers')
 
     $scope.state.loading = true
     Location.get($state.params.id).then(function(response) {
-      $scope.location = response.data.location
-      $scope.visits   = response.data.location.visits
+      $scope.location  = response.data.location
+      $scope.visits    = response.data.location.visits
+      $scope.questions = response.data.location_questions
     }, function(response) {
       $scope.$emit(denguechat.env.error, {error: response})
     }).finally(function() {
