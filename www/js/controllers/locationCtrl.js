@@ -1,9 +1,8 @@
 angular.module('starter.controllers')
-.controller('locationCtrl', ['$scope', "$state", 'Location', '$ionicHistory', "$ionicSlideBoxDelegate", 'LocationQuiz', function($scope, $state, Location, $ionicHistory, $ionicSlideBoxDelegate, LocationQuiz) {
+.controller('locationCtrl', ['$scope', "$state", 'Location', '$ionicHistory', "$ionicSlideBoxDelegate", 'LocationQuiz', '$ionicLoading', function($scope, $state, Location, $ionicHistory, $ionicSlideBoxDelegate, LocationQuiz, $ionicLoading) {
   $scope.location = {};
   $scope.state    = {firstLoad: true, pageIndex: 0};
   $scope.params   = {search: ""};
-  $scope.questions = [];
 
   $scope.changeTimeline = function(pageIndex) {
     $scope.state.pageIndex = pageIndex
@@ -15,7 +14,7 @@ angular.module('starter.controllers')
   }
 
   $scope.shouldDisplay = function(q) {
-    return LocationQuiz.shouldDisplay(q, $scope.questions)
+    return LocationQuiz.shouldDisplay(q, $scope.location.questions)
   }
 
   $scope.refresh = function() {
@@ -24,15 +23,33 @@ angular.module('starter.controllers')
 
     $scope.state.loading = true
     Location.get($state.params.id).then(function(response) {
+      // Let's parse the dates.
+      for (var i=0; i < response.data.location.questions.length; i++) {
+        if (response.data.location.questions[i].type == "date" && response.data.location.questions[i].answer)
+          response.data.location.questions[i].answer = new Date(response.data.location.questions[i].answer)
+      }
+
       $scope.location  = response.data.location
+
+
       $scope.visits    = response.data.location.visits
-      $scope.questions = response.data.location_questions
     }, function(response) {
       $scope.$emit(denguechat.env.error, {error: response})
     }).finally(function() {
      $scope.state.firstLoad = false;
      $scope.state.loading   = false;
      $scope.$broadcast('scroll.refreshComplete');
+    });
+  }
+
+  $scope.saveQuestions = function() {
+    $ionicLoading.show()
+    Location.updateQuestions($scope.location).then(function(response) {
+      console.log(response)
+    }, function(response) {
+      $scope.$emit(denguechat.env.error, {error: response})
+    }).finally(function() {
+      $ionicLoading.hide()
     });
   }
 
