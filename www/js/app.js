@@ -56,6 +56,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
           $rootScope.modal.show();
         })
       }
+    } else if (response.status !== -1) {
+      navigator.notification.alert(response.error.data.message, null, "Server not responding", "OK")
     } else if (response.error.status === 422) {
       navigator.notification.alert(response.error.data.message, null, "Server not responding", "OK")
     } else if (response.error.status === -1) {
@@ -154,6 +156,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       'menuContent@app': {
         templateUrl: 'templates/locations/show.html',
         controller: 'locationCtrl'
+      }
+    }
+  })
+  .state('app.visit.new_inspection', {
+    url: '/inspections/new',
+    views: {
+      'menuContent@app': {
+        templateUrl: 'templates/inspections/new.html',
+        controller: 'newInspectionsCtrl'
       }
     }
   })
