@@ -56,6 +56,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
           $rootScope.modal.show();
         })
       }
+    } else if (response.status !== -1) {
+      navigator.notification.alert(response.error.data.message, null, "Server not responding", "OK")
     } else if (response.error.status === 422) {
       navigator.notification.alert(response.error.data.message, null, "Server not responding", "OK")
     } else if (response.error.status === -1) {
@@ -150,13 +152,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   })
   .state('app.location', {
     url: '/location/:id',
-    // onEnter: ['$state', function($state) {
-    //   if ($state.transition) {
-    //     $state.transition.finally(function() {
-    //       $state.go('app.location.visits', {})
-    //     });
-    //   }
-    // }],
     views: {
       'menuContent@app': {
         templateUrl: 'templates/locations/show.html',
@@ -164,22 +159,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       }
     }
   })
-  // .state('app.location.visits', {
-  //   url: '/visits',
-  //   views: {
-  //     'visits@app.location': {
-  //       templateUrl: 'templates/locations/visits.html',
-  //       controller: 'locationCtrl'
-  //     }
-  //   }
-  // })
-  // .state('app.location.questions', {
-  //   url: '/questions',
-  //   views: {
-  //     'questions@app.location': {
-  //       templateUrl: 'templates/locations/questions.html',
-  //       controller: 'questionsCtrl'
-  //     }
-  //   }
-  // })
+  .state('app.visit.new_inspection', {
+    url: '/inspections/new',
+    views: {
+      'menuContent@app': {
+        templateUrl: 'templates/inspections/new.html',
+        controller: 'newInspectionsCtrl'
+      }
+    }
+  })
 });

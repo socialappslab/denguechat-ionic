@@ -1,0 +1,59 @@
+<ion-view view-title="Add an inspection">
+  <ion-content class="has-footer">
+
+    <div class="list">
+      <label class="item item-input item-select">
+        <div class="input-label">Criadero</div>
+        <select ng-model="inspection.breeding_site_id" ng-options="bs.id as bs.description for bs in breeding_sites"></select>
+      </label>
+      <label class="item item-input">
+        <div class="input-label">Descripción</div>
+        <input type="text" class="text-right" ng-model="inspection.location">
+      </label>
+      <li class="item item-toggle">
+       Protegido
+       <label class="toggle toggle-balanced">
+         <input type="checkbox">
+         <div class="track">
+           <div class="handle" ng-model="inspection.protected"></div>
+         </div>
+       </label>
+      </li>
+      <li class="item item-toggle">
+       Abatizado
+       <label class="toggle toggle-balanced">
+         <input type="checkbox">
+         <div class="track">
+           <div class="handle" ng-model="inspection.chemically_treated"></div>
+         </div>
+       </label>
+      </li>
+      <li class="item item-toggle">
+       Larvas
+       <label class="toggle toggle-balanced">
+         <input type="checkbox">
+         <div class="track">
+           <div class="handle" ng-model="inspection.larvae"></div>
+         </div>
+       </label>
+      </li>
+      <li class="item item-toggle">
+       Pupas
+       <label class="toggle toggle-balanced">
+         <input type="checkbox">
+         <div class="track">
+           <div class="handle" ng-model="inspection.pupae"></div>
+         </div>
+       </label>
+      </li>
+      <li class="item item-icon-right" ng-click="loadCamera()">
+        Foto de criadero
+        <i class="icon ion-ios-camera-outline"></i>
+      </li>
+    </div>
+  </ion-content>
+
+  <div class="bar bar-footer bar-balanced">
+    <div class="title" ng-click="create()">Add</div>
+  </div>
+</ion-view>
