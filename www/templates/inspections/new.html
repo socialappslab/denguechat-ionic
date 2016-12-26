@@ -13,42 +13,43 @@
       <li class="item item-toggle">
        Protegido
        <label class="toggle toggle-balanced">
-         <input type="checkbox">
+         <input type="checkbox" ng-model="inspection.protected">
          <div class="track">
-           <div class="handle" ng-model="inspection.protected"></div>
+           <div class="handle"></div>
          </div>
        </label>
       </li>
       <li class="item item-toggle">
        Abatizado
        <label class="toggle toggle-balanced">
-         <input type="checkbox">
+         <input type="checkbox" ng-model="inspection.chemically_treated">
          <div class="track">
-           <div class="handle" ng-model="inspection.chemically_treated"></div>
+           <div class="handle"></div>
          </div>
        </label>
       </li>
       <li class="item item-toggle">
        Larvas
        <label class="toggle toggle-balanced">
-         <input type="checkbox">
+         <input type="checkbox" ng-model="inspection.larvae">
          <div class="track">
-           <div class="handle" ng-model="inspection.larvae"></div>
+           <div class="handle"></div>
          </div>
        </label>
       </li>
       <li class="item item-toggle">
        Pupas
        <label class="toggle toggle-balanced">
-         <input type="checkbox">
+         <input type="checkbox" ng-model="inspection.pupae">
          <div class="track">
-           <div class="handle" ng-model="inspection.pupae"></div>
+           <div class="handle"></div>
          </div>
        </label>
       </li>
       <li class="item item-icon-right" ng-click="loadCamera()">
         Foto de criadero
-        <i class="icon ion-ios-camera-outline"></i>
+        <i class="icon ion-ios-camera-outline" ng-if="!inspection.before_photo"></i>
+        <img style="height:50px; max-width: 50px; float:right;" src="{{inspection.before_photo}}" ng-if="inspection.before_photo"></img>
       </li>
     </div>
   </ion-content>

@@ -4,14 +4,21 @@ angular.module('starter.controllers')
   $scope.breeding_sites = Inspection.breeding_sites;
 
   $scope.loadCamera = function() {
-    console.log("Loads camera...")
+    if (navigator.camera) {
+      navigator.camera.getPicture(function(base64) {
+        $scope.inspection.before_photo = "data:image/jpeg;base64," + base64
+        $scope.$apply()
+      }, function(response) {
+      }, {saveToPhotoAlbum: true, destinationType: 0})
+    } else {
+      alert("Camera not supported!")
+    }
   }
 
   $scope.create = function() {
     $ionicLoading.show()
 
     Inspection.create($scope.inspection).then(function(response) {
-      console.log(response)
       $ionicLoading.hide().then(function() {
         $ionicHistory.goBack();
       })
