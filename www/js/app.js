@@ -56,9 +56,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
           $rootScope.modal.show();
         })
       }
-    } else if (response.status !== -1) {
+    } else if (response.status !== -1 && response.error.data) {
       navigator.notification.alert(response.error.data.message, null, "Server not responding", "OK")
-    } else if (response.error.status === 422) {
+    } else if (response.error.status === 422 && response.error.data) {
       navigator.notification.alert(response.error.data.message, null, "Server not responding", "OK")
     } else if (response.error.status === -1) {
       navigator.notification.alert("We couldn't reach the server. Try again later.", null, "Server not responding", "OK")
