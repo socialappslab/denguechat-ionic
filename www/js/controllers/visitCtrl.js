@@ -10,7 +10,7 @@ angular.module('starter.controllers')
       $scope.$emit(denguechat.env.error, {error: response})
     }).finally(function() {
       $scope.state.firstLoad = false;
-     $scope.$broadcast('scroll.refreshComplete');
+      $scope.$broadcast('scroll.refreshComplete');
     });
   }
 
