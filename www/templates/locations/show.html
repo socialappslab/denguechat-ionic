@@ -23,7 +23,7 @@
             Add a visit
           </div> -->
 
-          <ion-item class="item-icon-right item-icon-left" ng-repeat="visit in visits" ui-sref="app.visit({id: visit.id})">
+          <ion-item class="item-icon-right item-icon-left" ng-repeat="visit in visits" ui-sref="app.location.visit({visit_id: visit.id})">
             <i class="{{visit.inspections_count == 0 ? 'icon ion-ios-circle-outline' : 'icon ion-ios-circle-filled'}}" ng-style="{'color': visit.color}"></i>
 
             <h2>{{visit.visited_at}}</h2>

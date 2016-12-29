@@ -23,7 +23,7 @@
         <ion-spinner></ion-spinner>
       </ion-item>
 
-      <ion-item class="item-icon-right" ng-repeat="visit in visits" ui-sref="app.visit({id: visit.id})">
+      <ion-item class="item-icon-right" ng-repeat="visit in visits" ui-sref="app.visit({visit_id: visit.id})">
         <h2>{{visit.visited_at}}</h2>
         <p>{{visit.location}}</p>
         <p>{{visit.inspections}} inspections</p>

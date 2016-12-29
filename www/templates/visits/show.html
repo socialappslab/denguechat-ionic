@@ -1,7 +1,7 @@
 <ion-view view-title="{{visit.visited_at}}">
 
   <ion-nav-buttons side="right">
-    <button class="button button-icon button-clear ion-ios-plus-empty" ui-sref="app.visit.new_inspection"></button>
+    <button class="button button-icon button-clear ion-ios-plus-empty" ui-sref="app.visit.new_inspection({visit_id: visit.id})"></button>
   </ion-nav-buttons>
 
   <ion-content>

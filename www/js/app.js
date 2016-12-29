@@ -106,7 +106,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     }
   })
   .state('app.visit', {
-    url: '/visit/:id',
+    url: '/visit/:visit_id',
     views: {
       'menuContent': {
         templateUrl: 'templates/visits/show.html',
@@ -156,6 +156,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       'menuContent@app': {
         templateUrl: 'templates/locations/show.html',
         controller: 'locationCtrl'
+      }
+    }
+  })
+  .state('app.location.visit', {
+    url: '/visits/:visit_id',
+    views: {
+      'menuContent@app': {
+        templateUrl: 'templates/visits/show.html',
+        controller: 'visitCtrl'
       }
     }
   })
