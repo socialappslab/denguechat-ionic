@@ -17,6 +17,18 @@ angular.module('starter.services')
        }
       })
     },
+    create: function(visit) {
+      return $http({
+        method: "POST",
+        url:    denguechat.env.baseURL + "visits/",
+        data: {
+          visit: visit
+        },
+        headers: {
+         "Authorization": "Bearer " + User.getToken()
+       }
+      })
+    },
     get: function(id) {
       if (id) {
         return $http({

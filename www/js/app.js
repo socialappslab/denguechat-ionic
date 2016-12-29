@@ -159,6 +159,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       }
     }
   })
+  .state('app.location.new_visit', {
+    url: '/new_visit',
+    views: {
+      'menuContent@app': {
+        templateUrl: 'templates/locations/new_visit.html',
+        controller: 'newVisitCtrl'
+      }
+    }
+  })
   .state('app.visit.new_inspection', {
     url: '/inspections/new',
     views: {
