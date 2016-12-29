@@ -13,6 +13,7 @@ angular.module('starter.controllers')
       $scope.$emit(denguechat.env.error, {error: response})
     }).finally(function() {
      $scope.state.loading = false;
+     $scope.$broadcast('scroll.refreshComplete');
     });
   }
 
