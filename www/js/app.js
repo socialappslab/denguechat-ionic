@@ -88,7 +88,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 })
 .config(function($stateProvider, $urlRouterProvider) {
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/locations')
+  $urlRouterProvider.otherwise('/app/posts')
   $stateProvider
   .state('app', {
     url: '/app',
@@ -96,6 +96,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     templateUrl: 'templates/menu.html',
     controller: 'AppCtrl'
   })
+  .state('app.posts', {
+    url: '/posts',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/posts/index.html',
+        controller: 'postsCtrl'
+      }
+    }
+  })
+
   .state('app.visits', {
     url: '/visits',
     views: {
