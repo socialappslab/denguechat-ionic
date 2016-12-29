@@ -1,0 +1,37 @@
+<ion-view view-title="Mi Comunidad">
+  <ion-nav-buttons side="right">
+    <button class="button button-icon button-positive button-clear ion-ios-compose-outline"></button>
+  </ion-nav-buttons>
+
+  <ion-content>
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="refresh()"></ion-refresher>
+
+    <ion-item ng-if="state.firstLoad == true" class="text-center">
+      <ion-spinner></ion-spinner>
+    </ion-item>
+
+    <ion-item ng-if="posts.length == 0 && state.firstLoad == false" class="text-center">
+      <h2>No posts found. Why not add one?</h2>
+    </ion-item>
+
+    <div class="list card" ng-repeat="post in posts">
+      <div class="item item-avatar">
+        <img src="{{post.profile_photo}}">
+        <h2>{{post.user.display_name}}</h2>
+        <p>{{post.timestamp}}</p>
+      </div>
+
+      <div class="item item-body">
+        <img class="full-image" src="{{post.photo}}" ng-if="!!post.photo">
+        <p ng-bind-html="post.content | denguechatLinky"></p>
+        <p>
+          <a href="#" class="subdued">
+            <i class="icon ion-android-favorite-outline"></i>
+          </a>
+          <!-- <a href="#" class="subdued">5 Comments</a> -->
+        </p>
+      </div>
+    </div>
+
+  </ion-content>
+</ion-view>
