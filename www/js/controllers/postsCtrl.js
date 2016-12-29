@@ -1,14 +1,14 @@
 angular.module('starter.controllers')
 .controller('postsCtrl', ['$scope', 'Post', "$filter", function($scope, Post, $filter) {
-  $scope.state = {loading: false};
+  $scope.state = {loading: false, hasMoreData: false};
+  $scope.posts = []
 
-  $scope.refresh = function() {
-    Post.get(4, 20, 0).then(function(response) {
-      $scope.posts = response.data.posts
-      for (var i=0; i < $scope.posts.length; i++) {
-        $scope.posts[i].content = $filter("denguechatLinky")($scope.posts[i].content, '_blank')
-      }
-
+  $scope.refresh = function(offset) {
+    console.log("LOADING!")
+    Post.get(4, 20, offset).then(function(response) {
+      Array.prototype.push.apply($scope.posts, response.data.posts)
+      $scope.$broadcast('scroll.infiniteScrollComplete');
+      $scope.state.hasMoreData = (response.data.posts.length !== 0)
     }, function(response) {
       $scope.$emit(denguechat.env.error, {error: response})
     }).finally(function() {
@@ -16,14 +16,19 @@ angular.module('starter.controllers')
     });
   }
 
+  $scope.loadMore = function() {
+    offset = $scope.posts.length
+    $scope.refresh(offset)
+  }
+
   $scope.$on(denguechat.env.data.refresh, function() {
     $scope.state.loading = true
-    $scope.refresh();
+    $scope.refresh(0);
   })
 
   // Triggered only once when the view is loaded.
   // http://ionicframework.com/docs/api/directive/ionView/
   $scope.$on("$ionicView.loaded", function() {
-    $scope.refresh();
+    $scope.refresh(0);
   })
 }])
