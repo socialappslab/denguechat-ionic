@@ -212,6 +212,17 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     var html = [];
     var url;
     var i;
+
+    // console.log(raw.match(/(<a href=')/i))
+    // TODO: Make sure that href=/ becomes ng-click="something"
+    // match = raw.match(/(<a href=')/i)
+    // url = match[0];
+    // i = match.index;
+    // raw = url + "#" + raw.substring(i + match[0].length)
+    // console.log(raw)
+
+
+
     while ((match = raw.match(LINKY_URL_REGEXP))) {
       // We can not end in these as they are sometimes found at the end of the sentence
       url = match[0];

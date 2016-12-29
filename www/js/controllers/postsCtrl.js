@@ -3,7 +3,7 @@ angular.module('starter.controllers')
   $scope.state = {loading: false};
 
   $scope.refresh = function() {
-    Post.get(4, 20, 20).then(function(response) {
+    Post.get(4, 20, 0).then(function(response) {
       $scope.posts = response.data.posts
       for (var i=0; i < $scope.posts.length; i++) {
         $scope.posts[i].content = $filter("denguechatLinky")($scope.posts[i].content, '_blank')
