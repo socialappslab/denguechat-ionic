@@ -1,11 +1,11 @@
 angular.module('starter.controllers')
-.controller('postsCtrl', ['$scope', 'Post', "$filter", function($scope, Post, $filter) {
+.controller('postsCtrl', ['$scope', 'Post', "$ionicModal", "$ionicLoading", function($scope, Post, $ionicModal, $ionicLoading) {
   $scope.state = {loading: false, hasMoreData: false};
   $scope.posts = []
+  $scope.post  = {}
 
   $scope.refresh = function(offset) {
-    console.log("LOADING!")
-    Post.get(4, 20, offset).then(function(response) {
+    Post.get(8, 20, offset).then(function(response) {
       Array.prototype.push.apply($scope.posts, response.data.posts)
       $scope.$broadcast('scroll.infiniteScrollComplete');
       $scope.state.hasMoreData = (response.data.posts.length !== 0)
@@ -20,6 +20,43 @@ angular.module('starter.controllers')
     offset = $scope.posts.length
     $scope.refresh(offset)
   }
+
+  $scope.showNewPostModal = function() {
+    // Create the login modal that we will use later
+    return $ionicModal.fromTemplateUrl('templates/posts/new.html', {
+      scope: $scope,
+      animation: 'slide-in-up',
+      focusFirstInput: true,
+      backdropClickToClose: false,
+      hardwareBackButtonClose: false
+    }).then(function(modal) {
+      $scope.modal = modal;
+      modal.show()
+    });
+  }
+
+  $scope.closeNewPostModal = function() {
+    $scope.modal.hide().then(function() {
+      $scope.modal.remove();
+    })
+  }
+
+  $scope.createPost = function() {
+    $ionicLoading.show()
+
+    $scope.post.neighborhood_id = 8
+
+    Post.create($scope.post).then(function(response) {
+      $scope.post = {}
+      $ionicLoading.hide().then(function() {
+        $scope.closeNewPostModal()
+      })
+    }, function(response) {
+      $scope.$emit(denguechat.env.error, {error: response})
+      $ionicLoading.hide()
+    })
+  }
+
 
   $scope.$on(denguechat.env.data.refresh, function() {
     $scope.state.loading = true

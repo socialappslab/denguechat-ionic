@@ -1,0 +1,18 @@
+<ion-modal-view class="login-modal">
+  <ion-header-bar class="bar bar-header bar-stable">
+    <h1 class="title">Write a new post</h1>
+    <button class="button button-clear button-positive" ng-click="closeNewPostModal()">Cancel</button>
+  </ion-header-bar>
+
+  <ion-content has-bouncing="false" scroll="false">
+    <div class="list">
+      <label class="item item-input">
+        <textarea ng-model="post.content" autofocus></textarea>
+      </label>
+    </div>
+  </ion-content>
+
+  <div class="bar bar-footer bar-balanced">
+    <div class="title" ng-click="createPost()">Create</div>
+  </div>
+</ion-modal-view>
