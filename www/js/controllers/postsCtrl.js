@@ -4,6 +4,17 @@ angular.module('starter.controllers')
   $scope.posts = []
   $scope.post  = {}
 
+  $scope.toggleLike = function(post) {
+    Post.like(post).then(function(response) {
+      console.log(response)
+      post.liked = response.data.liked
+    }, function(response) {
+      $scope.$emit(denguechat.env.error, {error: response})
+    }).finally(function() {
+     $scope.state.loading = false;
+    });
+  }
+
   $scope.refresh = function(offset) {
     Post.get(8, 20, offset).then(function(response) {
       Array.prototype.push.apply($scope.posts, response.data.posts)

@@ -25,8 +25,9 @@
         <img class="full-image" src="{{post.photo}}" ng-if="!!post.photo">
         <p ng-bind-html="post.content | denguechatLinky"></p>
         <p>
-          <a href="#" class="subdued">
-            <i class="icon ion-android-favorite-outline"></i>
+          <a href="#" class="subdued" ng-click="toggleLike(post)">
+            <i class="icon ion-android-favorite-outline" ng-if="!post.liked"></i>
+            <i class="icon ion-android-favorite assertive" ng-if="!!post.liked"></i>
           </a>
           <!-- <a href="#" class="subdued">5 Comments</a> -->
         </p>
