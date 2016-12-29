@@ -5,12 +5,10 @@ angular.module('starter.controllers')
   $scope.create = function() {
     $ionicLoading.show()
 
-    console.log($scope.visit)
     Visit.create($scope.visit).then(function(response) {
-      console.log(response)
-      // $ionicLoading.hide().then(function() {
-      //   $ionicHistory.goBack();
-      // })
+      $ionicLoading.hide().then(function() {
+        $ionicHistory.goBack();
+      })
     }, function(response) {
       console.log(response)
       $scope.$emit(denguechat.env.error, {error: response})
