@@ -9960,3 +9960,6 @@ a.button {
   .error-box p {
     color: white;
     margin: 0px; }
+
+.post .item-body i.icon {
+  font-size: 24px; }

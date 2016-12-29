@@ -7,7 +7,7 @@
 
 angular.module('starter.services', [])
 
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngSanitize'])
 
 .run(function($ionicPlatform, $rootScope, $ionicModal, User, $state, $ionicHistory) {
   $ionicPlatform.ready(function() {
@@ -88,7 +88,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 })
 .config(function($stateProvider, $urlRouterProvider) {
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/locations')
+  $urlRouterProvider.otherwise('/app/posts')
   $stateProvider
   .state('app', {
     url: '/app',
@@ -96,6 +96,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     templateUrl: 'templates/menu.html',
     controller: 'AppCtrl'
   })
+  .state('app.posts', {
+    url: '/posts',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/posts/index.html',
+        controller: 'postsCtrl'
+      }
+    }
+  })
+
   .state('app.visits', {
     url: '/visits',
     views: {
@@ -186,4 +196,67 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       }
     }
   })
-});
+})
+
+
+// The only difference between our linky and the "linky" is that we're
+// not sanitizing the HTML in order to allow for @dmitri mentions.
+.filter('denguechatLinky', [function() {
+  var LINKY_URL_REGEXP = /((ftp|https?):\/\/|(www\.)|(mailto:)?[A-Za-z0-9._%+-]+@)\S*[^\s.;,(){}<>"\u201d\u2019]/i,
+      MAILTO_REGEXP = /^mailto:/i;
+
+  return function(text, target) {
+    if (!text) return text;
+    var match;
+    var raw = text;
+    var html = [];
+    var url;
+    var i;
+
+    // console.log(raw.match(/(<a href=')/i))
+    // TODO: Make sure that href=/ becomes ng-click="something"
+    // match = raw.match(/(<a href=')/i)
+    // url = match[0];
+    // i = match.index;
+    // raw = url + "#" + raw.substring(i + match[0].length)
+    // console.log(raw)
+
+
+
+    while ((match = raw.match(LINKY_URL_REGEXP))) {
+      // We can not end in these as they are sometimes found at the end of the sentence
+      url = match[0];
+      // if we did not match ftp/http/www/mailto then assume mailto
+      if (!match[2] && !match[4]) {
+        url = (match[3] ? 'http://' : 'mailto:') + url;
+      }
+      i = match.index;
+      addText(raw.substr(0, i));
+      addLink(url, match[0].replace(MAILTO_REGEXP, ''));
+      raw = raw.substring(i + match[0].length);
+    }
+    addText(raw);
+    return html.join('');
+
+    function addText(text) {
+      if (!text) {
+        return;
+      }
+      html.push(text);
+    }
+
+    function addLink(url, text) {
+      html.push('<a ');
+      if (angular.isDefined(target)) {
+        html.push('target="',
+                  target,
+                  '" ');
+      }
+      html.push('href="',
+                url.replace(/"/g, '&quot;'),
+                '">');
+      addText(text);
+      html.push('</a>');
+    }
+  };
+}]);
