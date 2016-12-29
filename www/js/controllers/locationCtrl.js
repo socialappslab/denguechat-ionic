@@ -1,8 +1,9 @@
 angular.module('starter.controllers')
-.controller('locationCtrl', ['$scope', "$state", 'Location', '$ionicHistory', "$ionicSlideBoxDelegate", 'LocationQuiz', '$ionicLoading', function($scope, $state, Location, $ionicHistory, $ionicSlideBoxDelegate, LocationQuiz, $ionicLoading) {
+.controller('locationCtrl', ['$scope', "$state", 'Location', '$ionicHistory', "$ionicSlideBoxDelegate", 'LocationQuiz', '$ionicLoading', "$ionicModal", "Visit", function($scope, $state, Location, $ionicHistory, $ionicSlideBoxDelegate, LocationQuiz, $ionicLoading, $ionicModal, Visit) {
   $scope.location = {};
   $scope.state    = {firstLoad: true, pageIndex: 0};
   $scope.params   = {search: ""};
+  $scope.visit    = {location_id: $state.params.id}
 
   $scope.changeTimeline = function(pageIndex) {
     $scope.state.pageIndex = pageIndex
@@ -16,6 +17,41 @@ angular.module('starter.controllers')
   $scope.shouldDisplay = function(q) {
     return LocationQuiz.shouldDisplay(q, $scope.location.questions)
   }
+
+  $scope.showNewVisitModal = function() {
+    // Create the login modal that we will use later
+    return $ionicModal.fromTemplateUrl('templates/locations/new_visit.html', {
+      scope: $scope,
+      animation: 'slide-in-up',
+      focusFirstInput: true,
+      backdropClickToClose: false,
+      hardwareBackButtonClose: false
+    }).then(function(modal) {
+      $scope.modal = modal;
+      modal.show()
+    });
+  }
+
+  $scope.closeNewVisitModal = function() {
+    $scope.modal.hide().then(function() {
+      $scope.modal.remove();
+    })
+  }
+
+  $scope.createVisit = function() {
+    $ionicLoading.show()
+
+    Visit.create($scope.visit).then(function(response) {
+      $ionicLoading.hide().then(function() {
+        $scope.closeNewVisitModal()
+      })
+    }, function(response) {
+      $scope.$emit(denguechat.env.error, {error: response})
+      $ionicLoading.hide()
+    })
+  }
+
+
 
   $scope.refresh = function() {
     // TODO

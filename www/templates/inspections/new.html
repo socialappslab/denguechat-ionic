@@ -49,7 +49,7 @@
       <li class="item item-icon-right" ng-click="loadCamera()">
         Foto de criadero
         <i class="icon ion-ios-camera-outline" ng-if="!inspection.before_photo"></i>
-        <img style="height:50px; max-width: 50px; float:right;" src="{{inspection.before_photo}}" ng-if="inspection.before_photo"></img>
+        <img style="height:50px; max-width: 50px; float:right;" src="{{inspection.before_photo}}" ng-if="!!inspection.before_photo"></img>
       </li>
     </div>
   </ion-content>

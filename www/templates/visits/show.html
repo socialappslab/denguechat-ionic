@@ -1,7 +1,7 @@
 <ion-view view-title="{{visit.visited_at}}">
 
   <ion-nav-buttons side="right">
-    <button class="button button-icon button-clear ion-ios-plus-empty" ui-sref="app.visit.new_inspection"></button>
+    <button class="button button-icon button-clear ion-ios-plus-empty" ui-sref="app.visit.new_inspection({visit_id: visit.id})"></button>
   </ion-nav-buttons>
 
   <ion-content>
@@ -10,6 +10,10 @@
     <div class="item text-center" ng-if="state.firstLoad == true">
       <ion-spinner></ion-spinner>
     </div>
+    <ion-item ng-if="visit.inspections.length == 0 && state.firstLoad == false" class="text-center">
+      <h2>No inspections found. Why not add one?</h2>
+    </ion-item>
+
     <ion-item class="item-icon-left" ng-repeat="ins in visit.inspections">
       <i class="icon ion-ios-circle-filled" ng-style="{'color': ins.color}"></i>
       <h2>{{ins.report.breeding_site.description}}</h2>

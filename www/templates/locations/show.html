@@ -23,8 +23,8 @@
             Add a visit
           </div> -->
 
-          <ion-item class="item-icon-right item-icon-left" ng-repeat="visit in visits" ui-sref="app.visit({id: visit.id})">
-            <i class="icon ion-ios-circle-filled" ng-style="{'color': visit.color}"></i>
+          <ion-item class="item-icon-right item-icon-left" ng-repeat="visit in visits" ui-sref="app.location.visit({visit_id: visit.id})">
+            <i class="{{visit.inspections_count == 0 ? 'icon ion-ios-circle-outline' : 'icon ion-ios-circle-filled'}}" ng-style="{'color': visit.color}"></i>
 
             <h2>{{visit.visited_at}}</h2>
             <p>{{visit.inspections_count}} inspections</p>
@@ -73,7 +73,7 @@
   </ion-content>
 
   <div class="bar bar-footer bar-balanced">
-    <div class="title" ng-if="state.pageIndex == 0" ui-sref="app.visits.new">Add a visit</div>
+    <div class="title" ng-if="state.pageIndex == 0" ng-click="showNewVisitModal()">Add a visit</div>
     <div class="title" ng-click="saveQuestions()" ng-if="state.pageIndex == 1">Save questions</div>
   </div>
 

@@ -1,5 +1,22 @@
-<ion-view view-title="{{visit.visited_at}}">
+<ion-view>
   <ion-content>
-    TODO
+    <div class="list">
+      <label class="item item-input">
+        <div class="input-label">Location</div>
+        <input type="text" class="text-right" ng-model="visit.location_address">
+      </label>
+
+      <label class="item item-input">
+        <div class="input-label">Fecha de visita</div>
+        <input type="date" class="text-right" ng-model="visit.visited_at">
+      </label>
+    </div>
+
+
   </ion-content>
+
+  <div class="bar bar-footer bar-balanced">
+    <div class="title" ng-click="create()">Add</div>
+  </div>
+
 </ion-view>

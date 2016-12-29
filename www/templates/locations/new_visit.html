@@ -1,0 +1,40 @@
+<!-- <ion-view view-title="{{visit.visited_at}}">
+  <ion-content>
+
+    <div class="list">
+      <label class="item item-input">
+        <div class="input-label">Fecha de visita</div>
+        <input type="date" class="text-right" ng-model="visit.visited_at">
+      </label>
+    </div>
+
+
+  </ion-content>
+
+  <div class="bar bar-footer bar-balanced">
+    <div class="title" ng-click="create()">Add</div>
+  </div>
+
+</ion-view> -->
+
+<ion-modal-view class="login-modal">
+  <ion-header-bar class="bar bar-header bar-stable">
+    <h1 class="title">Add a visit</h1>
+    <button class="button button-clear button-positive" ng-click="closeNewVisitModal()">Cancel</button>
+  </ion-header-bar>
+  <ion-content has-bouncing="false" scroll="false">
+    <div class="list">
+      <label class="item item-input">
+        <div class="input-label">Fecha de visita</div>
+        <input type="date" class="text-right" ng-model="visit.visited_at">
+      </label>
+    </div>
+  </ion-content>
+
+  <div class="bar bar-footer bar-balanced">
+    <div class="bar bar-footer bar-balanced">
+      <div class="title" ng-click="createVisit()">Add</div>
+    </div>
+  </div>
+
+</ion-modal-view>
