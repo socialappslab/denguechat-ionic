@@ -73,7 +73,7 @@
   </ion-content>
 
   <div class="bar bar-footer bar-balanced">
-    <div class="title" ng-if="state.pageIndex == 0" ui-sref="app.location.new_visit">Add a visit</div>
+    <div class="title" ng-if="state.pageIndex == 0" ng-click="showNewVisitModal()">Add a visit</div>
     <div class="title" ng-click="saveQuestions()" ng-if="state.pageIndex == 1">Save questions</div>
   </div>
 
