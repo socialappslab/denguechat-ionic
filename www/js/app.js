@@ -9,7 +9,7 @@ angular.module('starter.services', [])
 
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.directives', 'ngSanitize'])
 
-.run(function($ionicPlatform, $rootScope, $ionicModal, User, $state, $ionicHistory) {
+.run(function($ionicPlatform, $rootScope, $ionicModal, User, $state, $ionicHistory, Pouch) {
   $rootScope.user = User.get()
 
   $ionicPlatform.ready(function() {

@@ -10,5 +10,6 @@ denguechat.env = {
   },
   baseURL: "http://localhost:5000/api/v0/",
   mainURL: "http://localhost:5000/",
+  localPouchURL: "clovi",
   debug: true
 }
