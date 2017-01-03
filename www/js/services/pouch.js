@@ -1,6 +1,6 @@
 
 angular.module('starter.services')
-.factory('Pouch', ['$http', '$q', 'Screener', function($http, $q, User) {
+.factory('Pouch', ['$http', '$q', 'User', function($http, $q, User) {
   return {
     db: new PouchDB("denguechat"),
 
@@ -32,6 +32,8 @@ angular.module('starter.services')
         self.db.get(docId).then(function(doc){
           return doc;
         }).catch(function(err){
+          console.log("Error caught!")
+          console.log(err)
           if (err.status == 404) {
             return self.fetchDoc(docId);
           }
