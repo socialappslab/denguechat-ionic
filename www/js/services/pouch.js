@@ -1,12 +1,13 @@
 
 angular.module('starter.services')
 .factory('Pouch', ['$http', '$q', 'User', function($http, $q, User) {
+  PouchDB.replicate('denguechat', 'http://localhost:5984/denguechat', {live: true});
   return {
     db: new PouchDB("denguechat"),
 
     // Make an AJAX call to the supplied URL.
     // Save a successful response to our local PouchDB, with the URL as key.
-    fetchDoc: function(url){
+    fetchDoc: function(docID, url){
       var self = this;
 
       return $http({
@@ -16,26 +17,30 @@ angular.module('starter.services')
           "Authorization": "Bearer " + User.getToken()
         }
       }).then(function(response) {
+        console.log("Data returned...")
         doc = response.data;
-        doc._id = docId;
+        doc._id = docID;
         self.db.put(doc);
-        return response;
+        return response.data;
       })
     },
 
     // Attempt to get a document from our local PouchDB.
     // If the document does not exist, fetch it from the Rails API.
-    cachedDoc: function(url){
+    cachedDoc: function(docID, url){
       var self = this;
 
       return $q.when(
-        self.db.get(docId).then(function(doc){
+        self.db.get(docID).then(function(doc){
+          console.log("Returning document...")
+          console.log(doc)
           return doc;
         }).catch(function(err){
           console.log("Error caught!")
           console.log(err)
           if (err.status == 404) {
-            return self.fetchDoc(docId);
+            console.log("FEtching doc...")
+            return self.fetchDoc(docID, url);
           }
         })
       );

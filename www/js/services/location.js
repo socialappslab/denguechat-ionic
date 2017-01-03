@@ -20,26 +20,28 @@ angular.module('starter.services')
        }
       })
     },
+    // TODO: How do we store a new document here if we don't know the location ID?
     create: function(location) {
       docId = denguechat.env.baseURL + "locations/"
       return Pouch.upsertDoc(docId, {location: location});
     },
     update: function(location) {
-      docId = denguechat.env.baseURL + "locations/" + location.id
-      return Pouch.upsertDoc(docId, {location: location});
+      return Pouch.upsertDoc(locationDocumentURL + location.id, {location: location});
     },
     updateQuestions: function(location) {
-      docId = denguechat.env.baseURL + "locations/" + location.id + "/questions"
+      docId = locationDocumentURL + location.id + "/questions"
       return Pouch.upsertDoc(docId, {questions: location.questions});
     },
     get: function(id) {
       if (id) {
-        docId = denguechat.env.baseURL + "locations/" + id
+        url = denguechat.env.baseURL + "locations/" + id
+        return Pouch.cachedDoc(locationDocumentURL + id, url);
       } else {
+        // TODO: Change this to use a different docId.
         docId = denguechat.env.baseURL + "locations/mobile"
+        url   = docId
+        return Pouch.cachedDoc(docId, url);
       }
-
-      return Pouch.cachedDoc(docId);
     }
   };
 })
