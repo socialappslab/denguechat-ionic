@@ -16,6 +16,7 @@ denguechat.env = {
   // @if ENV == 'DEVELOPMENT'
   baseURL: "http://localhost:5000/api/v0/",
   mainURL: "http://localhost:5000/",
+  localPouchURL: "denguechat",
   debug: true
   // @endif
   // @if ENV == 'PRODUCTION'

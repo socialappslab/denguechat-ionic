@@ -9,7 +9,7 @@ angular.module('starter.services', [])
 
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngSanitize'])
 
-.run(function($ionicPlatform, $rootScope, $ionicModal, User, $state, $ionicHistory) {
+.run(function($ionicPlatform, $rootScope, $ionicModal, User, $state, $ionicHistory, Pouch) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
