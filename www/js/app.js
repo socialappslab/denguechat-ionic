@@ -7,7 +7,7 @@
 
 angular.module('starter.services', [])
 
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngSanitize'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.directives', 'ngSanitize'])
 
 .run(function($ionicPlatform, $rootScope, $ionicModal, User, $state, $ionicHistory) {
   $ionicPlatform.ready(function() {
