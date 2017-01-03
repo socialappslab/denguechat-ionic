@@ -16,21 +16,34 @@
     <ion-header-bar class="bar-stable">
       <h1 class="title">Menu</h1>
     </ion-header-bar>
-    <ion-content scroll="false">
+    <ion-content scroll="false" padding="false" style="top:0px !important;" class="side-menu-left side-menu-gradient">
+      <div class="spacer" style="width: 268px; height: 32px;"></div>
+      <div class="profile-image">
+        <img src="img/gtbwUlNcSlWV47X3aVTg_snap.jpg" style="display: block; width: 40%; height: auto; margin-left: auto; margin-right: auto;">
+      </div>
+      <h3 style="color:white; text-align:center;">Dmitri</h3>
+      <div class="spacer" style="width: 268px; height: 34px;"></div>
       <ion-list>
-        <ion-item menu-close ui-sref="app.posts">
+        <ion-item menu-close ui-sref="app.posts" class="item-icon-left side-menu-item" active-page-highlight="">
+          <i class="icon ion-ios-chatbubble-outline"></i>
           Mi Comunidad
         </ion-item>
-        <ion-item menu-close ui-sref="app.locations">
-          Locations
+        <ion-item menu-close ui-sref="app.locations" class="item-icon-left side-menu-item" active-page-highlight="">
+          <i class="icon ion-ios-home-outline"></i>
+          Lugares
         </ion-item>
-        <ion-item menu-close ui-sref="app.visits">
+        <ion-item menu-close ui-sref="app.visits" class="item-icon-left side-menu-item" active-page-highlight="">
+          <i class="icon ion-ios-navigate-outline"></i>
           Visits
         </ion-item>
-        <ion-item menu-close ng-click="logout()">
-          Logout
-        </ion-item>
+
       </ion-list>
     </ion-content>
+
+    <ion-footer-bar align-title="center" class="bar-stable">
+      <h1 class="title" ng-click="logout()">Logout</h1>
+    </ion-footer-bar>
+
+
   </ion-side-menu>
 </ion-side-menus>
