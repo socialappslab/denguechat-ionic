@@ -12,6 +12,9 @@ angular.module('starter.services')
       this.setToken(user.token);
       $window.localStorage.setItem("user", JSON.stringify(user || {}));
     },
+    get: function() {
+      return JSON.parse($window.localStorage.getItem("user") || "{}")
+    },
     // TODO: This is an authentication token and it's stored in plain sight!!!!
     // Improve on the security by storing in Apple's Vault or Android's Vault...
     setToken: function(token) {
