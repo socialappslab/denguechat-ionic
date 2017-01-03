@@ -6,7 +6,7 @@ is returned via password authentication:
 https://www.firebase.com/docs/web/guide/login/password.html
 */
 angular.module('starter.services')
-.factory('Location', function($http, User) {
+.factory('Location', function($http, User, Pouch) {
   return {
     neighborhoods: [
       {"id":3,"name":"Tepalcingo"},
@@ -30,59 +30,25 @@ angular.module('starter.services')
       })
     },
     create: function(location) {
-      return $http({
-        method: "POST",
-        url:    denguechat.env.baseURL + "locations/",
-        data: {
-          location: location
-        },
-        headers: {
-         "Authorization": "Bearer " + User.getToken()
-       }
-      })
+      docId = denguechat.env.baseURL + "locations/"
+      return Pouch.upsertDoc(docId, {location: location});
     },
     update: function(location) {
-      return $http({
-        method: "PUT",
-        url:    denguechat.env.baseURL + "locations/" + location.id,
-        data: {
-          location: location
-        },
-        headers: {
-         "Authorization": "Bearer " + User.getToken()
-       }
-      })
+      docId = denguechat.env.baseURL + "locations/" + location.id
+      return Pouch.upsertDoc(docId, {location: location});
     },
     updateQuestions: function(location) {
-      return $http({
-        method: "PUT",
-        url:    denguechat.env.baseURL + "locations/" + location.id + "/questions",
-        data: {
-          questions: location.questions
-        },
-        headers: {
-         "Authorization": "Bearer " + User.getToken()
-       }
-      })
+      docId = denguechat.env.baseURL + "locations/" + location.id + "/questions"
+      return Pouch.upsertDoc(docId, {questions: location.questions});
     },
     get: function(id) {
       if (id) {
-        return $http({
-          method: "GET",
-          url:    denguechat.env.baseURL + "locations/" + id,
-          headers: {
-           "Authorization": "Bearer " + User.getToken()
-         }
-        })
+        docId = denguechat.env.baseURL + "locations/" + id
       } else {
-        return $http({
-          method: "GET",
-          url:    denguechat.env.baseURL + "locations/mobile",
-          headers: {
-           "Authorization": "Bearer " + User.getToken()
-         }
-        })
+        docId = denguechat.env.baseURL + "locations/mobile"
       }
+
+      return Pouch.cachedDoc(docId);
     }
   };
 })

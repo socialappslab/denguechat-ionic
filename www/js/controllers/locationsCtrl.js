@@ -19,7 +19,7 @@ angular.module('starter.controllers')
   $scope.refresh = function() {
     $scope.state.loading = true
     Location.get().then(function(response) {
-      $scope.locations = response.data.locations
+      $scope.locations = response.locations
     }, function(response) {
       $scope.$emit(denguechat.env.error, {error: response})
     }).finally(function() {
