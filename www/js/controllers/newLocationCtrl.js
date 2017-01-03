@@ -1,6 +1,6 @@
 angular.module('starter.controllers')
 .controller('newLocationCtrl', ['$scope', "$state", 'User', 'Location', '$ionicModal', '$rootScope', function($scope, $state, User, Location, $ionicModal, $rootScope) {
-  $scope.neighborhoods = Location.neighborhoods;
+  $scope.neighborhoods = User.get().neighborhoods;
   $scope.location      = {};
   $scope.state = {loading: false};
 

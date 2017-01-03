@@ -6,20 +6,11 @@ is returned via password authentication:
 https://www.firebase.com/docs/web/guide/login/password.html
 */
 angular.module('starter.services')
-.factory('Location', function($http, User) {
+.factory('Location', function($http, User, Pouch) {
+  var locationDocumentURL = "neighborhoods/" + User.get().neighborhood.id + "/locations/";
+
   return {
-    neighborhoods: [
-      {"id":3,"name":"Tepalcingo"},
-      {"id":4,"name":"Ocachicualli"},
-      {"id":1,"name":"Maré"},
-      {"id":8,"name":"La Quinta"},
-      {"id":5,"name":"Francisco Meza"},
-      {"id":7,"name":"Ariel Darce"},
-      {"id":9,"name":"Josefa Ortiz de Domínguez"},
-      {"id":10,"name":"Galope"},
-      {"id":11,"name":"Tangará"},
-      {"id":12,"name":"Centro Escolar Rafaela Herrera"}
-    ],
+    // TODO
     search: function(query) {
       return $http({
         method: "GET",
@@ -29,59 +20,27 @@ angular.module('starter.services')
        }
       })
     },
+    // TODO: How do we store a new document here if we don't know the location ID?
     create: function(location) {
-      return $http({
-        method: "POST",
-        url:    denguechat.env.baseURL + "locations/",
-        data: {
-          location: location
-        },
-        headers: {
-         "Authorization": "Bearer " + User.getToken()
-       }
-      })
+      docId = denguechat.env.baseURL + "locations/"
+      return Pouch.upsertDoc(docId, {location: location});
     },
     update: function(location) {
-      return $http({
-        method: "PUT",
-        url:    denguechat.env.baseURL + "locations/" + location.id,
-        data: {
-          location: location
-        },
-        headers: {
-         "Authorization": "Bearer " + User.getToken()
-       }
-      })
+      return Pouch.upsertDoc(locationDocumentURL + location.id, {location: location});
     },
     updateQuestions: function(location) {
-      return $http({
-        method: "PUT",
-        url:    denguechat.env.baseURL + "locations/" + location.id + "/questions",
-        data: {
-          questions: location.questions
-        },
-        headers: {
-         "Authorization": "Bearer " + User.getToken()
-       }
-      })
+      docId = locationDocumentURL + location.id + "/questions"
+      return Pouch.upsertDoc(docId, {questions: location.questions});
     },
     get: function(id) {
       if (id) {
-        return $http({
-          method: "GET",
-          url:    denguechat.env.baseURL + "locations/" + id,
-          headers: {
-           "Authorization": "Bearer " + User.getToken()
-         }
-        })
+        url = denguechat.env.baseURL + "locations/" + id
+        return Pouch.cachedDoc(locationDocumentURL + id, url);
       } else {
-        return $http({
-          method: "GET",
-          url:    denguechat.env.baseURL + "locations/mobile",
-          headers: {
-           "Authorization": "Bearer " + User.getToken()
-         }
-        })
+        // TODO: Change this to use a different docId.
+        docId = denguechat.env.baseURL + "locations/mobile"
+        url   = docId
+        return Pouch.cachedDoc(docId, url);
       }
     }
   };

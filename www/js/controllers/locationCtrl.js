@@ -60,15 +60,18 @@ angular.module('starter.controllers')
     $scope.state.loading = true
     Location.get($state.params.id).then(function(response) {
       // Let's parse the dates.
-      for (var i=0; i < response.data.location.questions.length; i++) {
-        if (response.data.location.questions[i].type == "date" && response.data.location.questions[i].answer)
-          response.data.location.questions[i].answer = new Date(response.data.location.questions[i].answer)
+      console.log("We now have data!")
+      console.log(response)
+      console.log(response.location)
+      for (var i=0; i < response.location.questions.length; i++) {
+        if (response.location.questions[i].type == "date" && response.location.questions[i].answer)
+          response.location.questions[i].answer = new Date(response.location.questions[i].answer)
       }
 
-      $scope.location  = response.data.location
+      $scope.location  = response.location
 
 
-      $scope.visits    = response.data.location.visits
+      $scope.visits    = response.location.visits
     }, function(response) {
       $scope.$emit(denguechat.env.error, {error: response})
     }).finally(function() {
