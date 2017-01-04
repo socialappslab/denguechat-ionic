@@ -16,7 +16,7 @@ angular.module('starter.controllers')
   }
 
   $scope.refresh = function(offset) {
-    Post.get(8, 20, offset).then(function(response) {
+    Post.get(20, offset).then(function(response) {
       Array.prototype.push.apply($scope.posts, response.data.posts)
       $scope.$broadcast('scroll.infiniteScrollComplete');
       $scope.state.hasMoreData = (response.data.posts.length !== 0)

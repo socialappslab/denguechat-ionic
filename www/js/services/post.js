@@ -17,10 +17,11 @@ angular.module('starter.services')
        }
       })
     },
-    get: function(n_id, limit, offset) {
+    get: function(limit, offset) {
+      nid = User.get().neighborhood.id
       return $http({
         method: "GET",
-        url:    denguechat.env.baseURL + "/posts?neighborhood_id=" + n_id + "&limit=" + limit + "&offset=" + offset,
+        url:    denguechat.env.baseURL + "/posts?neighborhood_id=" + nid + "&limit=" + limit + "&offset=" + offset,
         headers: {
          "Authorization": "Bearer " + User.getToken()
        }
