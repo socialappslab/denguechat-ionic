@@ -53,6 +53,18 @@ angular.module('starter.controllers')
     })
   }
 
+  $scope.loadCamera = function() {
+    if (navigator.camera) {
+      navigator.camera.getPicture(function(base64) {
+        $scope.post.compressed_photo = "data:image/jpeg;base64," + base64
+        $scope.$apply()
+      }, function(response) {
+      }, {saveToPhotoAlbum: true, destinationType: 0})
+    } else {
+      alert("Camera not supported!")
+    }
+  }
+
   $scope.createPost = function() {
     $ionicLoading.show()
 

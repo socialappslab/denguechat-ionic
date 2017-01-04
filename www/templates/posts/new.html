@@ -9,6 +9,13 @@
       <label class="item item-input">
         <textarea ng-model="post.content" autofocus></textarea>
       </label>
+
+      <li class="item item-icon-right" ng-click="loadCamera()">
+        Foto
+        <i class="icon ion-ios-camera-outline" ng-if="!post.compressed_photo"></i>
+        <img style="height:50px; max-width: 50px; float:right;" src="{{post.compressed_photo}}" ng-if="!!post.compressed_photo"></img>
+      </li>
+
     </div>
   </ion-content>
 
