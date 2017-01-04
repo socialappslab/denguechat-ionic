@@ -26,10 +26,20 @@ angular.module('starter.services')
        }
       })
     },
-    // TODO: How do we store a new document here if we don't know the location ID?
+    // TODO: Convert to PouchDB.
     create: function(location) {
-      doc_id = locationDocumentURL + cleanAddress(location.address)
-      return Pouch.upsertDoc(doc_id, {location: location});
+      // doc_id = locationDocumentURL + cleanAddress(location.address)
+      // return Pouch.upsertDoc(doc_id, {location: location});
+      return $http({
+        method: "POST",
+        url:    denguechat.env.baseURL + "locations/",
+        data: {
+          location: location
+        },
+        headers: {
+         "Authorization": "Bearer " + User.getToken()
+       }
+      })
     },
     update: function(location) {
       return Pouch.upsertDoc(locationDocumentURL + cleanAddress(location.address), {location: location});
