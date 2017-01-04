@@ -1,5 +1,5 @@
 angular.module('starter.controllers')
-.controller('visitCtrl', ['$scope', '$state', 'Visit', function($scope, $state, Visit) {
+.controller('visitCtrl', ['$scope', '$state', 'Visit', "$ionicModal", function($scope, $state, Visit, $ionicModal) {
   $scope.visit = {};
   $scope.state = {firstLoad: true};
 
@@ -12,6 +12,26 @@ angular.module('starter.controllers')
       $scope.state.firstLoad = false;
       $scope.$broadcast('scroll.refreshComplete');
     });
+  }
+
+  $scope.showNewInspectionModal = function() {
+    // Create the login modal that we will use later
+    return $ionicModal.fromTemplateUrl('templates/inspections/new.html', {
+      scope: $scope,
+      animation: 'slide-in-up',
+      focusFirstInput: true,
+      backdropClickToClose: false,
+      hardwareBackButtonClose: false
+    }).then(function(modal) {
+      $scope.modal = modal;
+      modal.show()
+    });
+  }
+
+  $scope.closeNewInspectionModal = function() {
+    $scope.modal.hide().then(function() {
+      $scope.modal.remove();
+    })
   }
 
   $scope.$on(denguechat.env.data.refresh, function() {
