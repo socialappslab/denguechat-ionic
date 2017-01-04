@@ -1,7 +1,7 @@
 angular.module('starter.controllers')
-.controller('newInspectionsCtrl', ['$scope', '$state', 'Inspection', '$ionicLoading', '$ionicHistory', function($scope, $state, Inspection, $ionicLoading, $ionicHistory) {
-  $scope.inspection = {visit_id: $state.params.id, protected: 0, chemically_treated: 0, larvae: 0, pupae: 0};
-  $scope.breeding_sites = Inspection.breeding_sites;
+.controller('newInspectionsCtrl', ['$scope', '$state', 'Inspection', '$ionicLoading', '$ionicHistory', "User", function($scope, $state, Inspection, $ionicLoading, $ionicHistory, User) {
+  $scope.inspection     = {visit_id: $state.params.id, protected: 0, chemically_treated: 0, larvae: 0, pupae: 0};
+  $scope.breeding_sites = User.get().breeding_sites
 
   $scope.loadCamera = function() {
     if (navigator.camera) {
