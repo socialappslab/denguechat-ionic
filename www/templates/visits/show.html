@@ -1,7 +1,7 @@
 <ion-view view-title="{{visit.visited_at}}">
 
   <ion-nav-buttons side="right">
-    <button class="button button-icon button-clear ion-ios-plus-empty" ui-sref="app.visit.new_inspection({visit_id: visit.id})"></button>
+    <button class="button button-icon button-clear ion-edit" ui-sref="app.location.visit.edit({visit_date: visit.visited_at, visit_id: visit.id})"></button>
   </ion-nav-buttons>
 
   <ion-content>
@@ -23,4 +23,9 @@
     </ion-item>
 
   </ion-content>
+
+  <div class="bar bar-footer bar-balanced">
+    <div class="title" ng-click="showNewInspectionModal()">Add an inspection</div>
+  </div>
+
 </ion-view>

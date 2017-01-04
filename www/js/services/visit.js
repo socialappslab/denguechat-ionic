@@ -39,6 +39,9 @@ angular.module('starter.services')
        }
       })
     },
+    update: function(location_id, visit_date, visit) {
+      return Pouch.upsertDoc(docID({visited_at: visit_date, location_id: location_id}), {visit: visit});
+    },
     get: function(location_id, visit_date, visit_id) {
       url = denguechat.env.baseURL + "visits/" + visit_id
       return Pouch.cachedDoc(docID({visited_at: visit_date, location_id: location_id}), url);
