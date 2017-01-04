@@ -153,15 +153,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     }
   })
-  .state('app.location.edit', {
-    url: '/edit',
-    views: {
-      'menuContent@app': {
-        templateUrl: 'templates/locations/edit.html',
-        controller: 'editLocationCtrl'
-      }
-    }
-  })
   .state('app.location', {
     url: '/location/:id',
     views: {
@@ -171,8 +162,17 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     }
   })
+  .state('app.location.edit', {
+    url: '/edit',
+    views: {
+      'menuContent@app': {
+        templateUrl: 'templates/locations/edit.html',
+        controller: 'editLocationCtrl'
+      }
+    }
+  })
   .state('app.location.visit', {
-    url: '/visits/:visit_id',
+    url: '/visits/:visit_date?visit_id',
     views: {
       'menuContent@app': {
         templateUrl: 'templates/visits/show.html',

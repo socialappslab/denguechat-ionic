@@ -17,7 +17,7 @@ angular.module('starter.controllers')
   }
 
   $scope.refresh = function() {
-    Visit.get().then(function(response) {
+    Visit.getAll().then(function(response) {
       $scope.visits = response.data.visits
     }, function(response) {
       $scope.$emit(denguechat.env.error, {error: response})

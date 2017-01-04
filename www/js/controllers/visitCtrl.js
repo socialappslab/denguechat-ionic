@@ -4,8 +4,8 @@ angular.module('starter.controllers')
   $scope.state = {firstLoad: true};
 
   $scope.refresh = function() {
-    Visit.get($state.params.visit_id).then(function(response) {
-      $scope.visit = response.data.visit
+    Visit.get($state.params.location_id, $state.params.visit_date, $state.params.visit_id).then(function(response) {
+      $scope.visit = response.visit
     }, function(response) {
       $scope.$emit(denguechat.env.error, {error: response})
     }).finally(function() {
