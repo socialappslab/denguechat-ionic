@@ -27,7 +27,7 @@
         <ion-spinner></ion-spinner>
       </ion-item>
 
-      <ion-item class="item-icon-right" ng-repeat="location in locations" ui-sref="app.location({id: location.id})">
+      <ion-item class="item-icon-right" ng-repeat="location in locations" ui-sref="app.location({id: location.address})">
         <h2>{{location.address}}</h2>
         <p>Last visited on {{location.last_visited_at}}</p>
         <p>{{location.visits_count}} visits total</p>

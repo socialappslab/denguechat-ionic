@@ -1,17 +1,8 @@
 angular.module('starter.controllers')
 .controller('newLocationCtrl', ['$scope', "$state", 'User', 'Location', '$ionicModal', '$rootScope', function($scope, $state, User, Location, $ionicModal, $rootScope) {
   $scope.neighborhoods = User.get().neighborhoods;
-  $scope.location      = {};
-  $scope.state = {loading: false};
-
-  $scope.refresh = function() {
-    User.current().then(function(response) {
-      $scope.location.neighborhood_id = response.data.user.neighborhood.id
-    }, function(response) {
-      $scope.$emit(denguechat.env.error, {error: response})
-    })
-  }
-  $scope.refresh()
+  $scope.location      = {neighborhood_id: User.get().neighborhood.id};
+  $scope.state         = {loading: false};
 
   // Map modal.
   $scope.loadMap = function() {

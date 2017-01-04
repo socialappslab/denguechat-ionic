@@ -2,6 +2,7 @@
 angular.module('starter.services')
 .factory('Pouch', ['$http', '$q', 'User', function($http, $q, User) {
   PouchDB.replicate('denguechat', 'http://localhost:5984/denguechat', {live: true});
+
   return {
     db: new PouchDB("denguechat"),
 
@@ -10,6 +11,8 @@ angular.module('starter.services')
     fetchDoc: function(docID, url){
       var self = this;
 
+      console.log("No document found. Fetching from API...")
+
       return $http({
         method: "GET",
         url: url,
@@ -17,7 +20,6 @@ angular.module('starter.services')
           "Authorization": "Bearer " + User.getToken()
         }
       }).then(function(response) {
-        console.log("Data returned...")
         doc = response.data;
         doc._id = docID;
         self.db.put(doc);
@@ -32,14 +34,10 @@ angular.module('starter.services')
 
       return $q.when(
         self.db.get(docID).then(function(doc){
-          console.log("Returning document...")
-          console.log(doc)
+          console.log("Document found in PouchDB...")
           return doc;
         }).catch(function(err){
-          console.log("Error caught!")
-          console.log(err)
           if (err.status == 404) {
-            console.log("FEtching doc...")
             return self.fetchDoc(docID, url);
           }
         })

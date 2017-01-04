@@ -58,11 +58,8 @@ angular.module('starter.controllers')
     // $ionicHistory.removeBackView()
 
     $scope.state.loading = true
-    Location.get($state.params.id).then(function(response) {
+    Location.getByAddress($state.params.id).then(function(response) {
       // Let's parse the dates.
-      console.log("We now have data!")
-      console.log(response)
-      console.log(response.location)
       for (var i=0; i < response.location.questions.length; i++) {
         if (response.location.questions[i].type == "date" && response.location.questions[i].answer)
           response.location.questions[i].answer = new Date(response.location.questions[i].answer)
