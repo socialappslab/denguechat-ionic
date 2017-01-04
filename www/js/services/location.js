@@ -7,7 +7,13 @@ https://www.firebase.com/docs/web/guide/login/password.html
 */
 angular.module('starter.services')
 .factory('Location', function($http, User, Pouch) {
+  // The root of the document ID naming.
   var locationDocumentURL = "neighborhoods/" + User.get().neighborhood.id + "/locations/";
+
+  // Helper function.
+  var cleanAddress = function(address) {
+    return address.toLowerCase();
+  }
 
   return {
     // TODO
@@ -22,26 +28,25 @@ angular.module('starter.services')
     },
     // TODO: How do we store a new document here if we don't know the location ID?
     create: function(location) {
-      docId = denguechat.env.baseURL + "locations/"
-      return Pouch.upsertDoc(docId, {location: location});
+      doc_id = locationDocumentURL + cleanAddress(location.address)
+      return Pouch.upsertDoc(doc_id, {location: location});
     },
     update: function(location) {
-      return Pouch.upsertDoc(locationDocumentURL + location.id, {location: location});
+      return Pouch.upsertDoc(locationDocumentURL + cleanAddress(location.address), {location: location});
     },
     updateQuestions: function(location) {
-      docId = locationDocumentURL + location.id + "/questions"
-      return Pouch.upsertDoc(docId, {questions: location.questions});
+      doc_id = locationDocumentURL + cleanAddress(location.address) + "/questions"
+      return Pouch.upsertDoc(doc_id, {questions: location.questions});
     },
-    get: function(id) {
-      if (id) {
-        url = denguechat.env.baseURL + "locations/" + id
-        return Pouch.cachedDoc(locationDocumentURL + id, url);
-      } else {
-        // TODO: Change this to use a different docId.
-        docId = denguechat.env.baseURL + "locations/mobile"
-        url   = docId
-        return Pouch.cachedDoc(docId, url);
-      }
+    getByAddress: function(address) {
+      url = denguechat.env.baseURL + "locations/" + cleanAddress(address)
+      return Pouch.cachedDoc(locationDocumentURL + cleanAddress(address), url);
+    },
+    getAll: function() {
+      // TODO: Change this to use a different docId.
+      docId = denguechat.env.baseURL + "locations/mobile"
+      url   = docId
+      return Pouch.cachedDoc(docId, url);
     }
   };
 })
