@@ -1,14 +1,14 @@
 angular.module('starter.controllers')
 .controller('editLocationCtrl', ['$scope', "$state", 'User', 'Location', '$ionicModal', '$rootScope', '$ionicLoading', function($scope, $state, User, Location, $ionicModal, $rootScope, $ionicLoading) {
   $scope.location      = {};
-  $scope.neighborhoods = Location.neighborhoods;
+  $scope.neighborhoods = User.get().neighborhoods;
   $scope.state = {loading: false, viewName: null};
 
   $scope.refresh = function() {
     $ionicLoading.show()
 
-    Location.get($state.params.id).then(function(response) {
-      $scope.location       = response.data.location
+    Location.getByAddress($state.params.id).then(function(response) {
+      $scope.location       = response.location
       $scope.state.viewName = $scope.location.address
     }, function(response) {
       $scope.$emit(denguechat.env.error, {error: response})
