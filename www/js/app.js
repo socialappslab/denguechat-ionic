@@ -180,6 +180,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     }
   })
+  .state('app.location.visit.edit', {
+    url: '/edit',
+    views: {
+      'menuContent@app': {
+        templateUrl: 'templates/visits/edit.html',
+        controller: 'editVisitCtrl'
+      }
+    }
+  })
   .state('app.location.new_visit', {
     url: '/new_visit',
     views: {
