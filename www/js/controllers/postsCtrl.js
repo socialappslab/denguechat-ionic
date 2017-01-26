@@ -100,7 +100,6 @@ angular.module('starter.controllers')
   // http://ionicframework.com/docs/api/directive/ionView/
   $scope.$on("$ionicView.loaded", function() {
     Post.getAll().then(function(posts) {
-      console.log(posts)
       $scope.posts = posts
     })
   })

@@ -1,7 +1,7 @@
 angular.module('starter.controllers')
-.controller('newLocationCtrl', ['$scope', "$state", 'User', 'Location', '$ionicModal', '$rootScope', function($scope, $state, User, Location, $ionicModal, $rootScope) {
+.controller('newLocationCtrl', ['$scope', "$state", 'User', 'Location', '$ionicModal', '$rootScope', "$ionicLoading", "$ionicHistory", function($scope, $state, User, Location, $ionicModal, $rootScope, $ionicLoading, $ionicHistory) {
   $scope.neighborhoods = User.get().neighborhoods;
-  $scope.location      = {neighborhood_id: User.get().neighborhood.id};
+  $scope.location      = {neighborhood_id: User.get().neighborhood.id, last_visited_at: new Date(), visits_count: 0};
   $scope.state         = {loading: false};
 
   // Map modal.
@@ -25,14 +25,28 @@ angular.module('starter.controllers')
 
 
   $scope.create = function() {
-    $scope.state.loading = true;
+    // $scope.state.loading = true;
+    //
+    // Location.create($scope.location).then(function(response) {
+    //   $state.go("app.location", {id: response.data.id})
+    // }, function(response) {
+    //   $scope.$emit(denguechat.env.error, {error: response})
+    // }).finally(function() {
+    //  $scope.state.loading   = false;
+    // });
 
-    Location.create($scope.location).then(function(response) {
-      $state.go("app.location", {id: response.data.id})
+    $ionicLoading.show()
+
+    doc_id = Location.documentID($scope.location)
+    Location.save(doc_id, $scope.location, {remote: true, synced: false}).then(function(response) {
+      $ionicLoading.hide().then(function() {
+        $ionicHistory.goBack(1)
+        $state.go("app.location", {id: doc_id})
+      })
+
     }, function(response) {
-      $scope.$emit(denguechat.env.error, {error: response})
-    }).finally(function() {
-     $scope.state.loading   = false;
-    });
+      $scope.$emit(denguechat.env.error, {error: "Something went wrong. Please try again."})
+      $ionicLoading.hide()
+    })
   }
 }])
