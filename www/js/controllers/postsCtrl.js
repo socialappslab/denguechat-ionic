@@ -68,9 +68,11 @@ angular.module('starter.controllers')
   $scope.createPost = function() {
     $ionicLoading.show()
 
+    $scope.post.created_at = new Date()
+    $scope.post.user_id    = user.id
+    $scope.post.neighborhood_id = $scope.user.neighborhood.id;
     doc_id = Post.documentID($scope.post)
     Post.save(doc_id, $scope.post, {remote: true, synced: false}).then(function(response) {
-      console.log(response)
       Post.get(doc_id).then(function(doc) {
         console.log("New post: ")
         console.log(doc)
@@ -91,15 +93,16 @@ angular.module('starter.controllers')
 
 
   $scope.$on(denguechat.env.data.refresh, function() {
-    $scope.state.loading = true
     $scope.refresh(0);
   })
 
   // Triggered only once when the view is loaded.
   // http://ionicframework.com/docs/api/directive/ionView/
   $scope.$on("$ionicView.loaded", function() {
+    $ionicLoading.show({hideOnStateChange: true})
     Post.getAll().then(function(posts) {
       $scope.posts = posts
+      $ionicLoading.hide()
     })
   })
 }])

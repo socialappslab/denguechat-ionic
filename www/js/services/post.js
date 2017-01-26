@@ -8,16 +8,13 @@ https://www.firebase.com/docs/web/guide/login/password.html
 angular.module('starter.services')
 .factory('Post', function($q, $http, User, Pouch, Backoff, _) {
   var backoff = new Backoff({ min: 1000, max: 60000 });
-  var whitelistedKeys = ["id", "user_id", "neighborhood_id", "photo", "content", "liked"];
+  var whitelistedKeys = ["id", "user_id", "neighborhood_id", "photo", "content", "liked", "created_at"];
 
 
   // Pouch.postsDB.destroy()
   return {
     documentID: function(post) {
-      date = (new Date).toISOString()
-      if (post.created_at)
-        date = (new Date(post.created_at)).toISOString()
-      return date + post.neighborhood_id
+      return (new Date(post.created_at)).toISOString() + post.neighborhood_id
     },
 
     like: function(post) {
