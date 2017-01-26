@@ -41,6 +41,18 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     Location.syncUnsyncedDocuments()
   });
 
+
+  $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
+    // Let's ensure that we have user data.
+    var user = User.get()
+    if (!user.neighborhood) {
+      event.preventDefault()
+      User.setToken("")
+      $rootScope.$emit(denguechat.env.error, {error: {status: 401}})
+    }
+  });
+
+
   //----------------------------------------------------------------------------\
 
   $rootScope.state = {loading: false}
