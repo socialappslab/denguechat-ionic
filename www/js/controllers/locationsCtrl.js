@@ -18,7 +18,7 @@ angular.module('starter.controllers')
 
   $scope.refresh = function() {
     $scope.state.loading = true
-    Location.getFromCloud().then(function(response) {
+    Location.getAllFromCloud().then(function(response) {
       $scope.locations = response.locations
     }, function(response) {
       $scope.$emit(denguechat.env.error, {error: response})
