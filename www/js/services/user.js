@@ -48,21 +48,6 @@ angular.module('starter.services')
         }
       })
     },
-    logout: function() {
-      user = this;
-
-      return $http({
-        method: "DELETE",
-        url:    denguechat.env.baseURL + "sessions",
-        headers: {
-         "Authorization": "Bearer " + this.getToken()
-        }
-      }).then(function(response) {}, function(error) {
-        $window.alert("Something went wrong!")
-      }).finally(function(response) {
-        user.setToken(null);
-      })
-    },
     current: function() {
       return $http({
         method: "GET",
