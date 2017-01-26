@@ -9,8 +9,9 @@ angular.module('starter.services', [])
 
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.directives', 'ngSanitize', 'underscore', 'Backo'])
 
-.run(function($ionicPlatform, $rootScope, $ionicModal, User, $state, $ionicHistory, Pouch, Post) {
+.run(function($ionicPlatform, $rootScope, $ionicModal, User, $state, $ionicHistory, Pouch, Post, Location) {
   $rootScope.user = User.get()
+  console.log(JSON.stringify($rootScope.user))
 
   Pouch.createPostNeighborhoodView()
   Pouch.createLocationNeighborhoodView()
@@ -54,6 +55,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     // If this runs, that means we're restarting the app after a crash, or loading it into memory again.
     // Check the database for any items that didn't sync, and try to sync them.
     Post.syncUnsyncedDocuments()
+    Location.syncUnsyncedDocuments()
   });
 
   //----------------------------------------------------------------------------\
@@ -76,7 +78,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   }
 
   $rootScope.$on(denguechat.env.error, function(event, response) {
-    if (response.error.status == 401) {
+    if (response.status == -1) {
+      navigator.notification.alert("We couldn't connect to the server. Do you have an internet connection?", null, "Server not responding", "OK")
+    }
+    else if (response.error.status == 401) {
       User.setToken(null);
 
       if ( !$rootScope.modal || ($rootScope.modal && !$rootScope.modal.isShown()) ) {
