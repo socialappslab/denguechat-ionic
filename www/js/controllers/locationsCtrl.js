@@ -18,7 +18,7 @@ angular.module('starter.controllers')
 
   $scope.refresh = function() {
     $scope.state.loading = true
-    Location.getAll().then(function(response) {
+    Location.getFromCloud().then(function(response) {
       $scope.locations = response.locations
     }, function(response) {
       $scope.$emit(denguechat.env.error, {error: response})
@@ -37,12 +37,21 @@ angular.module('starter.controllers')
   // Triggered only once when the view is loaded.
   // http://ionicframework.com/docs/api/directive/ionView/
   $scope.$on("$ionicView.loaded", function() {
-    $scope.refresh();
+    Location.getAll().then(function(locations) {
+      $scope.locations = locations
+      $scope.$broadcast('scroll.refreshComplete');
+      $scope.state.loading   = false
+      $scope.state.firstLoad = false
+    }).catch(function(error) {
+      $scope.$broadcast('scroll.refreshComplete');
+      $scope.state.loading = false
+      $scope.state.firstLoad = false
+    })
   })
 
-  $scope.$watch("params.search", function(newValue, oldValue) {
-    if (newValue == "" || newValue == null) {
-      $scope.refresh()
-    }
-  })
+  // $scope.$watch("params.search", function(newValue, oldValue) {
+  //   if (newValue == "" || newValue == null) {
+  //     $scope.refresh()
+  //   }
+  // })
 }])
