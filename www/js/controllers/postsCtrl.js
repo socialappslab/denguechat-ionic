@@ -2,29 +2,28 @@ angular.module('starter.controllers')
 .controller('postsCtrl', ['$scope', 'Post', "$ionicModal", "$ionicLoading", function($scope, Post, $ionicModal, $ionicLoading) {
   $scope.state = {loading: false, hasMoreData: false};
   $scope.posts = [];
-  $scope.post  = {user_id: $scope.user.id, neighborhood_id: $scope.user.neighborhood.id};
+  $scope.post  = {};
 
   $scope.toggleLike = function(post) {
-
-    Post.like(post).then(function(res) {
-      $scope.state.loading = false;
-    }, function(response) {
-      $scope.state.loading = false;
-    });
+    Post.like(post)
   }
 
   $scope.refresh = function(offset) {
+    $ionicLoading.show({hideOnStateChange: true})
+
     Post.getFromCloud(20, offset).then(function(response) {
-      console.log("Response: ")
-      console.log(response)
+      Post.getAll().then(function(posts) {
+        $scope.posts = posts
+        $ionicLoading.hide()
+      })
+
       // Array.prototype.push.apply($scope.posts, response.data.posts)
       // $scope.$broadcast('scroll.infiniteScrollComplete');
       // $scope.state.hasMoreData = (response.data.posts.length !== 0)
     }, function(response) {
-      console.log(response)
+      $ionicLoading.hide()
       $scope.$emit(denguechat.env.error, {error: response})
     }).finally(function() {
-     $scope.state.loading = false;
      $scope.$broadcast('scroll.refreshComplete');
     });
   }
