@@ -16,6 +16,8 @@ angular.module('starter.services')
     return address.toLowerCase();
   }
 
+  // Pouch.locationsDB.destroy()
+
   return {
     documentID: function(location) {
       return location.neighborhood_id + location.address
@@ -70,11 +72,7 @@ angular.module('starter.services')
       doc_id = locationDocumentURL + cleanAddress(location.address) + "/questions"
       return Pouch.upsertDoc(doc_id, {questions: location.questions});
     },
-    getByAddress: function(address) {
-      url = denguechat.env.baseURL + "locations/" + cleanAddress(address)
-      return Pouch.cachedDoc(locationDocumentURL + cleanAddress(address), url);
-    },
-    getFromCloud: function() {
+    getAllFromCloud: function() {
       thisLocation = this
       nid = User.get().neighborhood.id
       return $http({
@@ -85,6 +83,19 @@ angular.module('starter.services')
        }
      }).then(function(res) {
         return thisLocation.saveMultiple(res.data.locations, [], null)
+      })
+    },
+    getFromCloud: function(doc) {
+      thisLocation = this
+      return $http({
+        method: "GET",
+        url:    denguechat.env.baseURL + "locations/" + cleanAddress(doc.address),
+        headers: {
+         "Authorization": "Bearer " + User.getToken()
+       }
+     }).then(function(res) {
+       doc_id = thisLocation.documentID(res.data.location)
+       return thisLocation.save(doc_id, res.data.location, {remote: false, synced: true})
       })
     },
 
@@ -126,6 +137,26 @@ angular.module('starter.services')
         return deferred.promise;
       }
     },
+
+    syncMultiple: function(documents) {
+      thisLocation = this
+
+      duration = backoff.duration()
+      console.log("Running syncMultiple with documents:")
+      console.log(documents)
+      console.log("-----")
+
+      doc = documents.shift()
+      if (doc) {
+        setTimeout(function(){
+          thisLocation.sendChangesToCloud(doc.id).then(function(doc) {
+            backoff.reset()
+            thisLocation.syncMultiple(documents)
+          })
+        }, duration)
+      }
+    },
+
 
     get: function(document_id) {
       return Pouch.locationsDB.get(document_id)
