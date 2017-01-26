@@ -27,14 +27,14 @@
         <ion-spinner></ion-spinner>
       </ion-item>
 
-      <ion-item class="item-icon-right" ng-repeat="location in locations" ui-sref="app.location({id: location.address})">
+      <ion-item class="item-icon-right" ng-repeat="location in locations" ui-sref="app.location({id: location._id})">
         <h2>{{location.address}}</h2>
         <p>Last visited on {{location.last_visited_at}}</p>
         <p>{{location.visits_count}} visits total</p>
         <i class="icon ion-ios-arrow-right"></i>
       </ion-item>
       <ion-item ng-if="locations.length == 0 && state.firstLoad == false && state.loading == false" class="text-center">
-        <h2>No locations found. Have you visited any locations?</h2>
+        <h2>No locations found. Have you visited any locations? Try pulling down to refresh.</h2>
       </ion-item>
     </ion-list>
   </ion-content>
