@@ -32,10 +32,8 @@ angular.module('starter.services')
     getAll: function() {
       nid = User.get().neighborhood.id
       return this.findAllByNeighborhoodId(nid).then(function(doc) {
-        console.log(doc)
         docs = doc.rows.map(function(el) { return el.doc })
-        console.log(docs.map(function(el) { return el._id}))
-        return _.sortBy(docs, function(d){ return d.created_at; }).reverse();
+        return _.sortBy(docs, function(d){ return d._id; }).reverse();
       })
     },
     findAllByNeighborhoodId: function(neighborhood_id) {
@@ -48,7 +46,6 @@ angular.module('starter.services')
 
     // May actually be reusable for non-blob syncing stuff...
     save: function(doc_id, post, options) {
-      console.log("SAVING")
       thisPost = this
       if (options.remote == true)
         backoff.reset()
@@ -57,13 +54,7 @@ angular.module('starter.services')
       //  TODO: Maybe this is where we run the 'util' function comparing last document ot current
       // and only storing the "diff"... Our custom diff function of sorts. See:
       // https://github.com/pouchdb/upsert#example-2
-      console.log("Post.save")
-      console.log(doc_id)
       return Pouch.postsDB.upsert(doc_id, function(doc){
-        console.log("upserted in Post.save")
-        console.log(doc)
-        console.log("-----")
-
         // NOTE: We only update if the new key exists AND it doesn't
         // equal what's stored in DB. This allows us to sync data bidirectionally
         // without overwriting with trivial values.
@@ -82,9 +73,6 @@ angular.module('starter.services')
           doc.synced = !!options.synced
           if (options.remote == true)
             thisPost.sync(doc_id)
-          console.log("Changed doc")
-          console.log(doc)
-          console.log("----")
           return doc;
         }
 

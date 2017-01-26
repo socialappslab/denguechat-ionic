@@ -58,17 +58,15 @@ angular.module('starter.controllers')
     // $ionicHistory.removeBackView()
 
     $scope.state.loading = true
-    Location.getByAddress($state.params.id).then(function(response) {
+    Location.getFromCloud($scope.location).then(function(response) {
+      console.log(response)
       // Let's parse the dates.
-      for (var i=0; i < response.location.questions.length; i++) {
-        if (response.location.questions[i].type == "date" && response.location.questions[i].answer)
-          response.location.questions[i].answer = new Date(response.location.questions[i].answer)
-      }
-
-      $scope.location  = response.location
-
-
-      $scope.visits    = response.location.visits
+      // for (var i=0; i < response.location.questions.length; i++) {
+      //   if (response.location.questions[i].type == "date" && response.location.questions[i].answer)
+      //     response.location.questions[i].answer = new Date(response.location.questions[i].answer)
+      // }
+      //
+      // $scope.visits    = response.location.visits
     }, function(response) {
       $scope.$emit(denguechat.env.error, {error: response})
     }).finally(function() {
@@ -97,6 +95,22 @@ angular.module('starter.controllers')
   // Triggered only once when the view is loaded.
   // http://ionicframework.com/docs/api/directive/ionView/
   $scope.$on("$ionicView.loaded", function() {
-    $scope.refresh();
+    Location.get($state.params.id).then(function(doc) {
+
+      // TODO: Load visits + questions
+      $scope.visits = []
+
+      $scope.location = doc
+      $scope.$broadcast('scroll.refreshComplete');
+      $scope.state.loading   = false
+      $scope.state.firstLoad = false
+    }).catch(function(error) {
+      console.log(error)
+      console.log("^ ERROR")
+      $scope.$broadcast('scroll.refreshComplete');
+      $scope.state.loading = false
+      $scope.state.firstLoad = false
+    })
+
   })
 }])

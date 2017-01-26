@@ -12,10 +12,15 @@ angular.module('starter.controllers')
   $scope.login = function(){
     $scope.state = {loading: true, error: null}
     User.session($scope.user.username, $scope.user.password).then(function(response) {
+      console.log(JSON.stringify(response.data))
       User.set(response.data.user)
       $scope.$emit(denguechat.env.auth.success, {token: response.data.token})
     }, function(error) {
-      $scope.state.error = error.data.message
+      console.log(JSON.stringify(error))
+      if (error.status == -1)
+        $scope.state.error = "We couldn't connect to the server. Are you connected to the internet?"
+      else
+        $scope.state.error = error.data.message
     }).finally(function() {
       $scope.state.loading = false;
     })
