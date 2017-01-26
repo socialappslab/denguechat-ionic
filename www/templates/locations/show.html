@@ -10,11 +10,14 @@
     </div>
   </div>
   <ion-nav-buttons side="right">
-    <button class="button button-icon button-clear ion-edit" ui-sref="app.location.edit({id: location.address})"></button>
+    <button class="button button-icon button-clear ion-edit" ui-sref="app.location.edit({id: location._id})"></button>
   </ion-nav-buttons>
 
 
   <ion-content class="has-subheader has-footer">
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="refresh()"></ion-refresher>
+
+
     <ion-slide-box on-slide-changed="changeTimeline($index)" does-continue="false" show-pager="false">
       <ion-slide>
         <ion-list>
