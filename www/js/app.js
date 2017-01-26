@@ -13,6 +13,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   $rootScope.user = User.get()
 
   Pouch.createPostNeighborhoodView()
+  Pouch.createLocationNeighborhoodView()
 
   // var changes = Pouch.db.changes({
   //   since: 'now',
