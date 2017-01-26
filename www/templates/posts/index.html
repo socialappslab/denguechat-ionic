@@ -6,12 +6,9 @@
   <ion-content>
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="refresh()"></ion-refresher>
 
-    <ion-item ng-if="state.firstLoad == true" class="text-center">
-      <ion-spinner></ion-spinner>
-    </ion-item>
 
-    <ion-item ng-if="posts.length == 0 && state.firstLoad == false" class="text-center">
-      <h2>No posts found. Why not add one?</h2>
+    <ion-item ng-if="posts.length == 0" class="text-center">
+      <h2>No posts found. Try pulling down to refresh.</h2>
     </ion-item>
 
     <div class="list card post" ng-repeat="post in posts">
