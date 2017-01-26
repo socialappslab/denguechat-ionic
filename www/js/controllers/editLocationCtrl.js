@@ -2,21 +2,7 @@ angular.module('starter.controllers')
 .controller('editLocationCtrl', ['$scope', "$state", 'User', 'Location', '$ionicModal', '$rootScope', '$ionicLoading', function($scope, $state, User, Location, $ionicModal, $rootScope, $ionicLoading) {
   $scope.location      = {};
   $scope.neighborhoods = User.get().neighborhoods;
-  $scope.state = {loading: false, viewName: null};
-
-  $scope.refresh = function() {
-    $ionicLoading.show()
-
-    Location.getByAddress($state.params.id).then(function(response) {
-      $scope.location       = response.location
-      $scope.state.viewName = $scope.location.address
-    }, function(response) {
-      $scope.$emit(denguechat.env.error, {error: response})
-    }).finally(function(){
-      $ionicLoading.hide()
-    })
-  }
-  $scope.refresh()
+  $scope.state         = {loading: false};
 
   // Map modal.
   $scope.loadMap = function() {
@@ -41,11 +27,29 @@ angular.module('starter.controllers')
   $scope.update = function() {
     $ionicLoading.show()
 
-    Location.update($scope.location).then(function(response) {
-    }, function(response) {
-      $scope.$emit(denguechat.env.error, {error: response})
-    }).finally(function() {
-     $ionicLoading.hide()
-    });
+    Location.save($state.params.id, $scope.location, {remote: true, synced: false}).then(function(response) {
+      $ionicLoading.hide()
+    }).catch(function(response) {
+      $ionicLoading.hide()
+      $scope.$emit(denguechat.env.error, {error: "Something went wrong. Please try again."})
+    })
   }
+
+
+  $scope.$on("$ionicView.loaded", function() {
+    console.log($state.params.id)
+    Location.get($state.params.id).then(function(doc) {
+      $scope.location = doc
+      $scope.$broadcast('scroll.refreshComplete');
+      $scope.state.loading   = false
+      $scope.state.firstLoad = false
+    }).catch(function(error) {
+      console.log(error)
+      console.log("^ ERROR")
+      $scope.$broadcast('scroll.refreshComplete');
+      $scope.state.loading = false
+      $scope.state.firstLoad = false
+    })
+
+  })
 }])
