@@ -101,7 +101,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
     if ($rootScope.modal)
       $rootScope.modal.remove().then(function() {
-        $rootScope.$broadcast(denguechat.env.data.refresh);
+        $state.go("app.posts", {}, {reload: true})
+        // $rootScope.$broadcast(denguechat.env.data.refresh);
       })
   })
 
