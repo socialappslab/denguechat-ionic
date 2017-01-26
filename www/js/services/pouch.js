@@ -1,67 +1,40 @@
 
 angular.module('starter.services')
-.factory('Pouch', ['$http', '$q', 'User', function($http, $q, User) {
-  PouchDB.replicate('denguechat', 'http://localhost:5984/denguechat', {live: true});
+.factory('Pouch', ['$http', '$q', function($http, $q) {
+  PouchDB.replicate('posts', 'http://localhost:5984/posts', {live: true});
+  PouchDB.replicate('visits', 'http://localhost:5984/visits', {live: true});
+  PouchDB.replicate('locations', 'http://localhost:5984/locations', {live: true});
+  PouchDB.replicate('inspections', 'http://localhost:5984/inspections', {live: true});
 
   return {
-    db: new PouchDB("denguechat"),
+    // See https://pouchdb.com/guides/compact-and-destroy.html
+    // to understand why we use auto compaction.
+    // HINT: We don't use revisions at all.
+    postsDB: new PouchDB("posts", {auto_compaction: true}),
+    visitsDB: new PouchDB("visits", {auto_compaction: true}),
+    locationsDB: new PouchDB("locations", {auto_compaction: true}),
+    inspectionsDB: new PouchDB("inspections", {auto_compaction: true}),
+    syncDB: new PouchDB("sync"),
 
-    // Make an AJAX call to the supplied URL.
-    // Save a successful response to our local PouchDB, with the URL as key.
-    fetchDoc: function(docID, url){
-      var self = this;
 
-      console.log("No document found. Fetching from API...")
-
-      return $http({
-        method: "GET",
-        url: url,
-        headers: {
-          "Authorization": "Bearer " + User.getToken()
+    createPostNeighborhoodView: function() {
+      // document that tells PouchDB/CouchDB
+      // to build up an index on doc.name
+      var ddoc = {
+        _id: '_design/posts',
+        synced: true,
+        views: {
+          by_neighborhood_id: {
+            map: function (doc) { emit(doc.neighborhood_id); }.toString()
+          }
         }
-      }).then(function(response) {
-        doc = response.data;
-        doc._id = docID;
-        self.db.put(doc);
-        return response.data;
-      })
+      }
+      this.postsDB.put(ddoc).then(function () {
+        // success!
+      }).catch(function (err) {
+        // some error (maybe a 409, because it already exists?)
+      });
     },
-
-    // Attempt to get a document from our local PouchDB.
-    // If the document does not exist, fetch it from the Rails API.
-    cachedDoc: function(docID, url){
-      var self = this;
-
-      return $q.when(
-        self.db.get(docID).then(function(doc){
-          console.log("Document found in PouchDB...")
-          return doc;
-        }).catch(function(err){
-          if (err.status == 404) {
-            return self.fetchDoc(docID, url);
-          }
-        })
-      );
-    },
-
-    // Push changes in a doc to our local PouchDB.
-    upsertDoc: function(docId, changes){
-      var self = this;
-
-      return $q.when(
-        self.db.upsert(docId, function(doc){
-          for (var key in changes) {
-            doc[key] = changes[key];
-          }
-          doc.updated_at = new Date().toJSON();
-          return doc;
-        }).then(function(response){
-          return response;
-        }).catch(function(err){
-          return err;
-        })
-      );
-    }
 
   };
 }]);

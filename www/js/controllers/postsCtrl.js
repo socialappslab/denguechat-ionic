@@ -1,26 +1,27 @@
 angular.module('starter.controllers')
 .controller('postsCtrl', ['$scope', 'Post', "$ionicModal", "$ionicLoading", function($scope, Post, $ionicModal, $ionicLoading) {
   $scope.state = {loading: false, hasMoreData: false};
-  $scope.posts = []
-  $scope.post  = {}
+  $scope.posts = [];
+  $scope.post  = {user_id: $scope.user.id, neighborhood_id: $scope.user.neighborhood.id};
 
   $scope.toggleLike = function(post) {
-    Post.like(post).then(function(response) {
-      console.log(response)
-      post.liked = response.data.liked
+
+    Post.like(post).then(function(res) {
+      $scope.state.loading = false;
     }, function(response) {
-      $scope.$emit(denguechat.env.error, {error: response})
-    }).finally(function() {
-     $scope.state.loading = false;
+      $scope.state.loading = false;
     });
   }
 
   $scope.refresh = function(offset) {
-    Post.get(20, offset).then(function(response) {
-      Array.prototype.push.apply($scope.posts, response.data.posts)
-      $scope.$broadcast('scroll.infiniteScrollComplete');
-      $scope.state.hasMoreData = (response.data.posts.length !== 0)
+    Post.getFromCloud(20, offset).then(function(response) {
+      console.log("Response: ")
+      console.log(response)
+      // Array.prototype.push.apply($scope.posts, response.data.posts)
+      // $scope.$broadcast('scroll.infiniteScrollComplete');
+      // $scope.state.hasMoreData = (response.data.posts.length !== 0)
     }, function(response) {
+      console.log(response)
       $scope.$emit(denguechat.env.error, {error: response})
     }).finally(function() {
      $scope.state.loading = false;
@@ -68,15 +69,23 @@ angular.module('starter.controllers')
   $scope.createPost = function() {
     $ionicLoading.show()
 
-    $scope.post.neighborhood_id = 8
+    doc_id = Post.documentID($scope.post)
+    Post.save(doc_id, $scope.post, {remote: true, synced: false}).then(function(response) {
+      console.log(response)
+      Post.get(doc_id).then(function(doc) {
+        console.log("New post: ")
+        console.log(doc)
+        console.log("----")
+        $scope.posts.unshift(doc)
 
-    Post.create($scope.post).then(function(response) {
-      $scope.post = {}
-      $ionicLoading.hide().then(function() {
-        $scope.closeNewPostModal()
+        $scope.post = {}
+        $ionicLoading.hide().then(function() {
+          $scope.closeNewPostModal()
+        })
       })
+
     }, function(response) {
-      $scope.$emit(denguechat.env.error, {error: response})
+      $scope.$emit(denguechat.env.error, {error: "Something went wrong. Please try again."})
       $ionicLoading.hide()
     })
   }
@@ -90,6 +99,9 @@ angular.module('starter.controllers')
   // Triggered only once when the view is loaded.
   // http://ionicframework.com/docs/api/directive/ionView/
   $scope.$on("$ionicView.loaded", function() {
-    $scope.refresh(0);
+    Post.getAll().then(function(posts) {
+      console.log(posts)
+      $scope.posts = posts
+    })
   })
 }])

@@ -7,10 +7,32 @@
 
 angular.module('starter.services', [])
 
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.directives', 'ngSanitize'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.directives', 'ngSanitize', 'underscore', 'Backo'])
 
-.run(function($ionicPlatform, $rootScope, $ionicModal, User, $state, $ionicHistory, Pouch) {
+.run(function($ionicPlatform, $rootScope, $ionicModal, User, $state, $ionicHistory, Pouch, Post) {
   $rootScope.user = User.get()
+
+  Pouch.createPostNeighborhoodView()
+
+  // var changes = Pouch.db.changes({
+  //   since: 'now',
+  //   live: true,
+  //   include_docs: true
+  // }).on('change', function(change) {
+  //   // handle change
+  //   console.log("db.change Change happened...")
+  //   console.log(change)
+  // }).on('complete', function(info) {
+  //   console.log("db.changes Complete...")
+  //   console.log(change)
+  //
+  //   // changes() was canceled
+  // }).on('error', function (err) {
+  //   console.log("db.changes Error...")
+  //   console.log(change)
+  //
+  //   console.log(err);
+  // });
 
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -27,6 +49,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     if (!navigator.notification) {
       navigator.notification = window
     }
+
+    // If this runs, that means we're restarting the app after a crash, or loading it into memory again.
+    // Check the database for any items that didn't sync, and try to sync them.
+    Post.syncUnsyncedDocuments()
   });
 
   //----------------------------------------------------------------------------\
