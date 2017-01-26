@@ -9,11 +9,17 @@ angular.module('starter.services')
 .factory('User', function($window, $http) {
   return {
     set: function(user) {
-      this.setToken(user.token);
-      $window.localStorage.setItem("user", JSON.stringify(user || {}));
+      if (user)
+        $window.localStorage.setItem("user", JSON.stringify(user));
+      else
+        $window.localStorage.setItem("user", "");
     },
     get: function() {
-      return JSON.parse($window.localStorage.getItem("user") || "{}")
+      user = $window.localStorage.getItem("user")
+      if (user)
+        return JSON.parse(user)
+      else
+        return {}
     },
     // TODO: This is an authentication token and it's stored in plain sight!!!!
     // Improve on the security by storing in Apple's Vault or Android's Vault...
