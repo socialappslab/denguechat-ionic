@@ -90,12 +90,7 @@ angular.module('starter.services')
          "Authorization": "Bearer " + User.getToken()
        }
       }).then(function(res) {
-        posts = res.data.posts
-        // Pouch.postsDB.destroy().then(function(res) {
-        //  new PouchDB("posts", {auto_compaction: true})
-        //   return thisPost.saveMultiple(posts, [], null)
-        // })
-        return thisPost.saveMultiple(posts, [], null)
+        return thisPost.saveMultiple(res.data.posts, [], null)
       })
     },
 
