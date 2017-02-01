@@ -15,18 +15,14 @@
     </form>
   </div>
 
-  <ion-nav-buttons side="right">
+  <!-- <ion-nav-buttons side="right">
     <button class="button button-icon button-clear ion-ios-plus-empty" ui-sref="app.locations.new"></button>
-  </ion-nav-buttons>
+  </ion-nav-buttons> -->
 
-  <ion-content class="has-subheader">
+  <ion-content class="has-subheader has-footer">
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="refresh()"></ion-refresher>
 
     <ion-list>
-      <ion-item ng-if="state.firstLoad == true || state.loading == true" class="text-center">
-        <ion-spinner></ion-spinner>
-      </ion-item>
-
       <ion-item class="item-icon-right" ng-repeat="location in locations" ui-sref="app.location({id: location._id})">
         <h2>{{location.address}}</h2>
         <p>Last visited on {{location.last_visited_at}}</p>
@@ -38,4 +34,9 @@
       </ion-item>
     </ion-list>
   </ion-content>
+
+  <div class="bar bar-footer bar-balanced">
+    <div class="title" ng-click="showNewLocationModal()">Add location</div>
+  </div>
+
 </ion-view>
