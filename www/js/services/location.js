@@ -6,9 +6,9 @@ is returned via password authentication:
 https://www.firebase.com/docs/web/guide/login/password.html
 */
 angular.module('starter.services')
-.factory('Location', function($http, User, Pouch, $q, Backoff) {
+.factory('Location', function($http, User, Pouch, $q, Backoff, Visit) {
   var backoff = new Backoff({ min: 1000, max: 60000 });
-  var whitelistedKeys = ["id", "user_id", "latitude", "longitude", "neighborhood_id", "address", "last_visited_at", "visits_count"];
+  var whitelistedKeys = ["id", "user_id", "latitude", "longitude", "neighborhood_id", "address", "last_visited_at", "visits"];
 
 
   // Helper function.
@@ -126,12 +126,33 @@ angular.module('starter.services')
         return deferred.resolve(document_ids)
       } else {
         loc    = locations.shift();
-        doc_id = thisLocation.documentID(loc)
+        loc_doc_id = thisLocation.documentID(loc)
         console.log(loc)
-        console.log(doc_id)
-        return thisLocation.save(doc_id, loc, {remote: false, synced: true}).then(function(doc) {
-          document_ids.push(doc_id)
-          return thisLocation.saveMultiple(locations, document_ids, deferred)
+        console.log(loc_doc_id)
+        console.log("First location loc_doc_id: " + loc_doc_id)
+        return thisLocation.save(loc_doc_id, loc, {remote: false, synced: true}).then(function(doc) {
+          console.log("Now saving loc.visits...")
+          console.log(loc.visits)
+          console.log("------")
+
+          visit_doc_ids = []
+          Visit.saveMultiple(loc_doc_id, loc.visits, visit_doc_ids, null).then(function(res) {
+            console.log("Saved all visits!")
+            console.log(res)
+            console.log("And here is visit_doc_ids:")
+            console.log(visit_doc_ids)
+            console.log("DONEN----")
+
+            loc.visits = visit_doc_ids
+            console.log("Second location doc_id: " + loc_doc_id)
+            thisLocation.save(loc_doc_id, loc, {remote: false, synced: true}).then(function(doc) {
+              document_ids.push(loc_doc_id)
+              return thisLocation.saveMultiple(locations, document_ids, deferred)
+            })
+
+          }, function(err) { console.log("ER"); console.log(err)})
+
+
         })
 
         return deferred.promise;
