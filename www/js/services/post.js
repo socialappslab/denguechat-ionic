@@ -8,7 +8,7 @@ https://www.firebase.com/docs/web/guide/login/password.html
 angular.module('starter.services')
 .factory('Post', function($q, $http, User, Pouch, Backoff, _) {
   var backoff = new Backoff({ min: 1000, max: 60000 });
-  var whitelistedKeys = ["id", "user_id", "neighborhood_id", "photo", "content", "liked", "created_at"];
+  var whitelistedKeys = ["id", "user_id", "neighborhood_id", "photo", "base64_photo", "content", "liked", "created_at", "user", "timestamp"];
 
 
   // Pouch.postsDB.destroy()
@@ -82,7 +82,7 @@ angular.module('starter.services')
       nid = User.get().neighborhood.id
       return $http({
         method: "GET",
-        url:    denguechat.env.baseURL + "posts?neighborhood_id=" + nid + "&limit=" + limit + "&offset=" + offset,
+        url:    denguechat.env.baseURL + "posts?mobile=1&neighborhood_id=" + nid + "&limit=" + limit + "&offset=" + offset,
         headers: {
          "Authorization": "Bearer " + User.getToken()
        }
@@ -102,7 +102,6 @@ angular.module('starter.services')
       } else {
         post = posts.shift();
         doc_id = thisPost.documentID(post)
-        console.log(doc_id)
         return thisPost.save(doc_id, post, {remote: false, synced: true}).then(function(doc) {
           document_ids.push(doc_id)
           return thisPost.saveMultiple(posts, document_ids, deferred)
