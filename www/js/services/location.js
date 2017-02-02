@@ -16,7 +16,6 @@ angular.module('starter.services')
     return address.toLowerCase();
   }
 
-  // Pouch.locationsDB.destroy()
 
   return {
     documentID: function(location) {
@@ -27,7 +26,6 @@ angular.module('starter.services')
       nid = User.get().neighborhood.id
       return this.findAllByNeighborhoodId(nid).then(function(doc) {
         docs = doc.rows.map(function(el) { return el.doc })
-        console.log(docs)
         return _.sortBy(docs, function(d){ return d.address; });
       })
     },
@@ -82,7 +80,10 @@ angular.module('starter.services')
          "Authorization": "Bearer " + User.getToken()
        }
      }).then(function(res) {
-        return thisLocation.saveMultiple(res.data.locations, [], null)
+       console.log("-----")
+       console.log("Finished $http call....")
+       console.log("Calling thisLocation.saveMultiple()...")
+      return thisLocation.saveMultiple(res.data.locations, [], null)
       })
     },
     getFromCloud: function(doc) {
@@ -118,41 +119,30 @@ angular.module('starter.services')
     },
 
     saveMultiple: function(locations, document_ids, deferred) {
+      // Pouch.locationsDB.destroy()
+      // Pouch.visitsDB.destroy()
+      // Pouch.inspectionsDB.destroy()
+
       thisLocation = this
       if (!deferred)
         deferred = $q.defer();
 
       if (locations.length == 0) {
-        return deferred.resolve(document_ids)
+        deferred.resolve(document_ids)
+        return deferred.promise
       } else {
-        loc    = locations.shift();
+        loc        = locations.shift();
         loc_doc_id = thisLocation.documentID(loc)
-        console.log(loc)
-        console.log(loc_doc_id)
-        console.log("First location loc_doc_id: " + loc_doc_id)
-        return thisLocation.save(loc_doc_id, loc, {remote: false, synced: true}).then(function(doc) {
-          console.log("Now saving loc.visits...")
-          console.log(loc.visits)
-          console.log("------")
 
-          visit_doc_ids = []
-          Visit.saveMultiple(loc_doc_id, loc.visits, visit_doc_ids, null).then(function(res) {
-            // console.log("Saved all visits!")
-            // console.log(res)
-            // console.log("And here is visit_doc_ids:")
-            // console.log(visit_doc_ids)
-            // console.log("DONEN----")
+        thisLocation.save(loc_doc_id, loc, {remote: false, synced: true}).then(function(doc) {
+          document_ids.push(loc_doc_id)
 
+          Visit.saveMultiple(loc_doc_id, loc.visits, [], null).then(function(visit_doc_ids) {
             loc.visits = visit_doc_ids
-            console.log("Second location doc_id: " + loc_doc_id)
-            thisLocation.save(loc_doc_id, loc, {remote: false, synced: true}).then(function(doc) {
-              document_ids.push(loc_doc_id)
-              return thisLocation.saveMultiple(locations, document_ids, deferred)
+            thisLocation.save(loc_doc_id, loc, {remote: false, synced: true}).then(function(res) {
+              thisLocation.saveMultiple(locations, document_ids, deferred)
             })
-
-          }, function(err) { console.log("ER"); console.log(err)})
-
-
+          })
         })
 
         return deferred.promise;

@@ -24,6 +24,8 @@ angular.module('starter.controllers')
 
     Location.getAllFromCloud().then(function(response) {
       Location.getAll().then(function(locations) {
+        console.log("LOcation.getALl() returning...")
+        console.log(locations)
         $scope.locations = locations
         $ionicLoading.hide()
       })

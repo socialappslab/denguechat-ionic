@@ -7,9 +7,9 @@ angular.module('starter.controllers')
   Location.get($state.params.id).then(function(loc) {
     $scope.location = loc
 
-    Visit.getAll($scope.location.visits).then(function(docs) {
-      console.log(docs.rows)
-      $scope.visits = docs.rows
+    Visit.getAll($scope.location.visits).then(function(visits) {
+      $scope.visits = visits
+      console.log(visits)
     })
   })
 
