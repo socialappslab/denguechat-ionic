@@ -8,21 +8,24 @@ https://www.firebase.com/docs/web/guide/login/password.html
 angular.module('starter.services')
 .factory('Visit', function($http, User, Pouch, $q, Backoff, Inspection) {
   var backoff = new Backoff({ min: 1000, max: 60000 });
-  var whitelistedKeys = ["id", "visited_at", "inspections"];
+  var whitelistedKeys = ["id", "visited_at", "inspections", "color", "classification"];
 
 
   var cleanAddress = function(address) {
     return address.toLowerCase();
   }
 
-
+  // Pouch.visitsDB.destroy()
   return {
     documentID: function(location_doc_id, visit) {
       return location_doc_id + visit.visited_at
     },
 
     getAll: function(ins_doc_ids) {
-      return Pouch.visitsDB.allDocs({keys: ins_doc_ids})
+      return Pouch.visitsDB.allDocs({keys: ins_doc_ids, include_docs: true}).then(function(doc) {
+        console.log(doc)
+        return doc.rows.map(function(el) { return el.doc })
+      })
     },
 
     syncUnsyncedDocuments: function() {
@@ -44,37 +47,29 @@ angular.module('starter.services')
     },
 
     saveMultiple: function(location_doc_id, visits, document_ids, deferred) {
-      // console.log("Starting...")
       thisVisit = this
       if (!deferred)
         deferred = $q.defer();
 
       if (visits.length == 0) {
-        return deferred.resolve(document_ids)
+        deferred.resolve(document_ids)
+        return deferred.promise
       } else {
-        visit    = visits.shift();
+        visit        = visits.shift();
         visit_doc_id = thisVisit.documentID(location_doc_id, visit)
 
-        return thisVisit.save(visit_doc_id, visit, {remote: false, synced: true}).then(function(doc) {
-          console.log("Now saving visit.inspections...")
-          console.log(visit.inspections)
-          console.log("------")
+        thisVisit.save(visit_doc_id, visit, {remote: false, synced: true}).then(function(doc) {
+          document_ids.push(visit_doc_id)
 
-          ins_doc_ids = []
-          Inspection.saveMultiple(loc_doc_id, visit_doc_id, visit.inspections, ins_doc_ids, null).then(function(res) {
-            console.log("Saved all inspections!")
-            console.log(res)
-            console.log("And here is ins_doc_ids:")
+          Inspection.saveMultiple(location_doc_id, visit_doc_id, visit.inspections, [], null).then(function(ins_doc_ids) {
+            console.log("Inspection doc IDS:")
             console.log(ins_doc_ids)
-            console.log("------------------------")
-
+            console.log("------")
             visit.inspections = ins_doc_ids
-            thisVisit.save(visit_doc_id, visit, {remote: false, synced: true}).then(function(doc) {
-              document_ids.push(visit_doc_id)
-              return thisVisit.saveMultiple(location_doc_id, visits, document_ids, deferred)
+            thisVisit.save(visit_doc_id, visit, {remote: false, synced: true}).then(function(res) {
+              thisVisit.saveMultiple(location_doc_id, visits, document_ids, deferred)
             })
-
-          }, function(err) { console.log("ER"); console.log(err)})
+          })
         })
 
         return deferred.promise;

@@ -10,10 +10,15 @@ angular.module('starter.services')
   var backoff = new Backoff({ min: 1000, max: 60000 });
   var whitelistedKeys = ["id", "report", "color"];
 
-
+  // Pouch.inspectionsDB.destroy()
   return {
 
     documentID: function(location_doc_id, visit_doc_id, ins) {
+      console.log("-----")
+      console.log(location_doc_id)
+      console.log(visit_doc_id)
+      console.log(ins)
+      console.log("-----")
       return location_doc_id + visit_doc_id + ins.report.breeding_site.description + ins.report.field_identifier + ins.report.report
     },
 
@@ -39,22 +44,23 @@ angular.module('starter.services')
       })
     },
 
-    saveMultiple: function(location_doc_id, visit_doc_id, inspections, document_ids, deferred) {
+    saveMultiple: function(location_doc_id, visit_doc_id, inspections, ins_document_ids, insDeferred) {
       thisInspection = this
-      if (!deferred)
-        deferred = $q.defer();
+      if (!insDeferred)
+        insDeferred = $q.defer();
 
       if (inspections.length == 0) {
-        return deferred.resolve(document_ids);
+        insDeferred.resolve(ins_document_ids);
+        return insDeferred.promise;
       } else {
-        visit  = inspections.shift();
-        doc_id = thisInspection.documentID(location_doc_id, visit)
-        return thisInspection.save(doc_id, visit, {remote: false, synced: true}).then(function(doc) {
-          document_ids.push(doc_id)
-          return thisInspection.saveMultiple(location_doc_id, visit_doc_id, inspections, document_ids, deferred)
+        ins    = inspections.shift();
+        doc_id = thisInspection.documentID(location_doc_id, visit_doc_id, ins)
+        thisInspection.save(doc_id, ins, {remote: false, synced: true}).then(function(doc) {
+          ins_document_ids.push(doc_id)
+          thisInspection.saveMultiple(location_doc_id, visit_doc_id, inspections, ins_document_ids, insDeferred)
         })
 
-        return deferred.promise;
+        return insDeferred.promise;
       }
     },
 
