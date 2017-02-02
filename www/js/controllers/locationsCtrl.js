@@ -4,7 +4,7 @@ angular.module('starter.controllers')
   $scope.locations = [];
   $scope.state  = {firstLoad: true};
   $scope.params = {search: ""};
-  $scope.location      = {neighborhood_id: User.get().neighborhood.id, last_visited_at: new Date(), visits_count: 0};
+  $scope.location      = {visits: [], neighborhood_id: User.get().neighborhood.id, last_visited_at: new Date(), visits_count: 0};
 
 
   $scope.searchByAddress = function() {
