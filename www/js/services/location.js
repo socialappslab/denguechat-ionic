@@ -137,11 +137,11 @@ angular.module('starter.services')
 
           visit_doc_ids = []
           Visit.saveMultiple(loc_doc_id, loc.visits, visit_doc_ids, null).then(function(res) {
-            console.log("Saved all visits!")
-            console.log(res)
-            console.log("And here is visit_doc_ids:")
-            console.log(visit_doc_ids)
-            console.log("DONEN----")
+            // console.log("Saved all visits!")
+            // console.log(res)
+            // console.log("And here is visit_doc_ids:")
+            // console.log(visit_doc_ids)
+            // console.log("DONEN----")
 
             loc.visits = visit_doc_ids
             console.log("Second location doc_id: " + loc_doc_id)
