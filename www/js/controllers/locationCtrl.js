@@ -1,9 +1,17 @@
 angular.module('starter.controllers')
 .controller('locationCtrl', ['$scope', "$state", 'Location', '$ionicHistory', "$ionicSlideBoxDelegate", 'LocationQuiz', '$ionicLoading', "$ionicModal", "Visit", function($scope, $state, Location, $ionicHistory, $ionicSlideBoxDelegate, LocationQuiz, $ionicLoading, $ionicModal, Visit) {
-  $scope.location = {};
   $scope.state    = {firstLoad: true, pageIndex: 0};
   $scope.params   = {search: ""};
   $scope.visit    = {location_id: $state.params.id}
+
+  Location.get($state.params.id).then(function(loc) {
+    $scope.location = loc
+
+    Visit.getAll($scope.location.visits).then(function(visits) {
+      $scope.visits = visits
+      console.log(visits)
+    })
+  })
 
   $scope.changeTimeline = function(pageIndex) {
     $scope.state.pageIndex = pageIndex

@@ -30,7 +30,7 @@
             <i class="{{visit.inspections_count == 0 ? 'icon ion-ios-circle-outline' : 'icon ion-ios-circle-filled'}}" ng-style="{'color': visit.color}"></i>
 
             <h2>{{visit.visited_at}}</h2>
-            <p>{{visit.inspections_count}} inspections</p>
+            <p>{{visit.inspections.length}} inspections</p>
             <i class="icon ion-ios-arrow-right"></i>
           </ion-item>
           <ion-item ng-if="visits.length == 0 && state.firstLoad == false" class="text-center">
