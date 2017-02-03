@@ -65,6 +65,11 @@ gulp.task('development', function() {
     .pipe(preprocess({context: { ENV: 'DEVELOPMENT', DEBUG: true}}))
     .pipe(gulp.dest('./www/js/'));
 });
+gulp.task('ios', function() {
+  gulp.src('./environment.js')
+    .pipe(preprocess({context: { ENV: 'IOS', DEBUG: true}}))
+    .pipe(gulp.dest('./www/js/'));
+});
 
 gulp.task('production', function() {
   gulp.src('./environment.js')
