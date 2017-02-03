@@ -4,7 +4,7 @@
     <button class="button button-clear button-positive" ng-click="closeNewLocationModal()">Cancel</button>
   </ion-header-bar>
   <ion-content has-bouncing="false" scroll="false">
-    <div class="list">
+    <div class="list" style="margin-bottom: 0px;">
       <label class="item item-input item-select">
         <div class="input-label">Neighborhood</div>
         <select ng-model="location.neighborhood_id" ng-options="n.id as n.name for n in neighborhoods"></select>
@@ -17,21 +17,27 @@
       <div class="item row">
         <div class="col">
           <label class="item-input">
-            <input type="text" placeholder="Latitude" ng-model="location.latitude">
+            <input type="text" placeholder="Latitude" ng-model="location.latitude" disabled>
           </label>
         </div>
         <div class="col">
           <label class="item-input">
-            <input type="text" placeholder="Longitude" ng-model="location.longitude">
+            <input type="text" placeholder="Longitude" ng-model="location.longitude" disabled>
           </label>
         </div>
-        <div class="col">
+        <!-- <div class="col">
           <button class="button button-block button-small button-stable" ng-click="loadMap()">
             <i class="icon ion-ios-navigate-outline"></i>
           </button>
-        </div>
+        </div> -->
+      </div>
+
+      <div class="item text-center" ng-if="state.loadingGeo == true">
+        <ion-spinner></ion-spinner>
       </div>
     </div>
+
+    <div id="map" data-tap-disabled="true"></div>
 
   </ion-content>
 

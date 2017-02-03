@@ -27,11 +27,14 @@ angular.module('starter.services')
     },
 
     getAll: function() {
-      nid = User.get().neighborhood.id
-      return this.findAllByNeighborhoodId(nid).then(function(doc) {
-        docs = doc.rows.map(function(el) { return el.doc })
-        return _.sortBy(docs, function(d){ return d._id; }).reverse();
+      return User.get().then(function(user) {
+        nid = user.neighborhood.id 
+        return this.findAllByNeighborhoodId(nid).then(function(doc) {
+          docs = doc.rows.map(function(el) { return el.doc })
+          return _.sortBy(docs, function(d){ return d._id; }).reverse();
+        })
       })
+
     },
     findAllByNeighborhoodId: function(neighborhood_id) {
       return Pouch.postsDB.query("posts/by_neighborhood_id", {
