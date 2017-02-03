@@ -7,11 +7,15 @@
     <div class="list">
       <label class="item item-input item-select">
         <div class="input-label">Criadero</div>
-        <select ng-model="inspection.breeding_site_id" ng-options="bs.id as bs.description for bs in breeding_sites"></select>
+        <select ng-model="inspection.report.breeding_site" ng-options="bs as bs.description for bs in breeding_sites"></select>
       </label>
       <label class="item item-input">
         <div class="input-label">Descripción</div>
-        <input type="text" class="text-right" ng-model="inspection.location">
+        <input type="text" class="text-right" ng-model="inspection.report.report">
+      </label>
+      <label class="item item-input">
+        <div class="input-label">Field identifier</div>
+        <input type="text" class="text-right" ng-model="inspection.report.field_identifier">
       </label>
       <li class="item item-toggle">
        Protegido
