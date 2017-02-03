@@ -6,20 +6,37 @@ is returned via password authentication:
 https://www.firebase.com/docs/web/guide/login/password.html
 */
 angular.module('starter.services')
-.factory('User', function($window, $http) {
+.factory('User', function($window, $http, Pouch) {
   return {
-    set: function(user) {
-      if (user)
-        $window.localStorage.setItem("user", JSON.stringify(user));
-      else
-        $window.localStorage.setItem("user", "");
-    },
+    // set: function(user) {
+    //   if (user)
+    //     $window.localStorage.setItem("user", JSON.stringify(user));
+    //   else
+    //     $window.localStorage.setItem("user", "");
+    // },
+    // get: function() {
+    //   user = $window.localStorage.getItem("user")
+    //   if (user)
+    //     return JSON.parse(user)
+    //   else
+    //     return {}
+    // },
     get: function() {
-      user = $window.localStorage.getItem("user")
-      if (user)
-        return JSON.parse(user)
-      else
-        return {}
+      return Pouch.usersDB.get("user")
+    },
+    save: function(user) {
+      return Pouch.usersDB.upsert("user", function(doc){
+        for (var key in user) {
+          doc[key] = user[key]
+        }
+
+        return doc
+      })
+    },
+    destroy: function() {
+      return this.get().then(function(doc) {
+        return Pouch.usersDB.remove(doc)
+      })
     },
     // TODO: This is an authentication token and it's stored in plain sight!!!!
     // Improve on the security by storing in Apple's Vault or Android's Vault...

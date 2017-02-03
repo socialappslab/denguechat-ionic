@@ -13,10 +13,14 @@ denguechat.env = {
   mainURL: "http://10.0.3.2:5000/",
   debug: true
   // @endif
+  // @if ENV == 'IOS'
+  baseURL: "http://127.0.0.1:5000/api/v0/",
+  mainURL: "http://127.0.0.1:5000/",
+  debug: true
+  // @endif
   // @if ENV == 'DEVELOPMENT'
   baseURL: "http://localhost:5000/api/v0/",
   mainURL: "http://localhost:5000/",
-  localPouchURL: "denguechat",
   debug: true
   // @endif
   // @if ENV == 'PRODUCTION'
