@@ -1,16 +1,13 @@
 <ion-view view-title="{{visit.visited_at}}">
 
   <ion-nav-buttons side="right">
-    <button class="button button-icon button-clear ion-edit" ui-sref="app.location.visit.edit({visit_date: visit.visited_at, visit_id: visit.id})"></button>
+    <button class="button button-icon button-clear ion-edit" ui-sref="app.location.visit.edit({visit_id: visit._id})"></button>
   </ion-nav-buttons>
 
   <ion-content>
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="refresh()"></ion-refresher>
 
-    <div class="item text-center" ng-if="state.firstLoad == true">
-      <ion-spinner></ion-spinner>
-    </div>
-    <ion-item ng-if="visit.inspections.length == 0 && state.firstLoad == false" class="text-center">
+    <ion-item ng-if="visit.inspections.length == 0" class="text-center">
       <h2>No inspections found. Why not add one?</h2>
     </ion-item>
 

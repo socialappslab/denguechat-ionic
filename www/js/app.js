@@ -200,7 +200,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     }
   })
   .state('app.location.visit', {
-    url: '/visits/:visit_date?visit_id',
+    url: '/visits/:visit_id',
     views: {
       'menuContent@app': {
         templateUrl: 'templates/visits/show.html',

@@ -1,7 +1,20 @@
 angular.module('starter.controllers')
-.controller('visitCtrl', ['$scope', '$state', 'Visit', "$ionicModal", function($scope, $state, Visit, $ionicModal) {
-  $scope.visit = {};
-  $scope.state = {firstLoad: true};
+.controller('visitCtrl', ['$scope', '$state', 'Visit', "$ionicModal", "$ionicLoading", "Inspection", function($scope, $state, Visit, $ionicModal, $ionicLoading, Inspection) {
+  $scope.visit       = {};
+  $scope.inspections = [];
+
+  $scope.$on("$ionicView.loaded", function() {
+    $ionicLoading.show({hideOnStateChange: true})
+
+    Visit.get($state.params.visit_id).then(function(response) {
+      $scope.visit = response
+
+      Inspection.getAll($scope.visit.inspections).then(function(inspections) {
+        $ionicLoading.hide()
+        $scope.visit.inspections = inspections
+      })
+    })
+  })
 
   $scope.refresh = function() {
     Visit.get($state.params.location_id, $state.params.visit_date, $state.params.visit_id).then(function(response) {
@@ -39,7 +52,7 @@ angular.module('starter.controllers')
     $scope.refresh();
   })
 
-  $scope.$on("$ionicView.loaded", function() {
-    $scope.refresh();
-  })
+  // $scope.$on("$ionicView.loaded", function() {
+  //   $scope.refresh();
+  // })
 }] )
