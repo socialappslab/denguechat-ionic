@@ -7,7 +7,7 @@
 
 angular.module('starter.services', [])
 
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.directives', 'ngSanitize', 'underscore', 'Backo'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.directives', 'ngSanitize', 'underscore', 'Backo', 'ngCordova'])
 
 .run(function($ionicPlatform, $rootScope, $ionicModal, User, $state, $ionicHistory, Pouch, Post, Location, Visit, Inspection) {
   $rootScope.user = User.get()
