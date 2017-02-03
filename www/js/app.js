@@ -9,7 +9,7 @@ angular.module('starter.services', [])
 
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.directives', 'ngSanitize', 'underscore', 'Backo'])
 
-.run(function($ionicPlatform, $rootScope, $ionicModal, User, $state, $ionicHistory, Pouch, Post, Location) {
+.run(function($ionicPlatform, $rootScope, $ionicModal, User, $state, $ionicHistory, Pouch, Post, Location, Visit, Inspection) {
   $rootScope.user = User.get()
 
   Pouch.createPostNeighborhoodView()
@@ -39,6 +39,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     // Check the database for any items that didn't sync, and try to sync them.
     Post.syncUnsyncedDocuments()
     Location.syncUnsyncedDocuments()
+    Visit.syncUnsyncedDocuments()
+    Inspection.syncUnsyncedDocuments()
   });
 
 
