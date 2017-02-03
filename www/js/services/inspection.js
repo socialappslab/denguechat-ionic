@@ -8,22 +8,28 @@ https://www.firebase.com/docs/web/guide/login/password.html
 angular.module('starter.services')
 .factory('Inspection', function($http, User, Pouch, $q, Backoff) {
   var backoff = new Backoff({ min: 1000, max: 60000 });
-  var whitelistedKeys = ["id", "report", "color"];
+  var whitelistedKeys = ["id", "visit_id", "position", "location", "protected", "chemically_treated", "larvae", "pupae", "larvae", "report", "before_photo", "color", "created_at"];
 
   // Pouch.inspectionsDB.destroy()
   return {
-
     documentID: function(location_doc_id, visit_doc_id, ins) {
-      console.log("-----")
-      console.log(location_doc_id)
-      console.log(visit_doc_id)
-      console.log(ins)
-      console.log("-----")
-      return location_doc_id + visit_doc_id + ins.report.breeding_site.description + ins.report.field_identifier + ins.report.report
+      return location_doc_id + visit_doc_id + ins.created_at + ins.position
+    },
+
+    color: function(inspection) {
+      if(inspection.larvae || inspection.pupae) {
+        return "#e74c3c";
+      } else if (inspection.protected) {
+        return "#2ecc71"
+      } else {
+        return "#f1c40f"
+      }
     },
 
     getAll: function(ins_doc_ids) {
-      return Pouch.inspectionsDB.allDocs({keys: ins_doc_ids})
+      return Pouch.inspectionsDB.allDocs({keys: ins_doc_ids, include_docs: true}).then(function(docs) {
+        return docs.rows.map(function(el) { return el.doc })
+      })
     },
 
     syncUnsyncedDocuments: function() {

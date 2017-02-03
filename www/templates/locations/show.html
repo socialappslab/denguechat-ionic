@@ -10,7 +10,7 @@
     </div>
   </div>
   <ion-nav-buttons side="right">
-    <button class="button button-icon button-clear ion-edit" ui-sref="app.location.edit({id: location._id})"></button>
+    <button class="button button-icon button-clear ion-edit" ui-sref="app.location.edit({visit_id: visit._id})"></button>
   </ion-nav-buttons>
 
 
@@ -26,7 +26,7 @@
             Add a visit
           </div> -->
 
-          <ion-item class="item-icon-right item-icon-left" ng-repeat="visit in visits" ui-sref="app.location.visit({visit_date: visit.visited_at, visit_id: visit.id})">
+          <ion-item class="item-icon-right item-icon-left" ng-repeat="visit in visits" ui-sref="app.location.visit({visit_id: visit._id})">
             <i class="{{visit.inspections_count == 0 ? 'icon ion-ios-circle-outline' : 'icon ion-ios-circle-filled'}}" ng-style="{'color': visit.color}"></i>
 
             <h2>{{visit.visited_at}}</h2>

@@ -21,10 +21,21 @@ angular.module('starter.services')
       return location_doc_id + visit.visited_at
     },
 
+    get: function(document_id) {
+      return Pouch.visitsDB.get(document_id)
+    },
+
     getAll: function(ins_doc_ids) {
       return Pouch.visitsDB.allDocs({keys: ins_doc_ids, include_docs: true}).then(function(doc) {
-        console.log(doc)
         return doc.rows.map(function(el) { return el.doc })
+      })
+    },
+
+    addInspection: function(visit_doc_id, ins_doc_id) {
+      thisVisit = this
+      return thisVisit.get(visit_doc_id).then(function(doc) {
+        doc.inspections.push(ins_doc_id)
+        return thisVisit.save(visit_doc_id, doc, {remote: false, synced: true})
       })
     },
 
@@ -113,6 +124,7 @@ angular.module('starter.services')
         changed = false
         for (var key in _.pick(visit, whitelistedKeys)) {
           if (doc[key] != visit[key]) {
+            console.log(key)
             changed  = true
             doc[key] = visit[key]
           }
@@ -232,27 +244,8 @@ angular.module('starter.services')
          "Authorization": "Bearer " + User.getToken()
        }
       })
-    },
-    // TODO: Convert to PouchDB.
-    create: function(visit) {
-      return $http({
-        method: "POST",
-        url:    denguechat.env.baseURL + "visits/",
-        data: {
-          visit: visit
-        },
-        headers: {
-         "Authorization": "Bearer " + User.getToken()
-       }
-      })
-    },
-    update: function(location_id, visit_date, visit) {
-      return Pouch.upsertDoc(docID({visited_at: visit_date, location_id: location_id}), {visit: visit});
-    },
-    get: function(location_id, visit_date, visit_id) {
-      url = denguechat.env.baseURL + "visits/" + visit_id
-      return Pouch.cachedDoc(docID({visited_at: visit_date, location_id: location_id}), url);
-    },
+    }
+
     // TODO
     // getAll: function() {
     //   return $http({

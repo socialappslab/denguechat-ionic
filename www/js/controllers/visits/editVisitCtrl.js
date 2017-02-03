@@ -1,18 +1,28 @@
 angular.module('starter.controllers')
-.controller('editVisitCtrl', ['$scope', '$state', 'Inspection', '$ionicLoading', '$ionicHistory', "Visit", function($scope, $state, Inspection, $ionicLoading, $ionicHistory, Visit) {
-  $scope.visit = {location_address: $state.params.id, visited_at: new Date($state.params.visit_date) };
+.controller('editVisitCtrl', ['$scope', '$state', 'Inspection', '$ionicLoading', '$ionicHistory', "Visit", "Location", function($scope, $state, Inspection, $ionicLoading, $ionicHistory, Visit, Location) {
+  $scope.visit = {};
+
+  $scope.$on("$ionicView.loaded", function() {
+    $ionicLoading.show({hideOnStateChange: true})
+
+    Location.get($state.params.id).then(function(doc) {
+      Visit.get($state.params.visit_id).then(function(response) {
+        $scope.visit                  = response
+        $scope.visit.location_address = doc.address
+        $scope.visit.visited_at       = new Date($scope.visit.visited_at)
+        $ionicLoading.hide()
+      })
+    })
+  })
 
   $scope.update = function() {
-    $ionicLoading.show()
+    $ionicLoading.show({hideOnStateChange: true})
 
-    console.log($state.params)
-    Visit.update($state.params.id, $state.params.visit_date, $scope.visit).then(function(response) {
+    Visit.save($state.params.visit_id, $scope.visit, {remote: true}).then(function(response) {
+      console.log(response)
       $ionicLoading.hide().then(function() {
         $ionicHistory.goBack();
       })
-    }, function(response) {
-      $scope.$emit(denguechat.env.error, {error: response})
-      $ionicLoading.hide()
     })
   }
 }])

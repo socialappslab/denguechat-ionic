@@ -16,6 +16,9 @@ angular.module('starter.services')
     return address.toLowerCase();
   }
 
+  // Pouch.locationsDB.destroy()
+  // Pouch.visitsDB.destroy()
+  // Pouch.inspectionsDB.destroy()
 
   return {
     documentID: function(location) {
@@ -119,10 +122,6 @@ angular.module('starter.services')
     },
 
     saveMultiple: function(locations, document_ids, deferred) {
-      // Pouch.locationsDB.destroy()
-      // Pouch.visitsDB.destroy()
-      // Pouch.inspectionsDB.destroy()
-
       thisLocation = this
       if (!deferred)
         deferred = $q.defer();
