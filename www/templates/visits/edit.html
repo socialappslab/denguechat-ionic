@@ -1,22 +1,27 @@
 <ion-view>
-  <ion-content>
-    <div class="list">
-      <label class="item item-input">
-        <div class="input-label">Location</div>
-        <input type="text" class="text-right" ng-model="visit.location_address">
-      </label>
+  <form ng-submit="update()">
+    <ion-content scroll="false">
+      <div class="list">
+        <!-- <label class="item item-input">
+          <div class="input-label">Location</div>
+          <input type="text" class="text-right" ng-model="visit.location_address">
+        </label> -->
 
-      <label class="item item-input">
-        <div class="input-label">Fecha de visita</div>
-        <input type="date" class="text-right" ng-model="visit.visited_at">
-      </label>
+        <label class="item item-input">
+          <div class="input-label">Fecha de visita</div>
+          <input type="date" class="text-right" ng-model="visit.visited_at">
+        </label>
+      </div>
+
+
+    </ion-content>
+
+
+    <div class="bar bar-footer bar-balanced">
+      <div class="row" style="padding: 0px;">
+        <button type="submit" class="col button button-clear">Update</button>
+      </div>
     </div>
-
-
-  </ion-content>
-
-  <div class="bar bar-footer bar-balanced">
-    <div class="title" ng-click="update()">Update</div>
-  </div>
+  </form>
 
 </ion-view>
