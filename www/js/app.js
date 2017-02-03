@@ -10,7 +10,9 @@ angular.module('starter.services', [])
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.directives', 'ngSanitize', 'underscore', 'Backo'])
 
 .run(function($ionicPlatform, $rootScope, $ionicModal, User, $state, $ionicHistory, Pouch, Post, Location, Visit, Inspection) {
-  $rootScope.user = User.get()
+  User.get().then(function(user) {
+    $rootScope.user = user;
+  })
 
   Pouch.createPostNeighborhoodView()
   Pouch.createLocationNeighborhoodView()
@@ -44,14 +46,17 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   });
 
 
-  $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
-    // Let's ensure that we have user data.
-    var user = User.get()
-    if (!user.neighborhood) {
-      event.preventDefault()
-      User.setToken("")
-      $rootScope.$emit(denguechat.env.error, {error: {status: 401}})
-    }
+  $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams, options) {
+    User.get().then(function(user) {
+      console.log("RESPONSE from USER GET:")
+      console.log(JSON.stringify(user))
+
+      if (!user || !user.neighborhood || !user.breeding_sites) {
+        $rootScope.$emit(denguechat.env.auth.failure, {})
+      }
+    }, function(el) {
+      $rootScope.$emit(denguechat.env.auth.failure, {})
+    })
   });
 
 
@@ -99,12 +104,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
 
   $rootScope.$on(denguechat.env.auth.success, function(event, data) {
-    User.setToken(data.token);
-
     if ($rootScope.modal)
       $rootScope.modal.remove().then(function() {
+        $ionicHistory.clearHistory()
         $state.go("app.posts", {}, {reload: true})
-        // $rootScope.$broadcast(denguechat.env.data.refresh);
       })
   })
 

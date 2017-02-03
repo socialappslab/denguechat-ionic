@@ -11,14 +11,21 @@ angular.module('starter.controllers')
 
   $scope.login = function(){
     $scope.state = {loading: true, error: null}
+
     User.session($scope.user.username, $scope.user.password).then(function(response) {
-      console.log(JSON.stringify(response.data))
-      User.set(response.data.user)
-      $scope.$emit(denguechat.env.auth.success, {token: response.data.token})
+
+      User.save(response.data.user).then(function(doc) {
+        $scope.$emit(denguechat.env.auth.success, {})
+      }, function(err) {
+        $scope.state.error = "We couldn't store data locally. Please try again."
+      })
+
     }, function(error) {
       console.log(JSON.stringify(error))
       if (error.status == -1)
         $scope.state.error = "We couldn't connect to the server. Are you connected to the internet?"
+      else if (error.status == 500)
+        $scope.state.error = "Something went wrong on our end. Please try again."
       else
         $scope.state.error = error.data.message
     }).finally(function() {

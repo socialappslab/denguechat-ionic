@@ -1,20 +1,23 @@
 
 angular.module('starter.services')
 .factory('Pouch', ['$http', '$q', function($http, $q) {
-  PouchDB.replicate('posts', 'http://localhost:5984/posts', {live: true});
-  PouchDB.replicate('visits', 'http://localhost:5984/visits', {live: true});
-  PouchDB.replicate('locations', 'http://localhost:5984/locations', {live: true});
-  PouchDB.replicate('inspections', 'http://localhost:5984/inspections', {live: true});
+  // PouchDB.replicate('posts', 'http://localhost:5984/posts', {live: true});
+  // PouchDB.replicate('visits', 'http://localhost:5984/visits', {live: true});
+  // PouchDB.replicate('locations', 'http://localhost:5984/locations', {live: true});
+  // PouchDB.replicate('inspections', 'http://localhost:5984/inspections', {live: true});
 
   return {
     // See https://pouchdb.com/guides/compact-and-destroy.html
     // to understand why we use auto compaction.
     // HINT: We don't use revisions at all.
-    postsDB: new PouchDB("posts", {auto_compaction: true}),
-    visitsDB: new PouchDB("visits", {auto_compaction: true}),
-    locationsDB: new PouchDB("locations", {auto_compaction: true}),
-    inspectionsDB: new PouchDB("inspections", {auto_compaction: true}),
-    syncDB: new PouchDB("sync"),
+    usersDB:        new PouchDB("users"),
+    postsDB:        new PouchDB("posts", {auto_compaction: true}),
+    visitsDB:       new PouchDB("visits", {auto_compaction: true}),
+    locationsDB:    new PouchDB("locations", {auto_compaction: true}),
+    inspectionsDB:  new PouchDB("inspections", {auto_compaction: true}),
+    syncDB:         new PouchDB("sync"),
+    breedingsDB:    new PouchDB("breeding_sites"),
+    eliminationsDB: new PouchDB("eliminations"),
 
 
     createPostNeighborhoodView: function() {
@@ -53,7 +56,7 @@ angular.module('starter.services')
       }).catch(function (err) {
         // some error (maybe a 409, because it already exists?)
       });
-    }
+    },
 
   };
 }]);

@@ -103,6 +103,8 @@ angular.module('starter.controllers')
     Post.getAll().then(function(posts) {
       $scope.posts = posts
       $ionicLoading.hide()
+    }, function(error) {
+      $ionicLoading.hide()
     })
   })
 }])
