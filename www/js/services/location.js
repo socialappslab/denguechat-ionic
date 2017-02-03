@@ -8,7 +8,7 @@ https://www.firebase.com/docs/web/guide/login/password.html
 angular.module('starter.services')
 .factory('Location', function($http, User, Pouch, $q, Backoff, Visit) {
   var backoff = new Backoff({ min: 1000, max: 60000 });
-  var whitelistedKeys = ["id", "user_id", "latitude", "longitude", "neighborhood_id", "address", "last_visited_at", "visits"];
+  var whitelistedKeys = ["id", "user_id", "latitude", "longitude", "neighborhood_id", "address", "last_visited_at", "visits", "questions"];
 
 
   // Helper function.
@@ -39,17 +39,21 @@ angular.module('starter.services')
       })
     },
 
-
-
-    // TODO
-    search: function(query) {
-      return $http({
-        method: "GET",
-        url:    denguechat.env.baseURL + "locations/search?address=" + query,
-        headers: {
-         "Authorization": "Bearer " + User.getToken()
-       }
+    search: function(address) {
+      return Pouch.locationsDB.search({
+        query: address,
+        fields: ['address'],
+        include_docs: true
+      }).then(function(res) {
+        return res.rows
       })
+      // return $http({
+      //   method: "GET",
+      //   url:    denguechat.env.baseURL + "locations/search?address=" + query,
+      //   headers: {
+      //    "Authorization": "Bearer " + User.getToken()
+      //  }
+      // })
     },
     // TODO: Convert to PouchDB.
     create: function(location) {
@@ -65,13 +69,6 @@ angular.module('starter.services')
          "Authorization": "Bearer " + User.getToken()
        }
       })
-    },
-    update: function(location) {
-      return Pouch.upsertDoc(locationDocumentURL + cleanAddress(location.address), {location: location});
-    },
-    updateQuestions: function(location) {
-      doc_id = locationDocumentURL + cleanAddress(location.address) + "/questions"
-      return Pouch.upsertDoc(doc_id, {questions: location.questions});
     },
     getAllFromCloud: function() {
       thisLocation = this
