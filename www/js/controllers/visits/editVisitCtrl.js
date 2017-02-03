@@ -23,6 +23,6 @@ angular.module('starter.controllers')
       $ionicLoading.hide().then(function() {
         $ionicHistory.goBack();
       })
-    }, function(err) { console.log(err)})
+    })
   }
 }])

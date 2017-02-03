@@ -31,6 +31,14 @@ angular.module('starter.services')
       })
     },
 
+    addInspection: function(visit_doc_id, ins_doc_id) {
+      thisVisit = this
+      return thisVisit.get(visit_doc_id).then(function(doc) {
+        doc.inspections.push(ins_doc_id)
+        return thisVisit.save(visit_doc_id, doc, {remote: false, synced: true})
+      })
+    },
+
     syncUnsyncedDocuments: function() {
       thisVisit = this
       Pouch.visitsDB.changes({
