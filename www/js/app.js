@@ -48,12 +48,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
   $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams, options) {
     User.get().then(function(user) {
-      console.log("RESPONSE from USER GET:")
-      console.log(JSON.stringify(user))
-
-      if (!user || !user.neighborhood || !user.breeding_sites) {
+      if (!user || !user.neighborhood || !user.breeding_sites)
         $rootScope.$emit(denguechat.env.auth.failure, {})
-      }
     }, function(el) {
       $rootScope.$emit(denguechat.env.auth.failure, {})
     })

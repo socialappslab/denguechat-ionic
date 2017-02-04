@@ -32,13 +32,18 @@ angular.module('starter.controllers')
       // }
       //
       // $scope.visits    = response.location.visits
+
+      $scope.state.firstLoad = false;
+      $scope.state.loading   = false;
+      $scope.$broadcast('scroll.refreshComplete');
+
     }, function(response) {
+      $scope.state.firstLoad = false;
+      $scope.state.loading   = false;
+      $scope.$broadcast('scroll.refreshComplete');
+
       $scope.$emit(denguechat.env.error, {error: response})
-    }).finally(function() {
-     $scope.state.firstLoad = false;
-     $scope.state.loading   = false;
-     $scope.$broadcast('scroll.refreshComplete');
-    });
+    })
   }
 
   $scope.saveQuestions = function() {

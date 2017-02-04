@@ -15,16 +15,17 @@ angular.module('starter.controllers')
       Post.getAll().then(function(posts) {
         $scope.posts = posts
         $ionicLoading.hide()
-      })
+        $scope.$broadcast('scroll.refreshComplete');
+      }, function(er) {console.log("ERRORR"); console.log(JSON.stringify(er))})
+
 
       // Array.prototype.push.apply($scope.posts, response.data.posts)
       // $scope.$broadcast('scroll.infiniteScrollComplete');
       // $scope.state.hasMoreData = (response.data.posts.length !== 0)
     }, function(response) {
       $ionicLoading.hide()
+      $scope.$broadcast('scroll.refreshComplete');
       $scope.$emit(denguechat.env.error, {error: response})
-    }).finally(function() {
-     $scope.$broadcast('scroll.refreshComplete');
     });
   }
 

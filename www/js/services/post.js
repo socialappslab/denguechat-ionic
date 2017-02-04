@@ -27,9 +27,10 @@ angular.module('starter.services')
     },
 
     getAll: function() {
+      thisPost = this
       return User.get().then(function(user) {
-        nid = user.neighborhood.id 
-        return this.findAllByNeighborhoodId(nid).then(function(doc) {
+        nid = user.neighborhood.id
+        return thisPost.findAllByNeighborhoodId(nid).then(function(doc) {
           docs = doc.rows.map(function(el) { return el.doc })
           return _.sortBy(docs, function(d){ return d._id; }).reverse();
         })
@@ -82,15 +83,18 @@ angular.module('starter.services')
 
     getFromCloud: function(limit, offset) {
       thisPost = this
-      nid = User.get().neighborhood.id
-      return $http({
-        method: "GET",
-        url:    denguechat.env.baseURL + "posts?mobile=1&neighborhood_id=" + nid + "&limit=" + limit + "&offset=" + offset,
-        headers: {
-         "Authorization": "Bearer " + User.getToken()
-       }
-      }).then(function(res) {
-        return thisPost.saveMultiple(res.data.posts, [], null)
+      return User.get().then(function(user) {
+        nid = user.neighborhood.id
+        return $http({
+          method: "GET",
+          url:    denguechat.env.baseURL + "posts?mobile=1&neighborhood_id=" + nid + "&limit=" + limit + "&offset=" + offset,
+          headers: {
+           "Authorization": "Bearer " + user.token
+         }
+        }).then(function(res) {
+          console.log(JSON.stringify(res.data.posts))
+          return thisPost.saveMultiple(res.data.posts, [], null)
+        })
       })
     },
 
@@ -115,15 +119,17 @@ angular.module('starter.services')
     },
 
     sendToCloud: function(changes) {
-      return $http({
-        method: "PUT",
-        url: denguechat.env.baseURL + "sync/post",
-        data: {
-          changes: changes
-        },
-        headers: {
-          "Authorization": "Bearer " + User.getToken()
-        }
+      return User.get().then(function(user) {
+        return $http({
+          method: "PUT",
+          url: denguechat.env.baseURL + "sync/post",
+          data: {
+            changes: changes
+          },
+          headers: {
+            "Authorization": "Bearer " + user.token
+          }
+        })
       })
     },
 
