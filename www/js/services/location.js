@@ -20,20 +20,31 @@ angular.module('starter.services')
     timeout: null,
     syncStatus: {backoff: backoff, error: {}},
 
-    documentID: function(location) {
-      return location.neighborhood_id + location.address
+    documentID: function(user, location) {
+      return user.id + location.neighborhood_id + location.address
     },
 
     getAll: function() {
       thisLocation = this
       return User.get().then(function(user) {
-        nid = user.neighborhood.id
-        return thisLocation.findAllByNeighborhoodId(nid).then(function(doc) {
-          docs = doc.rows.map(function(el) { return el.doc })
-          return _.sortBy(docs, function(d){ return d.address; });
+        return Pouch.locationsDB.find({
+          selector: {
+            $and: [
+              { user_id: user.id },
+              { neighborhood_id: user.neighborhood.id }
+            ]
+          }
+        }).then(function(res) {
+          return res.docs
+        }, function(err) {
+          console.log("Something is wrong...")
+          console.log(err)
         })
+        // return thisLocation.findAllByNeighborhoodId(nid).then(function(doc) {
+        //   docs = doc.rows.map(function(el) { return el.doc })
+        //   return _.sortBy(docs, function(d){ return d.address; });
+        // })
       })
-
     },
     findAllByNeighborhoodId: function(neighborhood_id) {
       return Pouch.locationsDB.query("locations/by_neighborhood_id", {
@@ -74,7 +85,7 @@ angular.module('starter.services')
            "Authorization": "Bearer " + user.token
           }
         }).then(function(res) {
-          return thisLocation.saveMultiple(res.data.locations, [], null)
+          return thisLocation.saveMultiple(user, res.data.locations, [], null)
         })
       })
 
@@ -89,7 +100,7 @@ angular.module('starter.services')
             "Authorization": "Bearer " + user.token
           }
         }).then(function(res) {
-          doc_id = thisLocation.documentID(res.data.location)
+          doc_id = thisLocation.documentID(user, res.data.location)
           return thisLocation.save(doc_id, res.data.location, {remote: false, synced: true})
         })
       })
@@ -118,7 +129,7 @@ angular.module('starter.services')
       })
     },
 
-    saveMultiple: function(locations, document_ids, deferred) {
+    saveMultiple: function(user, locations, document_ids, deferred) {
       thisLocation = this
       if (!deferred)
         deferred = $q.defer();
@@ -128,7 +139,7 @@ angular.module('starter.services')
         return deferred.promise
       } else {
         loc        = locations.shift();
-        loc_doc_id = thisLocation.documentID(loc)
+        loc_doc_id = thisLocation.documentID(user, loc)
 
         thisLocation.save(loc_doc_id, loc, {remote: false, synced: true}).then(function(doc) {
           document_ids.push(loc_doc_id)
@@ -136,7 +147,7 @@ angular.module('starter.services')
           Visit.saveMultiple(loc_doc_id, loc.visits, [], null).then(function(visit_doc_ids) {
             loc.visits = visit_doc_ids
             thisLocation.save(loc_doc_id, loc, {remote: false, synced: true}).then(function(res) {
-              thisLocation.saveMultiple(locations, document_ids, deferred)
+              thisLocation.saveMultiple(user, locations, document_ids, deferred)
             })
           })
         })

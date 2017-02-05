@@ -234,6 +234,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     }
   })
+  .state('app.location.visit.inspection', {
+    url: '/inspection/:inspection_id',
+    cache: false,
+    views: {
+      'menuContent@app': {
+        templateUrl: 'templates/inspections/edit.html',
+        controller: 'inspectionCtrl'
+      }
+    }
+  })
   .state('app.location.new_visit', {
     url: '/new_visit',
     cache: false,
@@ -244,16 +254,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     }
   })
-  .state('app.visit.new_inspection', {
-    url: '/inspections/new',
-    cache: false,
-    views: {
-      'menuContent@app': {
-        templateUrl: 'templates/inspections/new.html',
-        controller: 'newInspectionsCtrl'
-      }
-    }
-  })
+  // .state('app.visit.new_inspection', {
+  //   url: '/inspections/new',
+  //   cache: false,
+  //   views: {
+  //     'menuContent@app': {
+  //       templateUrl: 'templates/inspections/new.html',
+  //       controller: 'newInspectionsCtrl'
+  //     }
+  //   }
+  // })
 })
 
 

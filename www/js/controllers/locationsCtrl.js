@@ -3,9 +3,11 @@ angular.module('starter.controllers')
   $scope.locations = [];
   $scope.state  = {firstLoad: true, loadingGeo: false};
   $scope.params = {search: ""};
+  $scope.user   = {}
 
 
   User.get().then(function(user) {
+    $scope.user          = user
     $scope.neighborhoods = user.neighborhoods;
     $scope.location      = {neighborhood_id: user.neighborhood.id, questions: user.neighborhood.questions, last_visited_at: new Date(), visits_count: 0}
   })
@@ -133,9 +135,12 @@ angular.module('starter.controllers')
       }
 
       $ionicLoading.show()
-      doc_id = Location.documentID($scope.location)
-      $scope.location.visits = []
+      doc_id = Location.documentID($scope.user, $scope.location)
+      $scope.location.user_id = $scope.user.id
+      $scope.location.visits  = []
       Location.save(doc_id, $scope.location, {remote: true, synced: false}).then(function(response) {
+        $scope.location = {}
+
         $ionicLoading.hide().then(function() {
           $scope.modal.hide().then(function() {
             $scope.modal.remove();

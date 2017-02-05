@@ -8,7 +8,7 @@ https://www.firebase.com/docs/web/guide/login/password.html
 angular.module('starter.services')
 .factory('Inspection', function($http, User, Pouch, $q, Backoff) {
   var backoff = new Backoff({ min: 1000, max: 60000 });
-  var whitelistedKeys = ["id", "visit_id", "position", "location", "protected", "chemically_treated", "larvae", "pupae", "larvae", "report", "before_photo", "color", "created_at"];
+  var whitelistedKeys = ["id", "visit_id", "position", "location", "protected", "chemically_treated", "larvae", "pupae", "larvae", "report", "color", "created_at"];
 
   // Pouch.inspectionsDB.destroy()
   return {
@@ -27,6 +27,10 @@ angular.module('starter.services')
       } else {
         return "#f1c40f"
       }
+    },
+
+    get: function(document_id) {
+      return Pouch.inspectionsDB.get(document_id)
     },
 
     getAll: function(ins_doc_ids) {

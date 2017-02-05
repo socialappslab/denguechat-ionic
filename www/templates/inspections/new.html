@@ -20,7 +20,7 @@
       <li class="item item-toggle">
        Protegido
        <label class="toggle toggle-balanced">
-         <input type="checkbox" ng-model="inspection.protected">
+         <input type="checkbox" ng-model="inspection.report.protected">
          <div class="track">
            <div class="handle"></div>
          </div>
@@ -29,7 +29,7 @@
       <li class="item item-toggle">
        Abatizado
        <label class="toggle toggle-balanced">
-         <input type="checkbox" ng-model="inspection.chemically_treated">
+         <input type="checkbox" ng-model="inspection.report.chemically_treated">
          <div class="track">
            <div class="handle"></div>
          </div>
@@ -38,7 +38,7 @@
       <li class="item item-toggle">
        Larvas
        <label class="toggle toggle-balanced">
-         <input type="checkbox" ng-model="inspection.larvae">
+         <input type="checkbox" ng-model="inspection.report.larvae">
          <div class="track">
            <div class="handle"></div>
          </div>
@@ -47,7 +47,7 @@
       <li class="item item-toggle">
        Pupas
        <label class="toggle toggle-balanced">
-         <input type="checkbox" ng-model="inspection.pupae">
+         <input type="checkbox" ng-model="inspection.report.pupae">
          <div class="track">
            <div class="handle"></div>
          </div>
@@ -55,14 +55,14 @@
       </li>
       <li class="item item-icon-right" ng-click="loadCamera()">
         Foto de criadero
-        <i class="icon ion-ios-camera-outline" ng-if="!inspection.before_photo"></i>
-        <img style="height:50px; max-width: 50px; float:right;" src="{{inspection.before_photo}}" ng-if="!!inspection.before_photo"></img>
+        <i class="icon ion-ios-camera-outline" ng-if="!inspection.report.before_photo"></i>
+        <img style="height:50px; max-width: 50px; float:right;" src="{{inspection.report.before_photo}}" ng-if="!!inspection.report.before_photo"></img>
       </li>
     </div>
   </ion-content>
 
   <div class="bar bar-footer bar-balanced">
-    <div class="title" ng-click="create()">Add</div>
+    <div class="title" ng-click="createInspection()">Add</div>
   </div>
 
 </ion-modal-view>

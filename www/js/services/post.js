@@ -11,12 +11,15 @@ angular.module('starter.services')
   var whitelistedKeys = ["id", "user_id", "neighborhood_id", "photo", "base64_photo", "content", "liked", "created_at", "user", "timestamp"];
 
   // Pouch.postsDB.destroy()
+  // Pouch.locationsDB.destroy()
+  // Pouch.visitsDB.destroy()
+  // Pouch.inspectionsDB.destroy()
   return {
     timeout: null,
     syncStatus: {backoff: backoff, error: {}},
 
-    documentID: function(post) {
-      return (new Date(post.created_at)).toISOString() + post.neighborhood_id
+    documentID: function(user, post) {
+      return user.id + (new Date(post.created_at)).toISOString() + post.neighborhood_id
     },
 
     like: function(post) {
@@ -94,14 +97,13 @@ angular.module('starter.services')
            "Authorization": "Bearer " + user.token
          }
         }).then(function(res) {
-          console.log(JSON.stringify(res.data.posts))
-          return thisPost.saveMultiple(res.data.posts, [], null)
+          return thisPost.saveMultiple(user, res.data.posts, [], null)
         })
       })
     },
 
 
-    saveMultiple: function(posts, document_ids, deferred) {
+    saveMultiple: function(user, posts, document_ids, deferred) {
       thisPost = this
       if (!deferred)
         deferred = $q.defer();
@@ -110,10 +112,10 @@ angular.module('starter.services')
         return deferred.resolve(document_ids)
       } else {
         post = posts.shift();
-        doc_id = thisPost.documentID(post)
+        doc_id = thisPost.documentID(user, post)
         return thisPost.save(doc_id, post, {remote: false, synced: true}).then(function(doc) {
           document_ids.push(doc_id)
-          return thisPost.saveMultiple(posts, document_ids, deferred)
+          return thisPost.saveMultiple(user, posts, document_ids, deferred)
         })
 
         return deferred.promise;

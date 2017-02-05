@@ -1,9 +1,30 @@
 angular.module('starter.controllers')
-.controller('locationCtrl', ['$scope', "$state", 'Location', '$ionicHistory', "$ionicSlideBoxDelegate", 'LocationQuiz', '$ionicLoading', "$ionicModal", "Visit", function($scope, $state, Location, $ionicHistory, $ionicSlideBoxDelegate, LocationQuiz, $ionicLoading, $ionicModal, Visit) {
+.controller('locationCtrl', ['$scope', "$state", 'Location', '$ionicLoading', '$ionicHistory', "$ionicSlideBoxDelegate", 'LocationQuiz', '$ionicLoading', "$ionicModal", "Visit", function($scope, $state, Location, $ionicLoading, $ionicHistory, $ionicSlideBoxDelegate, LocationQuiz, $ionicLoading, $ionicModal, Visit) {
   $scope.state    = {firstLoad: true, pageIndex: 0};
   $scope.params   = {search: ""};
   $scope.visit    = {}
   $scope.location = {}
+
+  $scope.$on("$ionicView.loaded", function() {
+    $ionicLoading.show({hideOnStateChange: true})
+
+    Location.get($state.params.id).then(function(loc) {
+      $scope.location          = loc
+      $scope.visit.location_id = loc.id;
+
+      console.log($scope.location.visits)
+      if (!$scope.location.visits || $scope.location.visits.length == 0) {
+        $scope.visits = []
+        $ionicLoading.hide();
+      } else {
+        Visit.getAll($scope.location.visits).then(function(visits) {
+          $scope.visits = visits
+          console.log(visits)
+          $ionicLoading.hide();
+        })
+      }
+    })
+  })
 
   $scope.createVisit = function() {
     $ionicLoading.show({hideOnStateChange: true})
@@ -66,39 +87,6 @@ angular.module('starter.controllers')
     $scope.state.loading = true
     $scope.refresh();
   })
-
-  // Triggered only once when the view is loaded.
-  // http://ionicframework.com/docs/api/directive/ionView/
-  $scope.$on("$ionicView.loaded", function() {
-    Location.get($state.params.id).then(function(loc) {
-      $scope.location          = loc
-      $scope.visit.location_id = loc.id;
-
-      if (!$scope.location.visits || $scope.location.visits.length == 0)
-        $scope.visits = []
-      else {
-        Visit.getAll($scope.location.visits).then(function(visits) {
-          $scope.visits = visits
-        })
-      }
-    })
-
-    // Location.get($state.params.id).then(function(doc) {
-    //   $scope.visits    = []
-    //
-    //   $scope.location = doc
-    //   $scope.$broadcast('scroll.refreshComplete');
-    //   $scope.state.loading   = false
-    //   $scope.state.firstLoad = false
-    // }).catch(function(error) {
-    //   console.log(error)
-    //   console.log("^ ERROR")
-    //   $scope.$broadcast('scroll.refreshComplete');
-    //   $scope.state.loading = false
-    //   $scope.state.firstLoad = false
-    // })
-  })
-
 
   $scope.changeTimeline = function(pageIndex) {
     $scope.state.pageIndex = pageIndex
