@@ -8,7 +8,7 @@ denguechat.env = {
   data: {
     refresh: "data.refresh"
   },
-  baseURL: "http://10.0.3.2:5000/api/v0/",
-  mainURL: "http://10.0.3.2:5000/",
+  baseURL: "http://localhost:5000/api/v0/",
+  mainURL: "http://localhost:5000/",
   debug: true
 }
