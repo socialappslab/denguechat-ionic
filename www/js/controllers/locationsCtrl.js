@@ -121,31 +121,36 @@ angular.module('starter.controllers')
 
 
   $scope.create = function() {
-    // $scope.state.loading = true;
-    //
-    // Location.create($scope.location).then(function(response) {
-    //   $state.go("app.location", {id: response.data.id})
-    // }, function(response) {
-    //   $scope.$emit(denguechat.env.error, {error: response})
-    // }).finally(function() {
-    //  $scope.state.loading   = false;
-    // });
+    if (!$scope.location.address) {
+      navigator.notification.alert("Address can't be blank", null, "Problem saving", "OK")
+      return
+    }
 
-    $ionicLoading.show()
+    Location.search($scope.location.address).then(function(result) {
+      if (result.docs.length > 0) {
+        navigator.notification.alert("A location with this address already exists", null, "Problem saving", "OK")
+        return
+      }
 
-    doc_id = Location.documentID($scope.location)
-    Location.save(doc_id, $scope.location, {remote: true, synced: false}).then(function(response) {
-      $ionicLoading.hide().then(function() {
-        $scope.modal.hide().then(function() {
-          $scope.modal.remove();
-          $state.go("app.location", {id: doc_id})
+      $ionicLoading.show()
+      doc_id = Location.documentID($scope.location)
+      $scope.location.visits = []
+      Location.save(doc_id, $scope.location, {remote: true, synced: false}).then(function(response) {
+        $ionicLoading.hide().then(function() {
+          $scope.modal.hide().then(function() {
+            $scope.modal.remove();
+            $state.go("app.location", {id: doc_id})
+          })
         })
+
+      }, function(response) {
+        $scope.$emit(denguechat.env.error, {error: "Something went wrong. Please try again."})
+        $ionicLoading.hide()
       })
 
-    }, function(response) {
-      $scope.$emit(denguechat.env.error, {error: "Something went wrong. Please try again."})
-      $ionicLoading.hide()
     })
+
+
   }
 
   $scope.$watch("params.search", function(newValue, oldValue) {
