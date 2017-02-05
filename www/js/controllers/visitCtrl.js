@@ -69,6 +69,7 @@ angular.module('starter.controllers')
 
     doc_id = Inspection.documentID($state.params.id, $state.params.visit_id, $scope.inspection)
     Inspection.save(doc_id, $scope.inspection, {remote: true, synced: false}).then(function(response) {
+      $scope.inspection._id = doc_id
       if ($scope.inspections) {
         $scope.inspections.push($scope.inspection)
         $scope.visit.inspections.push(doc_id)

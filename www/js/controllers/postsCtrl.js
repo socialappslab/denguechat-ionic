@@ -89,7 +89,7 @@ angular.module('starter.controllers')
     $ionicLoading.show()
 
     $scope.post.created_at      = new Date()
-    doc_id = Post.documentID($scope.post)
+    doc_id = Post.documentID($scope.post.user, $scope.post)
     Post.save(doc_id, $scope.post, {remote: true, synced: false}).then(function(response) {
       Post.get(doc_id).then(function(doc) {
         $scope.posts.unshift(doc)
