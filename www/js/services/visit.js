@@ -245,15 +245,16 @@ angular.module('starter.services')
 
     getAllFromCloud: function() {
       thisVisit = this
-      nid = User.get().neighborhood.id
-      return $http({
-        method: "GET",
-        url:    denguechat.env.baseURL + "visits/mobile",
-        headers: {
-         "Authorization": "Bearer " + User.getToken()
-       }
-     }).then(function(res) {
-        return thisVisit.saveMultiple(res.data.visits, [], null)
+      return User.get().then(function(user) {
+        return $http({
+          method: "GET",
+          url:    denguechat.env.baseURL + "visits/mobile",
+          headers: {
+            "Authorization": "Bearer " + user.token
+          }
+        }).then(function(res) {
+          return thisVisit.saveMultiple(res.data.visits, [], null)
+        })
       })
     },
 
