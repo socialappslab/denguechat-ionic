@@ -10,17 +10,16 @@ angular.module('starter.services')
   var backoff = new Backoff({ min: 1000, max: 60000 });
   var whitelistedKeys = ["id", "user_id", "latitude", "longitude", "neighborhood_id", "address", "last_visited_at", "visits", "questions"];
 
-
   // Helper function.
   var cleanAddress = function(address) {
     return address.toLowerCase();
   }
 
   // Pouch.locationsDB.destroy()
-  // Pouch.visitsDB.destroy()
-  // Pouch.inspectionsDB.destroy()
-
   return {
+    timeout: null,
+    syncStatus: {backoff: backoff, error: {}},
+
     documentID: function(location) {
       return location.neighborhood_id + location.address
     },
@@ -31,6 +30,7 @@ angular.module('starter.services')
         docs = doc.rows.map(function(el) { return el.doc })
         return _.sortBy(docs, function(d){ return d.address; });
       })
+
     },
     findAllByNeighborhoodId: function(neighborhood_id) {
       return Pouch.locationsDB.query("locations/by_neighborhood_id", {
@@ -85,6 +85,7 @@ angular.module('starter.services')
        console.log("Calling thisLocation.saveMultiple()...")
       return thisLocation.saveMultiple(res.data.locations, [], null)
       })
+
     },
     getFromCloud: function(doc) {
       thisLocation = this
@@ -235,6 +236,7 @@ angular.module('starter.services')
     },
 
     sendChangesToCloud: function(document_id) {
+      thisLocation = this;
       return Pouch.locationsDB.get(document_id).then(function(location) {
         console.log("Sync starting for document:")
         console.log(location)
@@ -271,6 +273,7 @@ angular.module('starter.services')
             }, function(res) {
               console.log("Failed with error:");
               console.log(res)
+              thisLocation.syncStatus.error = res;
               console.log("------")
               thisLocation.sync(location._id)
             })

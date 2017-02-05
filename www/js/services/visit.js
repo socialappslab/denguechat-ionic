@@ -17,6 +17,9 @@ angular.module('starter.services')
 
   // Pouch.visitsDB.destroy()
   return {
+    timeout: null,
+    syncStatus: {backoff: backoff, error: {}},
+
     documentID: function(location_doc_id, visit) {
       return location_doc_id + visit.visited_at
     },
@@ -173,6 +176,7 @@ angular.module('starter.services')
     },
 
     sendChangesToCloud: function(document_id) {
+      thisVisit = this
       return Pouch.visitsDB.get(document_id).then(function(visit) {
         console.log("Sync starting for document:")
         console.log(visit)
@@ -206,6 +210,7 @@ angular.module('starter.services')
             }, function(res) {
               console.log("Failed with error:");
               console.log(res)
+              thisVisit.syncStatus.error = res
               console.log("------")
               thisVisit.sync(visit._id)
             })

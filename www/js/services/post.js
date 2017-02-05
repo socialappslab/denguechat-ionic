@@ -10,9 +10,11 @@ angular.module('starter.services')
   var backoff = new Backoff({ min: 1000, max: 60000 });
   var whitelistedKeys = ["id", "user_id", "neighborhood_id", "photo", "base64_photo", "content", "liked", "created_at", "user", "timestamp"];
 
-
   // Pouch.postsDB.destroy()
   return {
+    timeout: null,
+    syncStatus: {backoff: backoff, error: {}},
+
     documentID: function(post) {
       return (new Date(post.created_at)).toISOString() + post.neighborhood_id
     },
@@ -184,6 +186,7 @@ angular.module('starter.services')
     },
 
     sendChangesToCloud: function(document_id) {
+      thisPost = this;
       return Pouch.postsDB.get(document_id).then(function(post) {
         console.log("Sync starting for document:")
         console.log(post)
@@ -192,9 +195,6 @@ angular.module('starter.services')
         return Pouch.postsDB.changes({
           include_docs: true,
           conflicts: false,
-          // TODO: If we turn this on, we won't ever be able to match those that
-          // are syncMultiple.
-          // since: sync.last_sync_seq,
           doc_ids: [post._id],
           filter: function(doc) {
             return !doc.synced
@@ -220,6 +220,7 @@ angular.module('starter.services')
             }, function(res) {
               console.log("Failed with error:");
               console.log(res)
+              thisPost.syncStatus.error = res;
               console.log("------")
               thisPost.sync(post._id)
             })
@@ -232,10 +233,6 @@ angular.module('starter.services')
 
     },
 
-
-    syncStatus: function() {
-      return Pouch.syncDB.get("posts")
-    },
     updateSyncState: function(sync_state) {
       return Pouch.syncDB.upsert("posts", function(state) {
         state.last_synced_at = sync_state.last_synced_at
