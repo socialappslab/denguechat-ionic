@@ -63,27 +63,45 @@ angular.module('starter.controllers')
   $scope.createInspection = function() {
     $ionicLoading.show({hideOnStateChange: true})
 
+    console.log("Saving inspection...")
+
     $scope.inspection.created_at = (new Date()).toISOString()
     $scope.inspection.color      = Inspection.color($scope.inspection)
     $scope.inspection.position   = $scope.inspections.length + 1
 
+    console.log("About to save inspection:")
+    console.log(JSON.stringify($scope.inspection))
+
     doc_id = Inspection.documentID($state.params.id, $state.params.visit_id, $scope.inspection)
+    console.log("DOC ID created: " + doc_id)
     Inspection.save(doc_id, $scope.inspection, {remote: true, synced: false}).then(function(response) {
+      console.log("Saved!")
+
       $scope.inspection._id = doc_id
-      if ($scope.inspections) {
-        $scope.inspections.push($scope.inspection)
-        $scope.visit.inspections.push(doc_id)
-      } else {
-        $scope.inspections       = [$scope.inspection]
+      $scope.inspections.push($scope.inspection)
+
+      if (!$scope.visit.inspections || $scope.visit.inspections.length == 0) {
         $scope.visit.inspections = [doc_id]
+      } else {
+        $scope.visit.inspections.push(doc_id)
       }
-      Visit.save($state.params.visit_id, $scope.visit, {remote: false, synced: true}).then(function(res) {
+
+      console.log("Saving Visit...")
+      Visit.save($state.params.visit_id, $scope.visit, {remote: false}).then(function(res) {
+        console.log("Visit saved!")
         $scope.inspection = {};
 
         $ionicLoading.hide().then(function() {
+          console.log("Close inspection modal...")
           $scope.closeNewInspectionModal()
         })
+      }, function(err) {
+        console.log("Error saving visit: ")
+        console.log(JSON.stringify(err))
       })
+    }, function(err) {
+      console.log("Error saving Inspection:")
+      console.log(JSON.stringify(err))
     })
   }
 
