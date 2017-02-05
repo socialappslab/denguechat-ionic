@@ -1,6 +1,10 @@
 angular.module('starter.controllers')
 .controller('newVisitCtrl', ['$scope', '$state', 'Inspection', '$ionicLoading', '$ionicHistory', "Visit", function($scope, $state, Inspection, $ionicLoading, $ionicHistory, Visit) {
-  $scope.visit = {location_id: $state.params.id};
+  $scope.visit = {};
+
+  Location.get($state.params.id).then(function(loc) {
+    $scope.visit.location_id = loc.id;
+  })
 
   $scope.create = function() {
     $ionicLoading.show()
