@@ -142,15 +142,17 @@ angular.module('starter.services')
 
 
     sendToCloud: function(changes) {
-      return $http({
-        method: "PUT",
-        url: denguechat.env.baseURL + "sync/inspection",
-        data: {
-          changes: changes
-        },
-        headers: {
-          "Authorization": "Bearer " + User.getToken()
-        }
+      return User.get().then(function(user) {
+        return $http({
+          method: "PUT",
+          url: denguechat.env.baseURL + "sync/inspection",
+          data: {
+            changes: changes
+          },
+          headers: {
+            "Authorization": "Bearer " + user.token
+          }
+        })
       })
     },
 

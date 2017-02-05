@@ -47,7 +47,7 @@ angular.module('starter.services')
         $window.localStorage.setItem("token", token);
     },
     getToken: function() {
-      return User.get().then(function(doc) {
+      return this.get().then(function(doc) {
         return doc.token;
       })
       // return $window.localStorage.getItem("token") || "";

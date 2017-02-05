@@ -25,10 +25,13 @@ angular.module('starter.services')
     },
 
     getAll: function() {
-      nid = User.get().neighborhood.id
-      return this.findAllByNeighborhoodId(nid).then(function(doc) {
-        docs = doc.rows.map(function(el) { return el.doc })
-        return _.sortBy(docs, function(d){ return d.address; });
+      thisLocation = this
+      return User.get().then(function(user) {
+        nid = user.neighborhood.id
+        return thisLocation.findAllByNeighborhoodId(nid).then(function(doc) {
+          docs = doc.rows.map(function(el) { return el.doc })
+          return _.sortBy(docs, function(d){ return d.address; });
+        })
       })
 
     },
@@ -40,64 +43,55 @@ angular.module('starter.services')
     },
 
     search: function(address) {
-      return Pouch.locationsDB.search({
-        query: address,
-        fields: ['address'],
-        include_docs: true
-      }).then(function(res) {
-        return res.rows
+      return Pouch.locationsDB.find({
+        selector: {address: address}
       })
-      // return $http({
-      //   method: "GET",
-      //   url:    denguechat.env.baseURL + "locations/search?address=" + query,
-      //   headers: {
-      //    "Authorization": "Bearer " + User.getToken()
-      //  }
-      // })
     },
     // TODO: Convert to PouchDB.
     create: function(location) {
       // doc_id = locationDocumentURL + cleanAddress(location.address)
       // return Pouch.upsertDoc(doc_id, {location: location});
-      return $http({
-        method: "POST",
-        url:    denguechat.env.baseURL + "locations/",
-        data: {
-          location: location
-        },
-        headers: {
-         "Authorization": "Bearer " + User.getToken()
-       }
+      return User.get().then(function(user) {
+        return $http({
+          method: "POST",
+          url:    denguechat.env.baseURL + "locations/",
+          data: {
+            location: location
+          },
+          headers: {
+           "Authorization": "Bearer " + user.token
+         }
+        })
       })
     },
     getAllFromCloud: function() {
       thisLocation = this
-      nid = User.get().neighborhood.id
-      return $http({
-        method: "GET",
-        url:    denguechat.env.baseURL + "locations/mobile",
-        headers: {
-         "Authorization": "Bearer " + User.getToken()
-       }
-     }).then(function(res) {
-       console.log("-----")
-       console.log("Finished $http call....")
-       console.log("Calling thisLocation.saveMultiple()...")
-      return thisLocation.saveMultiple(res.data.locations, [], null)
+      return User.get().then(function(user) {
+        return $http({
+          method: "GET",
+          url:    denguechat.env.baseURL + "locations/mobile",
+          headers: {
+           "Authorization": "Bearer " + user.token
+          }
+        }).then(function(res) {
+          return thisLocation.saveMultiple(res.data.locations, [], null)
+        })
       })
 
     },
     getFromCloud: function(doc) {
       thisLocation = this
-      return $http({
-        method: "GET",
-        url:    denguechat.env.baseURL + "locations/" + cleanAddress(doc.address),
-        headers: {
-         "Authorization": "Bearer " + User.getToken()
-       }
-     }).then(function(res) {
-       doc_id = thisLocation.documentID(res.data.location)
-       return thisLocation.save(doc_id, res.data.location, {remote: false, synced: true})
+      return User.get().then(function(user) {
+        return $http({
+          method: "GET",
+          url:    denguechat.env.baseURL + "locations/" + cleanAddress(doc.address),
+          headers: {
+            "Authorization": "Bearer " + user.token
+          }
+        }).then(function(res) {
+          doc_id = thisLocation.documentID(res.data.location)
+          return thisLocation.save(doc_id, res.data.location, {remote: false, synced: true})
+        })
       })
     },
 
@@ -223,15 +217,17 @@ angular.module('starter.services')
 
 
     sendToCloud: function(changes) {
-      return $http({
-        method: "PUT",
-        url: denguechat.env.baseURL + "sync/location",
-        data: {
-          changes: changes
-        },
-        headers: {
-          "Authorization": "Bearer " + User.getToken()
-        }
+      return User.get().then(function(user) {
+        return $http({
+          method: "PUT",
+          url: denguechat.env.baseURL + "sync/location",
+          data: {
+            changes: changes
+          },
+          headers: {
+            "Authorization": "Bearer " + user.token
+          }
+        })
       })
     },
 
