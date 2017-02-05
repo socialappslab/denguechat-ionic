@@ -2,8 +2,10 @@ angular.module('starter.controllers')
 .controller('visitCtrl', ['$scope', '$state', 'Visit', "$ionicModal", "$ionicLoading", "Inspection", "User", function($scope, $state, Visit, $ionicModal, $ionicLoading, Inspection, User) {
   $scope.visit       = {};
   $scope.inspection  = {report: {}};
+  $scope.inspections = []
 
   $scope.$on("$ionicView.loaded", function() {
+    // alert("LOADED")
     $ionicLoading.show({hideOnStateChange: true})
 
     User.get().then(function(user) {
@@ -14,13 +16,14 @@ angular.module('starter.controllers')
       $scope.visit               = response
       $scope.inspection.visit_id = $scope.visit.id
 
-      if (!$scope.visit.inspections || $scope.visit.inspections.length == 0) {
-        $scope.visit.inspections = []
+      if (!response.inspections || response.inspections.length == 0) {
+        $scope.inspections = []
         $ionicLoading.hide()
       } else {
-        Inspection.getAll($scope.visit.inspections).then(function(inspections) {
+        Inspection.getAll(response.inspections).then(function(inspections) {
           $ionicLoading.hide()
-          $scope.visit.inspections = inspections
+          $scope.inspections = inspections
+          $scope.$apply()
         })
       }
     })
@@ -57,26 +60,44 @@ angular.module('starter.controllers')
     })
   }
 
-  $scope.create = function() {
+  $scope.createInspection = function() {
     $ionicLoading.show({hideOnStateChange: true})
 
     $scope.inspection.created_at = (new Date()).toISOString()
     $scope.inspection.color      = Inspection.color($scope.inspection)
-    $scope.inspection.position   = $scope.visit.inspections.length + 1
+    $scope.inspection.position   = $scope.inspections.length + 1
 
     doc_id = Inspection.documentID($state.params.id, $state.params.visit_id, $scope.inspection)
-    Inspection.save(doc_id, $scope.inspection, {remote: true}).then(function(response) {
-      if ($scope.visit.inspections)
+    Inspection.save(doc_id, $scope.inspection, {remote: true, synced: false}).then(function(response) {
+      if ($scope.inspections) {
+        $scope.inspections.push($scope.inspection)
         $scope.visit.inspections.push(doc_id)
-      else
+      } else {
+        $scope.inspections       = [$scope.inspection]
         $scope.visit.inspections = [doc_id]
+      }
       Visit.save($state.params.visit_id, $scope.visit, {remote: false, synced: true}).then(function(res) {
+        $scope.inspection = {};
+
         $ionicLoading.hide().then(function() {
           $scope.closeNewInspectionModal()
         })
       })
     })
   }
+
+  $scope.loadCamera = function() {
+    if (navigator.camera) {
+      navigator.camera.getPicture(function(base64) {
+        $scope.inspection.before_photo = "data:image/jpeg;base64," + base64
+        $scope.$apply()
+      }, function(response) {
+      }, {saveToPhotoAlbum: true, destinationType: 0})
+    } else {
+      alert("Camera not supported!")
+    }
+  }
+
 
   // $scope.$on(denguechat.env.data.refresh, function() {
   //   $scope.state.firstLoad = true;

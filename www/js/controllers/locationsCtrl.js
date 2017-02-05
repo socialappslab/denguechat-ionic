@@ -136,6 +136,8 @@ angular.module('starter.controllers')
       doc_id = Location.documentID($scope.location)
       $scope.location.visits = []
       Location.save(doc_id, $scope.location, {remote: true, synced: false}).then(function(response) {
+        $scope.location = {}
+
         $ionicLoading.hide().then(function() {
           $scope.modal.hide().then(function() {
             $scope.modal.remove();

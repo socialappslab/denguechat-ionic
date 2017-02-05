@@ -11,6 +11,9 @@ angular.module('starter.services')
   var whitelistedKeys = ["id", "user_id", "neighborhood_id", "photo", "base64_photo", "content", "liked", "created_at", "user", "timestamp"];
 
   // Pouch.postsDB.destroy()
+  // Pouch.locationsDB.destroy()
+  // Pouch.visitsDB.destroy()
+  // Pouch.inspectionsDB.destroy()
   return {
     timeout: null,
     syncStatus: {backoff: backoff, error: {}},
@@ -94,7 +97,6 @@ angular.module('starter.services')
            "Authorization": "Bearer " + user.token
          }
         }).then(function(res) {
-          console.log(JSON.stringify(res.data.posts))
           return thisPost.saveMultiple(res.data.posts, [], null)
         })
       })

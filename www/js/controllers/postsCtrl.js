@@ -1,9 +1,27 @@
 angular.module('starter.controllers')
-.controller('postsCtrl', ['$scope', 'Post', "$ionicModal", "$ionicLoading", function($scope, Post, $ionicModal, $ionicLoading) {
+.controller('postsCtrl', ['$scope', 'Post', "$ionicModal", "$ionicLoading", "User", function($scope, Post, $ionicModal, $ionicLoading, User) {
   $scope.state = {loading: false, hasMoreData: false};
   $scope.posts = [];
   $scope.post  = {};
-  $scope.unsynced_changes = []
+
+  // Triggered only once when the view is loaded.
+  // http://ionicframework.com/docs/api/directive/ionView/
+  $scope.$on("$ionicView.loaded", function() {
+    $ionicLoading.show({hideOnStateChange: true})
+
+    User.get().then(function(user) {
+      $scope.post.user_id = user.id
+      $scope.post.user    = user
+      $scope.post.neighborhood_id = user.neighborhood.id
+    })
+
+    Post.getAll().then(function(posts) {
+      $scope.posts = posts
+      $ionicLoading.hide()
+    }, function(error) {
+      $ionicLoading.hide()
+    })
+  })
 
   $scope.toggleLike = function(post) {
     Post.like(post)
@@ -58,7 +76,7 @@ angular.module('starter.controllers')
   $scope.loadCamera = function() {
     if (navigator.camera) {
       navigator.camera.getPicture(function(base64) {
-        $scope.post.compressed_photo = "data:image/jpeg;base64," + base64
+        $scope.post.photo = "data:image/jpeg;base64," + base64
         $scope.$apply()
       }, function(response) {
       }, {saveToPhotoAlbum: true, destinationType: 0})
@@ -70,18 +88,13 @@ angular.module('starter.controllers')
   $scope.createPost = function() {
     $ionicLoading.show()
 
-    $scope.post.created_at = new Date()
-    $scope.post.user_id    = user.id
-    $scope.post.neighborhood_id = $scope.user.neighborhood.id;
+    $scope.post.created_at      = new Date()
     doc_id = Post.documentID($scope.post)
     Post.save(doc_id, $scope.post, {remote: true, synced: false}).then(function(response) {
       Post.get(doc_id).then(function(doc) {
-        console.log("New post: ")
-        console.log(doc)
-        console.log("----")
         $scope.posts.unshift(doc)
+        $scope.post = {};
 
-        $scope.post = {}
         $ionicLoading.hide().then(function() {
           $scope.closeNewPostModal()
         })
@@ -98,15 +111,4 @@ angular.module('starter.controllers')
     $scope.refresh(0);
   })
 
-  // Triggered only once when the view is loaded.
-  // http://ionicframework.com/docs/api/directive/ionView/
-  $scope.$on("$ionicView.loaded", function() {
-    $ionicLoading.show({hideOnStateChange: true})
-    Post.getAll().then(function(posts) {
-      $scope.posts = posts
-      $ionicLoading.hide()
-    }, function(error) {
-      $ionicLoading.hide()
-    })
-  })
 }])
