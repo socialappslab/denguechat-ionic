@@ -3,9 +3,11 @@ angular.module('starter.controllers')
   $scope.locations = [];
   $scope.state  = {firstLoad: true, loadingGeo: false};
   $scope.params = {search: ""};
+  $scope.user   = {}
 
 
   User.get().then(function(user) {
+    $scope.user          = user
     $scope.neighborhoods = user.neighborhoods;
     $scope.location      = {neighborhood_id: user.neighborhood.id, questions: user.neighborhood.questions, last_visited_at: new Date(), visits_count: 0}
   })

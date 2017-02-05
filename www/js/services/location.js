@@ -20,20 +20,31 @@ angular.module('starter.services')
     timeout: null,
     syncStatus: {backoff: backoff, error: {}},
 
-    documentID: function(location) {
-      return location.neighborhood_id + location.address
+    documentID: function(user, location) {
+      return user.id + location.neighborhood_id + location.address
     },
 
     getAll: function() {
       thisLocation = this
       return User.get().then(function(user) {
-        nid = user.neighborhood.id
-        return thisLocation.findAllByNeighborhoodId(nid).then(function(doc) {
-          docs = doc.rows.map(function(el) { return el.doc })
-          return _.sortBy(docs, function(d){ return d.address; });
+        return Pouch.locationsDB.find({
+          selector: {
+            $and: [
+              { user_id: user.id },
+              { neighborhood_id: user.neighborhood.id }
+            ]
+          }
+        }).then(function(res) {
+          return res.docs
+        }, function(err) {
+          console.log("Something is wrong...")
+          console.log(err)
         })
+        // return thisLocation.findAllByNeighborhoodId(nid).then(function(doc) {
+        //   docs = doc.rows.map(function(el) { return el.doc })
+        //   return _.sortBy(docs, function(d){ return d.address; });
+        // })
       })
-
     },
     findAllByNeighborhoodId: function(neighborhood_id) {
       return Pouch.locationsDB.query("locations/by_neighborhood_id", {
