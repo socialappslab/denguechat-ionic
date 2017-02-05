@@ -24,7 +24,7 @@ angular.module('starter.services')
 
     like: function(post) {
       post.liked = !post.liked
-      return this.save(post._id, post, {remote: true, synced: false})
+      return this.save(post._id, post, {remote: true})
     },
 
     get: function(document_id) {

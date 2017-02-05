@@ -9,10 +9,9 @@ angular.module('starter.controllers')
     $ionicLoading.show({hideOnStateChange: true})
 
     Location.get($state.params.id).then(function(loc) {
-      $scope.location          = loc
-      $scope.visit.location_id = loc.id;
+      $scope.location       = loc
+      $scope.visit.location = {id: loc.id, address: loc.address} 
 
-      console.log($scope.location.visits)
       if (!$scope.location.visits || $scope.location.visits.length == 0) {
         $scope.visits = []
         $ionicLoading.hide();
@@ -36,9 +35,10 @@ angular.module('starter.controllers')
       else
         $scope.location.visits = [doc_id]
 
-      Location.save($state.params.id, $scope.location, {remote: false, synced: true}).then(function(res) {
+      Location.save($state.params.id, $scope.location, {remote: false}).then(function(res) {
         $ionicLoading.hide().then(function() {
           $scope.closeNewVisitModal()
+          $state.reload()
         })
       }, function(err) {console.log(err)})
     }, function(response) {
