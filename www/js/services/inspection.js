@@ -199,8 +199,11 @@ angular.module('starter.services')
               backoff.reset();
 
               // Update the ins model.
+              for (var key in res.data.inspection) {
+                ins[key] = res.data.inspection[key]
+              }
               ins.synced         = true
-              ins.last_synced_at = res.last_synced_at
+              ins.last_synced_at = res.data.last_synced_at
               return Pouch.inspectionsDB.put(ins)
             }, function(res) {
               console.log("Failed with error:");

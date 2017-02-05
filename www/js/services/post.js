@@ -229,8 +229,11 @@ angular.module('starter.services')
               backoff.reset();
 
               // Update the post model.
+              for (var key in res.data.post) {
+                post[key] = res.data.post[key]
+              }
               post.synced         = true
-              post.last_synced_at = res.last_synced_at
+              post.last_synced_at = res.data.last_synced_at
               return Pouch.postsDB.put(post)
             }, function(res) {
               console.log("Failed with error:");

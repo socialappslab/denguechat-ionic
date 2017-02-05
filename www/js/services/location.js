@@ -276,8 +276,11 @@ angular.module('starter.services')
               backoff.reset();
 
               // Update the location model.
+              for (var key in res.data.location) {
+                location[key] = res.data.location[key]
+              }
               location.synced         = true
-              location.last_synced_at = res.last_synced_at
+              location.last_synced_at = res.data.last_synced_at
               return Pouch.locationsDB.put(location)
             }, function(res) {
               console.log("Failed with error:");

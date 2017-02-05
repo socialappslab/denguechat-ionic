@@ -221,8 +221,11 @@ angular.module('starter.services')
               backoff.reset();
 
               // Update the visit model.
+              for (var key in res.data.visit) {
+                visit[key] = res.data.visit[key]
+              }
               visit.synced         = true
-              visit.last_synced_at = res.last_synced_at
+              visit.last_synced_at = res.data.last_synced_at
               return Pouch.visitsDB.put(visit)
             }, function(res) {
               console.log("Failed with error:");
