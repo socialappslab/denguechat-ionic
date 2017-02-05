@@ -1,10 +1,14 @@
 angular.module('starter.controllers')
 .controller('locationsCtrl', ['$scope', 'Location', "$ionicLoading", "$ionicModal", "User", "$state", "$cordovaGeolocation", function($scope, Location, $ionicLoading, $ionicModal, User, $state, $cordovaGeolocation) {
-  $scope.neighborhoods = User.get().neighborhoods;
   $scope.locations = [];
   $scope.state  = {firstLoad: true, loadingGeo: false};
   $scope.params = {search: ""};
-  $scope.location      = {visits: [], neighborhood_id: User.get().neighborhood.id, last_visited_at: new Date(), visits_count: 0};
+
+
+  User.get().then(function(user) {
+    $scope.neighborhoods = user.neighborhoods;
+    $scope.location      = {neighborhood_id: user.neighborhood.id, questions: user.neighborhood.questions, last_visited_at: new Date(), visits_count: 0}
+  })
 
   // Triggered only once when the view is loaded.
   // http://ionicframework.com/docs/api/directive/ionView/
