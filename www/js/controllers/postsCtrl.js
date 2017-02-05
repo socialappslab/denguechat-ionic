@@ -3,6 +3,7 @@ angular.module('starter.controllers')
   $scope.state = {loading: false, hasMoreData: false};
   $scope.posts = [];
   $scope.post  = {};
+  $scope.unsynced_changes = []
 
   $scope.toggleLike = function(post) {
     Post.like(post)
