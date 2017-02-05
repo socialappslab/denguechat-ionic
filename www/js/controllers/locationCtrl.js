@@ -2,18 +2,26 @@ angular.module('starter.controllers')
 .controller('locationCtrl', ['$scope', "$state", 'Location', '$ionicHistory', "$ionicSlideBoxDelegate", 'LocationQuiz', '$ionicLoading', "$ionicModal", "Visit", function($scope, $state, Location, $ionicHistory, $ionicSlideBoxDelegate, LocationQuiz, $ionicLoading, $ionicModal, Visit) {
   $scope.state    = {firstLoad: true, pageIndex: 0};
   $scope.params   = {search: ""};
-  $scope.visit    = {location_id: $state.params.id}
+  $scope.visit    = {}
   $scope.location = {}
 
   $scope.createVisit = function() {
-    $ionicLoading.show()
+    $ionicLoading.show({hideOnStateChange: true})
 
-    Visit.create($scope.visit).then(function(response) {
-      $ionicLoading.hide().then(function() {
-        $scope.closeNewVisitModal()
-      })
+    doc_id = Visit.documentID($state.params.id, $scope.visit);
+    Visit.save(doc_id, $scope.visit, {remote: true, synced: false}).then(function(response) {
+      if ($scope.location.visits)
+        $scope.location.visits.push(doc_id)
+      else
+        $scope.location.visits = [doc_id]
+
+      Location.save($state.params.id, $scope.location, {remote: false, synced: true}).then(function(res) {
+        $ionicLoading.hide().then(function() {
+          $scope.closeNewVisitModal()
+        })
+      }, function(err) {console.log(err)})
     }, function(response) {
-      $scope.$emit(denguechat.env.error, {error: response})
+      console.log(response)
       $ionicLoading.hide()
     })
   }
