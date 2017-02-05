@@ -5,13 +5,13 @@
   </ion-nav-buttons>
 
   <ion-content class="has-footer">
-    <ion-refresher pulling-text="Pull to refresh..." on-refresh="refresh()"></ion-refresher>
+    <!-- <ion-refresher pulling-text="Pull to refresh..." on-refresh="refresh()"></ion-refresher> -->
 
     <ion-item ng-if="visit.inspections.length == 0" class="text-center">
       <h2>No inspections found. Why not add one?</h2>
     </ion-item>
 
-    <ion-item class="item-icon-left item-text-wrap" ng-repeat="ins in inspections">
+    <ion-item class="item-icon-left item-icon-right item-text-wrap" ng-repeat="ins in inspections" ui-sref="app.location.visit.inspection({inspection_id: ins._id})">
       <i class="icon ion-ios-circle-filled" ng-style="{'color': ins.color}"></i>
       <h2>{{ins.report.breeding_site.description}}</h2>
       <p>{{ins.report.field_identifier}}</p>

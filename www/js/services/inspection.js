@@ -29,6 +29,10 @@ angular.module('starter.services')
       }
     },
 
+    get: function(document_id) {
+      return Pouch.inspectionsDB.get(document_id)
+    },
+
     getAll: function(ins_doc_ids) {
       return Pouch.inspectionsDB.allDocs({keys: ins_doc_ids, include_docs: true}).then(function(docs) {
         return docs.rows.map(function(el) { return el.doc })
