@@ -71,11 +71,16 @@ angular.module('starter.controllers')
   // http://ionicframework.com/docs/api/directive/ionView/
   $scope.$on("$ionicView.loaded", function() {
     Location.get($state.params.id).then(function(loc) {
-      $scope.location = loc
+      $scope.location          = loc
+      $scope.visit.location_id = loc.id;
 
-      Visit.getAll($scope.location.visits).then(function(visits) {
-        $scope.visits = visits
-      })
+      if (!$scope.location.visits || $scope.location.visits.length == 0)
+        $scope.visits = []
+      else {
+        Visit.getAll($scope.location.visits).then(function(visits) {
+          $scope.visits = visits
+        })
+      }
     })
 
     // Location.get($state.params.id).then(function(doc) {
