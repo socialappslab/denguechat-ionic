@@ -48,12 +48,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
   $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams, options) {
     User.get().then(function(user) {
-      console.log("RESPONSE from USER GET:")
-      console.log(JSON.stringify(user))
-
-      if (!user || !user.neighborhood || !user.breeding_sites) {
+      if (!user || !user.neighborhood || !user.breeding_sites)
         $rootScope.$emit(denguechat.env.auth.failure, {})
-      }
     }, function(el) {
       $rootScope.$emit(denguechat.env.auth.failure, {})
     })
@@ -133,6 +129,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
   .state('app.posts', {
     url: '/posts',
+    cache: false,
     views: {
       'menuContent': {
         templateUrl: 'templates/posts/index.html',
@@ -150,26 +147,37 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     }
   })
-  .state('app.visit', {
-    url: '/visit/:visit_id',
+  // .state('app.visit', {
+  //   url: '/visit/:visit_id',
+  //   views: {
+  //     'menuContent': {
+  //       templateUrl: 'templates/visits/show.html',
+  //       controller: 'visitCtrl'
+  //     }
+  //   }
+  // })
+  // .state('app.visits.new', {
+  //   url: '/new',
+  //   views: {
+  //     'menuContent@app': {
+  //       templateUrl: 'templates/visits/new.html',
+  //       controller: 'newVisitCtrl'
+  //     }
+  //   }
+  // })
+  .state('app.sync', {
+    url: '/sync',
+    cache: false,
     views: {
       'menuContent': {
-        templateUrl: 'templates/visits/show.html',
-        controller: 'visitCtrl'
-      }
-    }
-  })
-  .state('app.visits.new', {
-    url: '/new',
-    views: {
-      'menuContent@app': {
-        templateUrl: 'templates/visits/new.html',
-        controller: 'newVisitCtrl'
+        templateUrl: 'templates/sync/index.html',
+        controller: 'syncCtrl'
       }
     }
   })
   .state('app.locations', {
     url: '/locations',
+    cache: false,
     views: {
       'menuContent': {
         templateUrl: 'templates/locations/index.html',
@@ -177,17 +185,18 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     }
   })
-  .state('app.locations.new', {
-    url: '/new',
-    views: {
-      'menuContent@app': {
-        templateUrl: 'templates/locations/new.html',
-        controller: 'newLocationCtrl'
-      }
-    }
-  })
+  // .state('app.locations.new', {
+  //   url: '/new',
+  //   views: {
+  //     'menuContent@app': {
+  //       templateUrl: 'templates/locations/new.html',
+  //       controller: 'newLocationCtrl'
+  //     }
+  //   }
+  // })
   .state('app.location', {
     url: '/location/:id',
+    cache: false,
     views: {
       'menuContent@app': {
         templateUrl: 'templates/locations/show.html',
@@ -197,6 +206,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
   .state('app.location.edit', {
     url: '/edit',
+    cache: false,
     views: {
       'menuContent@app': {
         templateUrl: 'templates/locations/edit.html',
@@ -206,6 +216,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
   .state('app.location.visit', {
     url: '/visits/:visit_id',
+    cache: false,
     views: {
       'menuContent@app': {
         templateUrl: 'templates/visits/show.html',
@@ -215,6 +226,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
   .state('app.location.visit.edit', {
     url: '/edit',
+    cache: false,
     views: {
       'menuContent@app': {
         templateUrl: 'templates/visits/edit.html',
@@ -224,6 +236,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
   .state('app.location.new_visit', {
     url: '/new_visit',
+    cache: false,
     views: {
       'menuContent@app': {
         templateUrl: 'templates/locations/new_visit.html',
@@ -233,6 +246,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
   .state('app.visit.new_inspection', {
     url: '/inspections/new',
+    cache: false,
     views: {
       'menuContent@app': {
         templateUrl: 'templates/inspections/new.html',

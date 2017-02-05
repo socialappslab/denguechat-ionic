@@ -2,18 +2,26 @@ angular.module('starter.controllers')
 .controller('locationCtrl', ['$scope', "$state", 'Location', '$ionicHistory', "$ionicSlideBoxDelegate", 'LocationQuiz', '$ionicLoading', "$ionicModal", "Visit", function($scope, $state, Location, $ionicHistory, $ionicSlideBoxDelegate, LocationQuiz, $ionicLoading, $ionicModal, Visit) {
   $scope.state    = {firstLoad: true, pageIndex: 0};
   $scope.params   = {search: ""};
-  $scope.visit    = {location_id: $state.params.id}
+  $scope.visit    = {}
   $scope.location = {}
 
   $scope.createVisit = function() {
-    $ionicLoading.show()
+    $ionicLoading.show({hideOnStateChange: true})
 
-    Visit.create($scope.visit).then(function(response) {
-      $ionicLoading.hide().then(function() {
-        $scope.closeNewVisitModal()
-      })
+    doc_id = Visit.documentID($state.params.id, $scope.visit);
+    Visit.save(doc_id, $scope.visit, {remote: true, synced: false}).then(function(response) {
+      if ($scope.location.visits)
+        $scope.location.visits.push(doc_id)
+      else
+        $scope.location.visits = [doc_id]
+
+      Location.save($state.params.id, $scope.location, {remote: false, synced: true}).then(function(res) {
+        $ionicLoading.hide().then(function() {
+          $scope.closeNewVisitModal()
+        })
+      }, function(err) {console.log(err)})
     }, function(response) {
-      $scope.$emit(denguechat.env.error, {error: response})
+      console.log(response)
       $ionicLoading.hide()
     })
   }
@@ -32,13 +40,18 @@ angular.module('starter.controllers')
       // }
       //
       // $scope.visits    = response.location.visits
+
+      $scope.state.firstLoad = false;
+      $scope.state.loading   = false;
+      $scope.$broadcast('scroll.refreshComplete');
+
     }, function(response) {
+      $scope.state.firstLoad = false;
+      $scope.state.loading   = false;
+      $scope.$broadcast('scroll.refreshComplete');
+
       $scope.$emit(denguechat.env.error, {error: response})
-    }).finally(function() {
-     $scope.state.firstLoad = false;
-     $scope.state.loading   = false;
-     $scope.$broadcast('scroll.refreshComplete');
-    });
+    })
   }
 
   $scope.saveQuestions = function() {
@@ -58,11 +71,16 @@ angular.module('starter.controllers')
   // http://ionicframework.com/docs/api/directive/ionView/
   $scope.$on("$ionicView.loaded", function() {
     Location.get($state.params.id).then(function(loc) {
-      $scope.location = loc
+      $scope.location          = loc
+      $scope.visit.location_id = loc.id;
 
-      Visit.getAll($scope.location.visits).then(function(visits) {
-        $scope.visits = visits
-      })
+      if (!$scope.location.visits || $scope.location.visits.length == 0)
+        $scope.visits = []
+      else {
+        Visit.getAll($scope.location.visits).then(function(visits) {
+          $scope.visits = visits
+        })
+      }
     })
 
     // Location.get($state.params.id).then(function(doc) {

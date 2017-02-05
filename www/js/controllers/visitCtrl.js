@@ -1,19 +1,28 @@
 angular.module('starter.controllers')
 .controller('visitCtrl', ['$scope', '$state', 'Visit', "$ionicModal", "$ionicLoading", "Inspection", "User", function($scope, $state, Visit, $ionicModal, $ionicLoading, Inspection, User) {
   $scope.visit       = {};
-  $scope.inspection  = {visit_id: $scope.visit.id, report: {}};
-  $scope.breeding_sites = User.get().breeding_sites
+  $scope.inspection  = {report: {}};
 
   $scope.$on("$ionicView.loaded", function() {
     $ionicLoading.show({hideOnStateChange: true})
 
-    Visit.get($state.params.visit_id).then(function(response) {
-      $scope.visit = response
+    User.get().then(function(user) {
+      $scope.breeding_sites = user.breeding_sites
+    });
 
-      Inspection.getAll($scope.visit.inspections).then(function(inspections) {
+    Visit.get($state.params.visit_id).then(function(response) {
+      $scope.visit               = response
+      $scope.inspection.visit_id = $scope.visit.id
+
+      if (!$scope.visit.inspections || $scope.visit.inspections.length == 0) {
+        $scope.visit.inspections = []
         $ionicLoading.hide()
-        $scope.visit.inspections = inspections
-      })
+      } else {
+        Inspection.getAll($scope.visit.inspections).then(function(inspections) {
+          $ionicLoading.hide()
+          $scope.visit.inspections = inspections
+        })
+      }
     })
   })
 
@@ -57,8 +66,11 @@ angular.module('starter.controllers')
 
     doc_id = Inspection.documentID($state.params.id, $state.params.visit_id, $scope.inspection)
     Inspection.save(doc_id, $scope.inspection, {remote: true}).then(function(response) {
-
-      Visit.addInspection($state.params.visit_id, doc_id).then(function(response) {
+      if ($scope.visit.inspections)
+        $scope.visit.inspections.push(doc_id)
+      else
+        $scope.visit.inspections = [doc_id]
+      Visit.save($state.params.visit_id, $scope.visit, {remote: false, synced: true}).then(function(res) {
         $ionicLoading.hide().then(function() {
           $scope.closeNewInspectionModal()
         })

@@ -1,10 +1,14 @@
 angular.module('starter.controllers')
 .controller('locationsCtrl', ['$scope', 'Location', "$ionicLoading", "$ionicModal", "User", "$state", "$cordovaGeolocation", function($scope, Location, $ionicLoading, $ionicModal, User, $state, $cordovaGeolocation) {
-  $scope.neighborhoods = User.get().neighborhoods;
   $scope.locations = [];
   $scope.state  = {firstLoad: true, loadingGeo: false};
   $scope.params = {search: ""};
-  $scope.location      = {visits: [], neighborhood_id: User.get().neighborhood.id, last_visited_at: new Date(), visits_count: 0};
+
+
+  User.get().then(function(user) {
+    $scope.neighborhoods = user.neighborhoods;
+    $scope.location      = {neighborhood_id: user.neighborhood.id, questions: user.neighborhood.questions, last_visited_at: new Date(), visits_count: 0}
+  })
 
   // Triggered only once when the view is loaded.
   // http://ionicframework.com/docs/api/directive/ionView/
@@ -52,14 +56,15 @@ angular.module('starter.controllers')
         console.log(locations)
         $scope.locations = locations
         $ionicLoading.hide()
-      })
+        $scope.state.firstLoad = false;
+        $scope.$broadcast('scroll.refreshComplete');
+      }, function(er) {console.log(JSON.stringify(er))})
 
     }, function(response) {
+      $scope.state.firstLoad = false;
+      $scope.$broadcast('scroll.refreshComplete');
       $ionicLoading.hide()
       $scope.$emit(denguechat.env.error, {error: response})
-    }).finally(function() {
-     $scope.state.firstLoad = false;
-     $scope.$broadcast('scroll.refreshComplete');
     });
   }
 
@@ -116,31 +121,36 @@ angular.module('starter.controllers')
 
 
   $scope.create = function() {
-    // $scope.state.loading = true;
-    //
-    // Location.create($scope.location).then(function(response) {
-    //   $state.go("app.location", {id: response.data.id})
-    // }, function(response) {
-    //   $scope.$emit(denguechat.env.error, {error: response})
-    // }).finally(function() {
-    //  $scope.state.loading   = false;
-    // });
+    if (!$scope.location.address) {
+      navigator.notification.alert("Address can't be blank", null, "Problem saving", "OK")
+      return
+    }
 
-    $ionicLoading.show()
+    Location.search($scope.location.address).then(function(result) {
+      if (result.docs.length > 0) {
+        navigator.notification.alert("A location with this address already exists", null, "Problem saving", "OK")
+        return
+      }
 
-    doc_id = Location.documentID($scope.location)
-    Location.save(doc_id, $scope.location, {remote: true, synced: false}).then(function(response) {
-      $ionicLoading.hide().then(function() {
-        $scope.modal.hide().then(function() {
-          $scope.modal.remove();
-          $state.go("app.location", {id: doc_id})
+      $ionicLoading.show()
+      doc_id = Location.documentID($scope.location)
+      $scope.location.visits = []
+      Location.save(doc_id, $scope.location, {remote: true, synced: false}).then(function(response) {
+        $ionicLoading.hide().then(function() {
+          $scope.modal.hide().then(function() {
+            $scope.modal.remove();
+            $state.go("app.location", {id: doc_id})
+          })
         })
+
+      }, function(response) {
+        $scope.$emit(denguechat.env.error, {error: "Something went wrong. Please try again."})
+        $ionicLoading.hide()
       })
 
-    }, function(response) {
-      $scope.$emit(denguechat.env.error, {error: "Something went wrong. Please try again."})
-      $ionicLoading.hide()
     })
+
+
   }
 
   $scope.$watch("params.search", function(newValue, oldValue) {
@@ -166,7 +176,7 @@ angular.module('starter.controllers')
 
   $scope.loadGeo = function() {
     // Map-related tasks
-    var options = {timeout: 10000, maximumAge: 60000, enableHighAccuracy: true};
+    var options = {timeout: 10000, enableHighAccuracy: true};
 
     $cordovaGeolocation.getCurrentPosition(options).then(function(position){
       $scope.location.latitude  = position.coords.latitude

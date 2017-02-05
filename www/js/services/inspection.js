@@ -12,6 +12,9 @@ angular.module('starter.services')
 
   // Pouch.inspectionsDB.destroy()
   return {
+    timeout: null,
+    syncStatus: {backoff: backoff, error: {}},
+
     documentID: function(location_doc_id, visit_doc_id, ins) {
       return location_doc_id + visit_doc_id + ins.created_at + ins.position
     },
@@ -31,6 +34,17 @@ angular.module('starter.services')
         return docs.rows.map(function(el) { return el.doc })
       })
     },
+
+    unsyncedChanges: function() {
+      return Pouch.inspectionsDB.changes({
+        include_docs: true,
+        conflicts: false,
+        filter: function(doc) { return !doc.synced }
+      }).then(function(changes) {
+        return changes.results
+      })
+    },
+
 
     syncUnsyncedDocuments: function() {
       thisInspection = this
@@ -128,15 +142,17 @@ angular.module('starter.services')
 
 
     sendToCloud: function(changes) {
-      return $http({
-        method: "PUT",
-        url: denguechat.env.baseURL + "sync/inspection",
-        data: {
-          changes: changes
-        },
-        headers: {
-          "Authorization": "Bearer " + User.getToken()
-        }
+      return User.get().then(function(user) {
+        return $http({
+          method: "PUT",
+          url: denguechat.env.baseURL + "sync/inspection",
+          data: {
+            changes: changes
+          },
+          headers: {
+            "Authorization": "Bearer " + user.token
+          }
+        })
       })
     },
 
@@ -149,12 +165,13 @@ angular.module('starter.services')
       console.log(duration)
       console.log("-----")
 
-      setTimeout(function(){
+      this.timeout = setTimeout(function(){
         thisInspection.sendChangesToCloud(document_id)
       }, duration);
     },
 
     sendChangesToCloud: function(document_id) {
+      thisInspection = this;
       return Pouch.inspectionsDB.get(document_id).then(function(ins) {
         console.log("Sync starting for document:")
         console.log(ins)
@@ -182,12 +199,16 @@ angular.module('starter.services')
               backoff.reset();
 
               // Update the ins model.
+              for (var key in res.data.inspection) {
+                ins[key] = res.data.inspection[key]
+              }
               ins.synced         = true
-              ins.last_synced_at = res.last_synced_at
+              ins.last_synced_at = res.data.last_synced_at
               return Pouch.inspectionsDB.put(ins)
             }, function(res) {
               console.log("Failed with error:");
               console.log(res)
+              thisInspection.syncStatus.error = res;
               console.log("------")
               thisInspection.sync(ins._id)
             })

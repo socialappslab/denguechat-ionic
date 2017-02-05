@@ -26,6 +26,11 @@
             Add a visit
           </div> -->
 
+          <ion-item ng-if="visits.length == 0" class="text-center">
+            <h2>No visits found. Why not add one?</h2>
+          </ion-item>
+
+
           <ion-item class="item-icon-right item-icon-left" ng-repeat="visit in visits" ui-sref="app.location.visit({visit_id: visit._id})">
             <!-- <i class="{{visit.inspections_count == 0 ? 'icon ion-ios-circle-outline' : 'icon ion-ios-circle-filled'}}" ng-style="{'color': visit.color}"></i> -->
 

@@ -10,9 +10,11 @@ angular.module('starter.services')
   var backoff = new Backoff({ min: 1000, max: 60000 });
   var whitelistedKeys = ["id", "user_id", "neighborhood_id", "photo", "base64_photo", "content", "liked", "created_at", "user", "timestamp"];
 
-
   // Pouch.postsDB.destroy()
   return {
+    timeout: null,
+    syncStatus: {backoff: backoff, error: {}},
+
     documentID: function(post) {
       return (new Date(post.created_at)).toISOString() + post.neighborhood_id
     },
@@ -27,9 +29,10 @@ angular.module('starter.services')
     },
 
     getAll: function() {
+      thisPost = this
       return User.get().then(function(user) {
-        nid = user.neighborhood.id 
-        return this.findAllByNeighborhoodId(nid).then(function(doc) {
+        nid = user.neighborhood.id
+        return thisPost.findAllByNeighborhoodId(nid).then(function(doc) {
           docs = doc.rows.map(function(el) { return el.doc })
           return _.sortBy(docs, function(d){ return d._id; }).reverse();
         })
@@ -82,15 +85,18 @@ angular.module('starter.services')
 
     getFromCloud: function(limit, offset) {
       thisPost = this
-      nid = User.get().neighborhood.id
-      return $http({
-        method: "GET",
-        url:    denguechat.env.baseURL + "posts?mobile=1&neighborhood_id=" + nid + "&limit=" + limit + "&offset=" + offset,
-        headers: {
-         "Authorization": "Bearer " + User.getToken()
-       }
-      }).then(function(res) {
-        return thisPost.saveMultiple(res.data.posts, [], null)
+      return User.get().then(function(user) {
+        nid = user.neighborhood.id
+        return $http({
+          method: "GET",
+          url:    denguechat.env.baseURL + "posts?mobile=1&neighborhood_id=" + nid + "&limit=" + limit + "&offset=" + offset,
+          headers: {
+           "Authorization": "Bearer " + user.token
+         }
+        }).then(function(res) {
+          console.log(JSON.stringify(res.data.posts))
+          return thisPost.saveMultiple(res.data.posts, [], null)
+        })
       })
     },
 
@@ -115,19 +121,26 @@ angular.module('starter.services')
     },
 
     sendToCloud: function(changes) {
-      return $http({
-        method: "PUT",
-        url: denguechat.env.baseURL + "sync/post",
-        data: {
-          changes: changes
-        },
-        headers: {
-          "Authorization": "Bearer " + User.getToken()
-        }
+      return User.get().then(function(user) {
+        return $http({
+          method: "PUT",
+          url: denguechat.env.baseURL + "sync/post",
+          data: {
+            changes: changes
+          },
+          headers: {
+            "Authorization": "Bearer " + user.token
+          }
+        })
       })
     },
 
     syncUnsyncedDocuments: function() {
+      if (this.timeout) {
+        backoff.reset()
+        clearTimeout(this.timeout)
+      }
+
       thisPost = this
       Pouch.postsDB.changes({
         include_docs: false,
@@ -172,12 +185,23 @@ angular.module('starter.services')
       console.log(duration)
       console.log("-----")
 
-      setTimeout(function(){
+      this.timeout = setTimeout(function(){
         thisPost.sendChangesToCloud(document_id)
       }, duration);
     },
 
+    unsyncedChanges: function() {
+      return Pouch.postsDB.changes({
+        include_docs: true,
+        conflicts: false,
+        filter: function(doc) { return !doc.synced }
+      }).then(function(changes) {
+        return changes.results
+      })
+    },
+
     sendChangesToCloud: function(document_id) {
+      thisPost = this;
       return Pouch.postsDB.get(document_id).then(function(post) {
         console.log("Sync starting for document:")
         console.log(post)
@@ -186,9 +210,6 @@ angular.module('starter.services')
         return Pouch.postsDB.changes({
           include_docs: true,
           conflicts: false,
-          // TODO: If we turn this on, we won't ever be able to match those that
-          // are syncMultiple.
-          // since: sync.last_sync_seq,
           doc_ids: [post._id],
           filter: function(doc) {
             return !doc.synced
@@ -208,12 +229,16 @@ angular.module('starter.services')
               backoff.reset();
 
               // Update the post model.
+              for (var key in res.data.post) {
+                post[key] = res.data.post[key]
+              }
               post.synced         = true
-              post.last_synced_at = res.last_synced_at
+              post.last_synced_at = res.data.last_synced_at
               return Pouch.postsDB.put(post)
             }, function(res) {
               console.log("Failed with error:");
               console.log(res)
+              thisPost.syncStatus.error = res;
               console.log("------")
               thisPost.sync(post._id)
             })
@@ -226,10 +251,6 @@ angular.module('starter.services')
 
     },
 
-
-    syncStatus: function() {
-      return Pouch.syncDB.get("posts")
-    },
     updateSyncState: function(sync_state) {
       return Pouch.syncDB.upsert("posts", function(state) {
         state.last_synced_at = sync_state.last_synced_at

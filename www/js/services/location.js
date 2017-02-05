@@ -10,27 +10,30 @@ angular.module('starter.services')
   var backoff = new Backoff({ min: 1000, max: 60000 });
   var whitelistedKeys = ["id", "user_id", "latitude", "longitude", "neighborhood_id", "address", "last_visited_at", "visits", "questions"];
 
-
   // Helper function.
   var cleanAddress = function(address) {
     return address.toLowerCase();
   }
 
   // Pouch.locationsDB.destroy()
-  // Pouch.visitsDB.destroy()
-  // Pouch.inspectionsDB.destroy()
-
   return {
+    timeout: null,
+    syncStatus: {backoff: backoff, error: {}},
+
     documentID: function(location) {
       return location.neighborhood_id + location.address
     },
 
     getAll: function() {
-      nid = User.get().neighborhood.id
-      return this.findAllByNeighborhoodId(nid).then(function(doc) {
-        docs = doc.rows.map(function(el) { return el.doc })
-        return _.sortBy(docs, function(d){ return d.address; });
+      thisLocation = this
+      return User.get().then(function(user) {
+        nid = user.neighborhood.id
+        return thisLocation.findAllByNeighborhoodId(nid).then(function(doc) {
+          docs = doc.rows.map(function(el) { return el.doc })
+          return _.sortBy(docs, function(d){ return d.address; });
+        })
       })
+
     },
     findAllByNeighborhoodId: function(neighborhood_id) {
       return Pouch.locationsDB.query("locations/by_neighborhood_id", {
@@ -40,67 +43,64 @@ angular.module('starter.services')
     },
 
     search: function(address) {
-      return Pouch.locationsDB.search({
-        query: address,
-        fields: ['address'],
-        include_docs: true
-      }).then(function(res) {
-        return res.rows
+      return Pouch.locationsDB.find({
+        selector: {address: address}
       })
-      // return $http({
-      //   method: "GET",
-      //   url:    denguechat.env.baseURL + "locations/search?address=" + query,
-      //   headers: {
-      //    "Authorization": "Bearer " + User.getToken()
-      //  }
-      // })
     },
     // TODO: Convert to PouchDB.
     create: function(location) {
       // doc_id = locationDocumentURL + cleanAddress(location.address)
       // return Pouch.upsertDoc(doc_id, {location: location});
-      return $http({
-        method: "POST",
-        url:    denguechat.env.baseURL + "locations/",
-        data: {
-          location: location
-        },
-        headers: {
-         "Authorization": "Bearer " + User.getToken()
-       }
+      return User.get().then(function(user) {
+        return $http({
+          method: "POST",
+          url:    denguechat.env.baseURL + "locations/",
+          data: {
+            location: location
+          },
+          headers: {
+           "Authorization": "Bearer " + user.token
+         }
+        })
       })
     },
     getAllFromCloud: function() {
       thisLocation = this
-      nid = User.get().neighborhood.id
-      return $http({
-        method: "GET",
-        url:    denguechat.env.baseURL + "locations/mobile",
-        headers: {
-         "Authorization": "Bearer " + User.getToken()
-       }
-     }).then(function(res) {
-       console.log("-----")
-       console.log("Finished $http call....")
-       console.log("Calling thisLocation.saveMultiple()...")
-      return thisLocation.saveMultiple(res.data.locations, [], null)
+      return User.get().then(function(user) {
+        return $http({
+          method: "GET",
+          url:    denguechat.env.baseURL + "locations/mobile",
+          headers: {
+           "Authorization": "Bearer " + user.token
+          }
+        }).then(function(res) {
+          return thisLocation.saveMultiple(res.data.locations, [], null)
+        })
       })
+
     },
     getFromCloud: function(doc) {
       thisLocation = this
-      return $http({
-        method: "GET",
-        url:    denguechat.env.baseURL + "locations/" + cleanAddress(doc.address),
-        headers: {
-         "Authorization": "Bearer " + User.getToken()
-       }
-     }).then(function(res) {
-       doc_id = thisLocation.documentID(res.data.location)
-       return thisLocation.save(doc_id, res.data.location, {remote: false, synced: true})
+      return User.get().then(function(user) {
+        return $http({
+          method: "GET",
+          url:    denguechat.env.baseURL + "locations/" + cleanAddress(doc.address),
+          headers: {
+            "Authorization": "Bearer " + user.token
+          }
+        }).then(function(res) {
+          doc_id = thisLocation.documentID(res.data.location)
+          return thisLocation.save(doc_id, res.data.location, {remote: false, synced: true})
+        })
       })
     },
 
     syncUnsyncedDocuments: function() {
+      if (this.timeout) {
+        backoff.reset()
+        clearTimeout(this.timeout)
+      }
+
       thisLocation = this
       Pouch.locationsDB.changes({
         include_docs: false,
@@ -205,21 +205,31 @@ angular.module('starter.services')
       })
     },
 
-
-
-    sendToCloud: function(changes) {
-      return $http({
-        method: "PUT",
-        url: denguechat.env.baseURL + "sync/location",
-        data: {
-          changes: changes
-        },
-        headers: {
-          "Authorization": "Bearer " + User.getToken()
-        }
+    unsyncedChanges: function() {
+      return Pouch.locationsDB.changes({
+        include_docs: true,
+        conflicts: false,
+        filter: function(doc) { return !doc.synced }
+      }).then(function(changes) {
+        return changes.results
       })
     },
 
+
+    sendToCloud: function(changes) {
+      return User.get().then(function(user) {
+        return $http({
+          method: "PUT",
+          url: denguechat.env.baseURL + "sync/location",
+          data: {
+            changes: changes
+          },
+          headers: {
+            "Authorization": "Bearer " + user.token
+          }
+        })
+      })
+    },
 
     sync: function(document_id) {
       thisLocation = this
@@ -229,12 +239,13 @@ angular.module('starter.services')
       console.log(duration)
       console.log("-----")
 
-      setTimeout(function(){
+      this.timeout = setTimeout(function(){
         thisLocation.sendChangesToCloud(document_id)
       }, duration);
     },
 
     sendChangesToCloud: function(document_id) {
+      thisLocation = this;
       return Pouch.locationsDB.get(document_id).then(function(location) {
         console.log("Sync starting for document:")
         console.log(location)
@@ -265,12 +276,16 @@ angular.module('starter.services')
               backoff.reset();
 
               // Update the location model.
+              for (var key in res.data.location) {
+                location[key] = res.data.location[key]
+              }
               location.synced         = true
-              location.last_synced_at = res.last_synced_at
+              location.last_synced_at = res.data.last_synced_at
               return Pouch.locationsDB.put(location)
             }, function(res) {
               console.log("Failed with error:");
               console.log(res)
+              thisLocation.syncStatus.error = res;
               console.log("------")
               thisLocation.sync(location._id)
             })

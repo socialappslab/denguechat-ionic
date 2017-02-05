@@ -1,0 +1,49 @@
+<ion-view view-title="Sync">
+  <ion-content>
+    <ion-list>
+      <ion-item class="item-icon-left item-text-wrap" ng-click="syncNow('posts')">
+        <i class="icon ion-ios-refresh-empty" ng-if="posts.length > 0"></i>
+        <i class="icon ion-ios-checkmark-empty" ng-if="posts.length == 0"></i>
+        <h2 ng-if="posts.length > 0">{{posts.length}} posts changes waiting to sync. Click to retry now.</h2>
+        <h2 ng-if="posts.length == 0">Posts all synced!</h2>
+        <div ng-if="posts.length > 0">
+          <p>{{post.syncStatus.backoff.attempts}} attempts</p>
+          <p>Last known error: {{post.syncStatus.error}}</p>
+        </div>
+      </ion-item>
+
+      <ion-item class="item-icon-left item-text-wrap" ng-click="syncNow('locations')">
+        <i class="icon ion-ios-refresh-empty" ng-if="locations.length > 0"></i>
+        <i class="icon ion-ios-checkmark-empty" ng-if="locations.length == 0"></i>
+        <h2 ng-if="locations.length > 0">{{locations.length}} location changes waiting to sync. Click to retry now.</h2>
+        <h2 ng-if="locations.length == 0">Locations all synced!</h2>
+        <div ng-if="locations.length > 0">
+          <p>{{location.syncStatus.backoff.attempts}} attempts</p>
+          <p>Last known error: {{location.syncStatus.error}}</p>
+        </div>
+      </ion-item>
+
+      <ion-item class="item-icon-left item-text-wrap" ng-click="syncNow('visits')">
+        <i class="icon ion-ios-refresh-empty" ng-if="visits.length > 0"></i>
+        <i class="icon ion-ios-checkmark-empty" ng-if="visits.length == 0"></i>
+        <h2 ng-if="visits.length > 0">{{visits.length}} visit changes waiting to sync. Click to retry now.</h2>
+        <h2 ng-if="visits.length == 0">Visits all synced!</h2>
+        <div ng-if="visits.length > 0">
+          <p>{{visit.syncStatus.backoff.attempts}} attempts</p>
+          <p>Last known error: {{visit.syncStatus.error}}</p>
+        </div>
+      </ion-item>
+
+      <ion-item class="item-icon-left item-text-wrap" ng-click="syncNow('inspections')">
+        <i class="icon ion-ios-refresh-empty" ng-if="inspections.length > 0"></i>
+        <i class="icon ion-ios-checkmark-empty" ng-if="inspections.length == 0"></i>
+        <h2 ng-if="inspections.length > 0">{{inspections.length}} inspection changes waiting to sync. Click to retry now.</h2>
+        <h2 ng-if="inspections.length == 0">Inspections all synced!</h2>
+        <div ng-if="inspections.length > 0">
+          <p>{{inspection.syncStatus.backoff.attempts}} attempts</p>
+          <p>Last known error: {{inspection.syncStatus.error}}</p>
+        </div>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

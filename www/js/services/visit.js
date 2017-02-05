@@ -8,8 +8,7 @@ https://www.firebase.com/docs/web/guide/login/password.html
 angular.module('starter.services')
 .factory('Visit', function($http, User, Pouch, $q, Backoff, Inspection) {
   var backoff = new Backoff({ min: 1000, max: 60000 });
-  var whitelistedKeys = ["id", "visited_at", "inspections", "color", "classification"];
-
+  var whitelistedKeys = ["id", "visited_at", "location_id", "inspections", "color", "classification"];
 
   var cleanAddress = function(address) {
     return address.toLowerCase();
@@ -17,6 +16,9 @@ angular.module('starter.services')
 
   // Pouch.visitsDB.destroy()
   return {
+    timeout: null,
+    syncStatus: {backoff: backoff, error: {}},
+
     documentID: function(location_doc_id, visit) {
       return location_doc_id + visit.visited_at
     },
@@ -39,7 +41,22 @@ angular.module('starter.services')
       })
     },
 
+    unsyncedChanges: function() {
+      return Pouch.visitsDB.changes({
+        include_docs: true,
+        conflicts: false,
+        filter: function(doc) { return !doc.synced }
+      }).then(function(changes) {
+        return changes.results
+      })
+    },
+
     syncUnsyncedDocuments: function() {
+      if (this.timeout) {
+        backoff.reset()
+        clearTimeout(this.timeout)
+      }
+
       thisVisit = this
       Pouch.visitsDB.changes({
         include_docs: false,
@@ -146,15 +163,17 @@ angular.module('starter.services')
 
 
     sendToCloud: function(changes) {
-      return $http({
-        method: "PUT",
-        url: denguechat.env.baseURL + "sync/visit",
-        data: {
-          changes: changes
-        },
-        headers: {
-          "Authorization": "Bearer " + User.getToken()
-        }
+      return User.get().then(function(user) {
+        return $http({
+          method: "PUT",
+          url: denguechat.env.baseURL + "sync/visit",
+          data: {
+            changes: changes
+          },
+          headers: {
+            "Authorization": "Bearer " + user.token
+          }
+        })
       })
     },
 
@@ -167,12 +186,13 @@ angular.module('starter.services')
       console.log(duration)
       console.log("-----")
 
-      setTimeout(function(){
+      this.timeout = setTimeout(function(){
         thisVisit.sendChangesToCloud(document_id)
       }, duration);
     },
 
     sendChangesToCloud: function(document_id) {
+      thisVisit = this
       return Pouch.visitsDB.get(document_id).then(function(visit) {
         console.log("Sync starting for document:")
         console.log(visit)
@@ -200,12 +220,16 @@ angular.module('starter.services')
               backoff.reset();
 
               // Update the visit model.
+              for (var key in res.data.visit) {
+                visit[key] = res.data.visit[key]
+              }
               visit.synced         = true
-              visit.last_synced_at = res.last_synced_at
+              visit.last_synced_at = res.data.last_synced_at
               return Pouch.visitsDB.put(visit)
             }, function(res) {
               console.log("Failed with error:");
               console.log(res)
+              thisVisit.syncStatus.error = res
               console.log("------")
               thisVisit.sync(visit._id)
             })
