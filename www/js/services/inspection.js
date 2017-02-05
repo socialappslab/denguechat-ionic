@@ -8,7 +8,7 @@ https://www.firebase.com/docs/web/guide/login/password.html
 angular.module('starter.services')
 .factory('Inspection', function($http, User, Pouch, $q, Backoff) {
   var backoff = new Backoff({ min: 1000, max: 60000 });
-  var whitelistedKeys = ["id", "visit_id", "position", "location", "protected", "chemically_treated", "larvae", "pupae", "larvae", "report", "before_photo", "color", "created_at"];
+  var whitelistedKeys = ["id", "visit_id", "position", "location", "protected", "chemically_treated", "larvae", "pupae", "larvae", "report", "before_photo", "after_photo", "color", "created_at"];
 
   // Pouch.inspectionsDB.destroy()
   return {
