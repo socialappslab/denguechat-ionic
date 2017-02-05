@@ -56,14 +56,15 @@ angular.module('starter.controllers')
         console.log(locations)
         $scope.locations = locations
         $ionicLoading.hide()
-      })
+        $scope.state.firstLoad = false;
+        $scope.$broadcast('scroll.refreshComplete');
+      }, function(er) {console.log(JSON.stringify(er))})
 
     }, function(response) {
+      $scope.state.firstLoad = false;
+      $scope.$broadcast('scroll.refreshComplete');
       $ionicLoading.hide()
       $scope.$emit(denguechat.env.error, {error: response})
-    }).finally(function() {
-     $scope.state.firstLoad = false;
-     $scope.$broadcast('scroll.refreshComplete');
     });
   }
 
