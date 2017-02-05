@@ -42,7 +42,22 @@ angular.module('starter.services')
       })
     },
 
+    unsyncedChanges: function() {
+      return Pouch.visitsDB.changes({
+        include_docs: true,
+        conflicts: false,
+        filter: function(doc) { return !doc.synced }
+      }).then(function(changes) {
+        return changes.results
+      })
+    },
+
     syncUnsyncedDocuments: function() {
+      if (this.timeout) {
+        backoff.reset()
+        clearTimeout(this.timeout)
+      }
+
       thisVisit = this
       Pouch.visitsDB.changes({
         include_docs: false,
@@ -170,7 +185,7 @@ angular.module('starter.services')
       console.log(duration)
       console.log("-----")
 
-      setTimeout(function(){
+      this.timeout = setTimeout(function(){
         thisVisit.sendChangesToCloud(document_id)
       }, duration);
     },

@@ -35,6 +35,17 @@ angular.module('starter.services')
       })
     },
 
+    unsyncedChanges: function() {
+      return Pouch.inspectionsDB.changes({
+        include_docs: true,
+        conflicts: false,
+        filter: function(doc) { return !doc.synced }
+      }).then(function(changes) {
+        return changes.results
+      })
+    },
+
+
     syncUnsyncedDocuments: function() {
       thisInspection = this
       Pouch.inspectionsDB.changes({
@@ -152,7 +163,7 @@ angular.module('starter.services')
       console.log(duration)
       console.log("-----")
 
-      setTimeout(function(){
+      this.timeout = setTimeout(function(){
         thisInspection.sendChangesToCloud(document_id)
       }, duration);
     },

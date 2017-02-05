@@ -176,7 +176,7 @@ angular.module('starter.controllers')
 
   $scope.loadGeo = function() {
     // Map-related tasks
-    var options = {timeout: 10000, maximumAge: 60000, enableHighAccuracy: true};
+    var options = {timeout: 10000, enableHighAccuracy: true};
 
     $cordovaGeolocation.getCurrentPosition(options).then(function(position){
       $scope.location.latitude  = position.coords.latitude

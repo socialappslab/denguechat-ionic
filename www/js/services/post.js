@@ -136,6 +136,11 @@ angular.module('starter.services')
     },
 
     syncUnsyncedDocuments: function() {
+      if (this.timeout) {
+        backoff.reset()
+        clearTimeout(this.timeout)
+      }
+
       thisPost = this
       Pouch.postsDB.changes({
         include_docs: false,
@@ -180,9 +185,19 @@ angular.module('starter.services')
       console.log(duration)
       console.log("-----")
 
-      setTimeout(function(){
+      this.timeout = setTimeout(function(){
         thisPost.sendChangesToCloud(document_id)
       }, duration);
+    },
+
+    unsyncedChanges: function() {
+      return Pouch.postsDB.changes({
+        include_docs: true,
+        conflicts: false,
+        filter: function(doc) { return !doc.synced }
+      }).then(function(changes) {
+        return changes.results
+      })
     },
 
     sendChangesToCloud: function(document_id) {
