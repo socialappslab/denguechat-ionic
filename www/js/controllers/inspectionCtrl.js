@@ -70,21 +70,40 @@ angular.module('starter.controllers')
   }
 
   $scope.loadCamera = function() {
-    $cordovaCamera.getPicture({saveToPhotoAlbum: true, quality: 50, allowEdit: true, correctOrientation: true, targetWidth: 750, targetHeight: 750, destinationType: 0}).then(function(base64) {
-      $scope.inspection.report.before_photo = "data:image/jpeg;base64," + base64
-    }).catch(function(res) {
-      navigator.notification.alert(JSON.stringify(res), null)
-      $scope.$emit(clovi.env.error, res)
-    })
+    // $cordovaCamera.getPicture({saveToPhotoAlbum: true, quality: 50, allowEdit: true, correctOrientation: true, targetWidth: 750, targetHeight: 750, destinationType: 0}).then(function(base64) {
+    //   $scope.inspection.report.before_photo = "data:image/jpeg;base64," + base64
+    // }).catch(function(res) {
+    //   navigator.notification.alert(JSON.stringify(res), null)
+    //   $scope.$emit(clovi.env.error, res)
+    // })
+    if (navigator.camera) {
+      navigator.camera.getPicture(function(base64) {
+        $scope.inspection.report.before_photo = "data:image/jpeg;base64," + base64
+        $scope.$apply()
+      }, function(response) {
+      }, {saveToPhotoAlbum: true, destinationType: 0})
+    } else {
+      alert("Camera not supported!")
+    }
   }
 
   $scope.loadAfterCamera = function() {
-    $cordovaCamera.getPicture({saveToPhotoAlbum: true, quality: 50, allowEdit: true, correctOrientation: true, targetWidth: 750, targetHeight: 750, destinationType: 0}).then(function(base64) {
-      $scope.inspection.report.after_photo = "data:image/jpeg;base64," + base64
-    }).catch(function(res) {
-      navigator.notification.alert(JSON.stringify(res), null)
-      $scope.$emit(clovi.env.error, res)
-    })
+    // $cordovaCamera.getPicture({saveToPhotoAlbum: true, quality: 50, allowEdit: true, correctOrientation: true, targetWidth: 750, targetHeight: 750, destinationType: 0}).then(function(base64) {
+    //   $scope.inspection.report.after_photo = "data:image/jpeg;base64," + base64
+    // }).catch(function(res) {
+    //   navigator.notification.alert(JSON.stringify(res), null)
+    //   $scope.$emit(clovi.env.error, res)
+    // })
+    if (navigator.camera) {
+      navigator.camera.getPicture(function(base64) {
+        $scope.inspection.report.after_photo = "data:image/jpeg;base64," + base64
+        $scope.$apply()
+      }, function(res) {
+        $scope.$emit(denguechat.error, res)
+      }, {saveToPhotoAlbum: true, destinationType: 0})
+    } else {
+      alert("Camera not supported!")
+    }
   }
 
 }] )
