@@ -7,7 +7,16 @@
 
 angular.module('starter.services', [])
 
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.directives', 'ngSanitize', 'underscore', 'Backo', 'ngCordova'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.directives', 'ngSanitize', 'underscore', 'angularMoment', 'Backo', 'ngCordova'])
+
+
+.filter('formatDate', function ($filter, moment) {
+  return function (time) {
+    date = moment(time, "YYYY-MM-DD").format("MMM DD, YYYY")
+    return $filter('date')(date, '');
+  }
+})
+
 
 .run(function($ionicPlatform, $rootScope, $ionicModal, User, $state, $ionicHistory, Pouch, Post, Location, Visit, Inspection) {
   User.get().then(function(user) {
