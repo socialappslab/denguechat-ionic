@@ -286,16 +286,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     }
   })
-  // .state('app.visit.new_inspection', {
-  //   url: '/inspections/new',
-  //   cache: false,
-  //   views: {
-  //     'menuContent@app': {
-  //       templateUrl: 'templates/inspections/new.html',
-  //       controller: 'newInspectionsCtrl'
-  //     }
-  //   }
-  // })
 })
 
 
