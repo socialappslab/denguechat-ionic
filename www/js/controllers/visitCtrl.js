@@ -1,5 +1,5 @@
 angular.module('starter.controllers')
-.controller('visitCtrl', ['$scope', '$state', 'Visit', "$ionicModal", "$ionicLoading", "Inspection", "User", function($scope, $state, Visit, $ionicModal, $ionicLoading, Inspection, User) {
+.controller('visitCtrl', ['$scope', '$state', 'Visit', "$ionicModal", "$ionicLoading", "Inspection", "User", "$cordovaCamera", function($scope, $state, Visit, $ionicModal, $ionicLoading, Inspection, User, $cordovaCamera) {
   $scope.visit       = {};
   $scope.inspection  = {report: {}};
   $scope.inspections = []
@@ -106,17 +106,13 @@ angular.module('starter.controllers')
   }
 
   $scope.loadCamera = function() {
-    if (navigator.camera) {
-      navigator.camera.getPicture(function(base64) {
-        $scope.inspection.before_photo = "data:image/jpeg;base64," + base64
-        $scope.$apply()
-      }, function(response) {
-      }, {saveToPhotoAlbum: true, destinationType: 0})
-    } else {
-      alert("Camera not supported!")
-    }
+    $cordovaCamera.getPicture({saveToPhotoAlbum: true, quality: 50, allowEdit: true, correctOrientation: true, targetWidth: 750, targetHeight: 750, destinationType: 0}).then(function(base64) {
+      $scope.inspection.report.before_photo = "data:image/jpeg;base64," + base64
+    }).catch(function(res) {
+      navigator.notification.alert(JSON.stringify(res), null)
+      $scope.$emit(clovi.env.error, res)
+    })
   }
-
 
   // $scope.$on(denguechat.env.data.refresh, function() {
   //   $scope.state.firstLoad = true;

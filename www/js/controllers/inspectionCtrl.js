@@ -1,5 +1,5 @@
 angular.module('starter.controllers')
-.controller('inspectionCtrl', ['$scope', '$state', 'Visit', "$ionicModal", "$ionicLoading", "Inspection", "User", "$ionicHistory", function($scope, $state, Visit, $ionicModal, $ionicLoading, Inspection, User, $ionicHistory) {
+.controller('inspectionCtrl', ['$scope', '$state', 'Visit', "$ionicModal", "$ionicLoading", "Inspection", "User", "$ionicHistory", "$cordovaCamera", function($scope, $state, Visit, $ionicModal, $ionicLoading, Inspection, User, $ionicHistory, $cordovaCamera) {
   $scope.visit       = {};
   $scope.inspection  = {report: {}};
   $scope.inspections = []
@@ -67,27 +67,21 @@ angular.module('starter.controllers')
   }
 
   $scope.loadCamera = function() {
-    if (navigator.camera) {
-      navigator.camera.getPicture(function(base64) {
-        $scope.inspection.report.before_photo = "data:image/jpeg;base64," + base64
-        $scope.$apply()
-      }, function(response) {
-      }, {saveToPhotoAlbum: true, destinationType: 0})
-    } else {
-      alert("Camera not supported!")
-    }
+    $cordovaCamera.getPicture({saveToPhotoAlbum: true, quality: 50, allowEdit: true, correctOrientation: true, targetWidth: 750, targetHeight: 750, destinationType: 0}).then(function(base64) {
+      $scope.inspection.report.before_photo = "data:image/jpeg;base64," + base64
+    }).catch(function(res) {
+      navigator.notification.alert(JSON.stringify(res), null)
+      $scope.$emit(clovi.env.error, res)
+    })
   }
 
   $scope.loadAfterCamera = function() {
-    if (navigator.camera) {
-      navigator.camera.getPicture(function(base64) {
-        $scope.inspection.report.after_photo = "data:image/jpeg;base64," + base64
-        $scope.$apply()
-      }, function(response) {
-      }, {saveToPhotoAlbum: true, destinationType: 0})
-    } else {
-      alert("Camera not supported!")
-    }
+    $cordovaCamera.getPicture({saveToPhotoAlbum: true, quality: 50, allowEdit: true, correctOrientation: true, targetWidth: 750, targetHeight: 750, destinationType: 0}).then(function(base64) {
+      $scope.inspection.report.after_photo = "data:image/jpeg;base64," + base64
+    }).catch(function(res) {
+      navigator.notification.alert(JSON.stringify(res), null)
+      $scope.$emit(clovi.env.error, res)
+    })
   }
 
 }] )
