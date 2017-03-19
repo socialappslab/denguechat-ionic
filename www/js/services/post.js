@@ -34,18 +34,48 @@ angular.module('starter.services')
     getAll: function() {
       thisPost = this
       return User.get().then(function(user) {
-        nid = user.neighborhood.id
-        return thisPost.findAllByNeighborhoodId(nid).then(function(doc) {
-          docs = doc.rows.map(function(el) { return el.doc })
-          return _.sortBy(docs, function(d){ return d._id; }).reverse();
+        nids = _.map(user.neighborhoods, function(n) { return n.id})
+
+        return thisPost.findAllByNeighborhoodIds(nids).then(function(doc) {
+          console.log(doc)
+          return doc
         })
       })
-
     },
-    findAllByNeighborhoodId: function(neighborhood_id) {
-      return Pouch.postsDB.query("posts/by_neighborhood_id", {
-        key: neighborhood_id,
-        include_docs: true
+    findAllByNeighborhoodIds: function(nids) {
+      // Pouch.postsDB.getIndexes().then(function(res) {
+      //   _.map(res.indexes, function(ind) {
+      //     if (ind.ddoc) {
+      //       console.log(ind)
+      //       return Pouch.postsDB.deleteIndex(ind)
+      //     }
+      //   })
+      // })
+
+      // NOTE: Until this issue is resolved, we'll be using
+      // underscore to sort:
+      // https://github.com/pouchdb/pouchdb/issues/6266
+      // NOTE: This is problematic because it creates an index and is sent for
+      // sync server.
+      // return Pouch.postsDB.createIndex({
+      //   index: { fields: ["neighborhood_id"] }
+      // }).then(function() {
+      //   return Pouch.postsDB.find({
+      //     selector: {
+      //       neighborhood_id: {$in: nids}
+      //     }
+      //     // sort: [{created_at: "asc"}]
+      //   })
+      // }).then(function(res) {
+      //   return _.sortBy(res, function(r) {return r.created_at})
+      // })
+      return Pouch.postsDB.find({
+        selector: {
+          neighborhood_id: {$in: nids}
+        }
+        // sort: [{created_at: "asc"}]
+      }).then(function(res) {
+        return _.sortBy(res.docs, function(r) {return r.created_at}).reverse()
       })
     },
 

@@ -6,7 +6,7 @@ is returned via password authentication:
 https://www.firebase.com/docs/web/guide/login/password.html
 */
 angular.module('starter.services')
-.factory('User', function($window, $http, Pouch) {
+.factory('User', function($window, $http, Pouch, $q) {
   return {
     // set: function(user) {
     //   if (user)
@@ -22,7 +22,7 @@ angular.module('starter.services')
     //     return {}
     // },
     get: function() {
-      return Pouch.usersDB.get("user")
+      return $q.when(Pouch.usersDB.get("user"))
     },
     save: function(user) {
       return Pouch.usersDB.upsert("user", function(doc){

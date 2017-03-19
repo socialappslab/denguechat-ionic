@@ -26,7 +26,7 @@ angular.module('starter.controllers')
   })
 
   $scope.createVisit = function() {
-    $ionicLoading.show({hideOnStateChange: true})
+    $ionicLoading.show({template: "<ion-spinner></ion-spinner><br>Creando la visita...", hideOnStateChange: true})
 
     doc_id = Visit.documentID($state.params.id, $scope.visit);
     Visit.save(doc_id, $scope.visit, {remote: true, synced: false}).then(function(response) {

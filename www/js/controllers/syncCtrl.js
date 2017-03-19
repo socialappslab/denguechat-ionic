@@ -1,5 +1,5 @@
 angular.module('starter.controllers')
-.controller('syncCtrl', ['$scope', 'Location', "Post", "Visit", "Inspection", function($scope, Location, Post, Visit, Inspection) {
+.controller('syncCtrl', ['$scope', 'Location', "Post", "Visit", "Inspection", "Pouch", "$ionicLoading", "$state", function($scope, Location, Post, Visit, Inspection, Pouch, $ionicLoading, $state) {
   $scope.post  = {};
   $scope.visit = {};
   $scope.location = {};
@@ -18,26 +18,54 @@ angular.module('starter.controllers')
       Inspection.syncUnsyncedDocuments()
   }
 
+  $scope.destroyDatabases = function() {
+    t = window.confirm("This will destroy all databases. Are you sure?")
+    if (!t)
+      return false
+
+    return Pouch.postsDB.destroy().then(function() {
+      return Pouch.locationsDB.destroy()
+    }).then(function() {
+      return Pouch.visitsDB.destroy()
+    }).then(function() {
+      return Pouch.inspectionsDB.destroy()
+    }).then(function() {
+      $state.go("app.sync", {}, {reload: true})
+    }).catch(function(err) {
+      alert("Something went wrong while destroy databases. Here is the error: " + JSON.stringify(err))
+    })
+  }
+
 
   // Triggered only once when the view is loaded.
   // http://ionicframework.com/docs/api/directive/ionView/
   $scope.$on("$ionicView.loaded", function() {
+    $ionicLoading.show({template: "<ion-spinner></ion-spinner><br>Loading database...", hideOnStateChange: true})
+
     Post.unsyncedChanges().then(function(changes) {
       $scope.posts = changes
       $scope.post.syncStatus = Post.syncStatus
+    }).then(function() {
+      return Location.unsyncedChanges().then(function(changes) {
+        $scope.locations = changes
+        $scope.location.syncStatus = Location.syncStatus
+      })
+    }).then(function() {
+      return Visit.unsyncedChanges().then(function(changes) {
+        $scope.visits = changes
+        $scope.visit.syncStatus = Visit.syncStatus
+      })
+    }).then(function() {
+      $ionicLoading.hide()
+
+      return Inspection.unsyncedChanges().then(function(changes) {
+        $scope.inspections = changes
+        $scope.inspection.syncStatus = Inspection.syncStatus
+      })
+    }).catch(function(err) {
+      alert("Something went wrong while loading changes. Here is the error: " + JSON.stringify(err))
     })
-    Location.unsyncedChanges().then(function(changes) {
-      $scope.locations = changes
-      $scope.location.syncStatus = Location.syncStatus
-    })
-    Visit.unsyncedChanges().then(function(changes) {
-      $scope.visits = changes
-      $scope.visit.syncStatus = Visit.syncStatus
-    })
-    Inspection.unsyncedChanges().then(function(changes) {
-      $scope.inspections = changes
-      $scope.inspection.syncStatus = Inspection.syncStatus
-    })
+
   })
 
   $scope.$watch("visit_last_known_error", function(n, o) {

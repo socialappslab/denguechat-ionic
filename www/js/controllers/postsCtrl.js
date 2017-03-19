@@ -7,7 +7,7 @@ angular.module('starter.controllers')
   // Triggered only once when the view is loaded.
   // http://ionicframework.com/docs/api/directive/ionView/
   $scope.$on("$ionicView.loaded", function() {
-    $ionicLoading.show({hideOnStateChange: true})
+    $ionicLoading.show({template: "<ion-spinner></ion-spinner><br>Cargando los posts...", hideOnStateChange: true})
 
     User.get().then(function(user) {
       $scope.post.user_id = user.id
@@ -17,8 +17,9 @@ angular.module('starter.controllers')
 
     Post.getAll().then(function(posts) {
       $scope.posts = posts
-      $ionicLoading.hide()
-    }, function(error) {
+    }).catch(function(res) {
+      $scope.$emit(denguechat.error, res)
+    }).finally(function() {
       $ionicLoading.hide()
     })
   })
@@ -28,24 +29,19 @@ angular.module('starter.controllers')
   }
 
   $scope.refresh = function(offset) {
-    $ionicLoading.show({hideOnStateChange: true})
+    $ionicLoading.show({template: "<ion-spinner></ion-spinner><br>Cargando los posts de denguechat.com...", hideOnStateChange: true})
 
     Post.getFromCloud(20, offset).then(function(response) {
-      Post.getAll().then(function(posts) {
+      return Post.getAll().then(function(posts) {
         $scope.posts = posts
-        $ionicLoading.hide()
         $scope.$broadcast('scroll.refreshComplete');
-      }, function(er) {console.log("ERRORR"); console.log(JSON.stringify(er))})
+        $ionicLoading.hide()
+      })
 
-
-      // Array.prototype.push.apply($scope.posts, response.data.posts)
-      // $scope.$broadcast('scroll.infiniteScrollComplete');
-      // $scope.state.hasMoreData = (response.data.posts.length !== 0)
-    }, function(response) {
+    }).catch(function(res) {
       $ionicLoading.hide()
-      $scope.$broadcast('scroll.refreshComplete');
-      $scope.$emit(denguechat.env.error, {error: response})
-    });
+      $scope.$emit(denguechat.env.error, res)
+    })
   }
 
   $scope.loadMore = function() {
@@ -67,10 +63,26 @@ angular.module('starter.controllers')
     });
   }
 
-  $scope.closeNewPostModal = function() {
-    $scope.modal.hide().then(function() {
-      $scope.modal.remove();
-    })
+  // $scope.showCommentsModal = function(post) {
+  //   return $ionicModal.fromTemplateUrl('templates/posts/comments.html', {
+  //     scope: $scope,
+  //     animation: 'slide-in-up'
+  //   }).then(function(modal) {
+  //     $scope.modal         = modal;
+  //     return modal.show()
+  //   }).then(function() {
+  //     $ionicScrollDelegate.$getByHandle('commentContent').scrollBottom()
+  //     $scope.status_update = post
+  //   })
+  // }
+
+  $scope.closeModal = function() {
+    $scope.post = {}
+    if ($scope.modal) {
+      $scope.modal.hide().then(function() {
+        $scope.modal.remove();
+      })
+    }
   }
 
   $scope.loadCamera = function() {
@@ -86,23 +98,22 @@ angular.module('starter.controllers')
   }
 
   $scope.createPost = function() {
-    $ionicLoading.show()
+    $ionicLoading.show({template: "<ion-spinner></ion-spinner><br>Creando post...", hideOnStateChange: true})
+
 
     $scope.post.created_at      = new Date()
     doc_id = Post.documentID($scope.post.user, $scope.post)
     Post.save(doc_id, $scope.post, {remote: true, synced: false}).then(function(response) {
-      Post.get(doc_id).then(function(doc) {
+      return Post.get(doc_id).then(function(doc) {
         $scope.posts.unshift(doc)
         $scope.post = {};
-
         $ionicLoading.hide().then(function() {
-          $scope.closeNewPostModal()
+          $scope.closeModal()
         })
       })
-
-    }, function(response) {
-      $scope.$emit(denguechat.env.error, {error: "Something went wrong. Please try again."})
+    }).catch(function(rese) {
       $ionicLoading.hide()
+      $scope.$emit(denguechat.error, res)
     })
   }
 

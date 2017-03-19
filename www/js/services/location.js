@@ -27,12 +27,15 @@ angular.module('starter.services')
     getAll: function() {
       thisLocation = this
       return User.get().then(function(user) {
+        console.log("\n\n\n")
+        console.log(user)
+        console.log("\n\n\n")
         return Pouch.locationsDB.find({
-          selector: {
-            $and: [
-              { user_id: user.id },
-              { neighborhood_id: user.neighborhood.id }
-            ]
+          selector: { user_id: user.id
+            // $and: [
+            //   { user_id: user.id },
+            //   { neighborhood_id: user.neighborhood.id }
+            // ]
           }
         }).then(function(res) {
           return res.docs
@@ -40,10 +43,6 @@ angular.module('starter.services')
           console.log("Something is wrong...")
           console.log(err)
         })
-        // return thisLocation.findAllByNeighborhoodId(nid).then(function(doc) {
-        //   docs = doc.rows.map(function(el) { return el.doc })
-        //   return _.sortBy(docs, function(d){ return d.address; });
-        // })
       })
     },
     findAllByNeighborhoodId: function(neighborhood_id) {
@@ -138,8 +137,12 @@ angular.module('starter.services')
         deferred.resolve(document_ids)
         return deferred.promise
       } else {
-        loc        = locations.shift();
-        loc_doc_id = thisLocation.documentID(user, loc)
+        loc         = locations.shift();
+        loc.user_id = user.id
+        loc_doc_id  = thisLocation.documentID(user, loc)
+        console.log("\n\n\n")
+        console.log(loc)
+        console.log("\n\n\n")
 
         thisLocation.save(loc_doc_id, loc, {remote: false, synced: true}).then(function(doc) {
           document_ids.push(loc_doc_id)

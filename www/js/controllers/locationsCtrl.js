@@ -23,10 +23,9 @@ angular.module('starter.controllers')
 
     Location.getAll().then(function(locations) {
       $scope.locations = locations
-      $scope.state.loading   = false
-      $scope.state.firstLoad = false;
-      $ionicLoading.hide();
-    }, function(res) {
+    }).catch(function(res) {
+      navigator.notification.alert(JSON.stringify(res), null, "Problem getting all locations", "OK")
+    }).finally(function(res) {
       $scope.state.loading   = false
       $scope.state.firstLoad = false;
       $ionicLoading.hide();
@@ -53,21 +52,17 @@ angular.module('starter.controllers')
     $ionicLoading.show({hideOnStateChange: true})
 
     Location.getAllFromCloud().then(function(response) {
-      Location.getAll().then(function(locations) {
-        console.log("LOcation.getALl() returning...")
-        console.log(locations)
+      return Location.getAll().then(function(locations) {
         $scope.locations = locations
-        $ionicLoading.hide()
-        $scope.state.firstLoad = false;
-        $scope.$broadcast('scroll.refreshComplete');
-      }, function(er) {console.log(JSON.stringify(er))})
-
-    }, function(response) {
+      })
+    }).then(function() {
       $scope.state.firstLoad = false;
       $scope.$broadcast('scroll.refreshComplete');
       $ionicLoading.hide()
-      $scope.$emit(denguechat.env.error, {error: response})
-    });
+    }).catch(function(res) {
+      navigator.notification.alert(JSON.stringify(res), null, "Problem getting all locations from server", "OK")
+      // $scope.$emit(denguechat.env.error, response)
+    })
   }
 
   $scope.$on(denguechat.env.data.refresh, function() {

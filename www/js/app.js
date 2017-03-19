@@ -21,9 +21,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 .run(function($ionicPlatform, $rootScope, $ionicModal, User, $state, $ionicHistory, Pouch, Post, Location, Visit, Inspection) {
   User.get().then(function(user) {
     $rootScope.user = user;
+    console.log(user)
   })
 
-  Pouch.createPostNeighborhoodView()
   Pouch.createLocationNeighborhoodView()
 
   $ionicPlatform.ready(function() {
@@ -84,47 +84,69 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     });
   }
 
-  $rootScope.$on(denguechat.env.error, function(event, response) {
-    if (response.status == -1) {
-      navigator.notification.alert("We couldn't connect to the server. Do you have an internet connection?", null, "Server not responding", "OK")
-    }
-    else if (response.error.status == 401) {
-      User.setToken(null);
+  $rootScope.$on(denguechat.error, function(event, response) {
+    console.log("\n\n\n---------------")
+    console.log("clovi.env.error: " + JSON.stringify(response))
+    console.log("---------------\n\n\n")
 
-      if ( !$rootScope.modal || ($rootScope.modal && !$rootScope.modal.isShown()) ) {
-        loadLoginModal().then(function() {
-          $rootScope.state.error = "Your session has expired"
-          $rootScope.modal.show();
-        })
-      }
-    } else if (response.status !== -1 && response.error.data) {
-      navigator.notification.alert(response.error.data.message, null, "Server not responding", "OK")
-    } else if (response.error.status === 422 && response.error.data) {
-      navigator.notification.alert(response.error.data.message, null, "Server not responding", "OK")
-    } else if (response.error.status === -1) {
-      navigator.notification.alert("We couldn't reach the server. Try again later.", null, "Server not responding", "OK")
-    } else {
-      navigator.notification.alert("Something went wrong", null, "Contact support@denguechat.com", "OK")
+    // If this is a PouchDB not found error, then let's quietly suppress it.
+    if (response.status == 404 && response.name == "not_found") {
+      return
     }
+
+    // if (response.status == 401) {
+    //   $rootScope.failedAuth()
+    //   return
+    // }
+
+    navigator.notification.alert(JSON.stringify(response), null)
   })
+
+  // $rootScope.$on(denguechat.env.error, function(event, response) {
+  //   if (response.status == -1) {
+  //     navigator.notification.alert("We couldn't connect to the server. Do you have an internet connection?", null, "Server not responding", "OK")
+  //   }
+  //   else if (response.error.status == 401) {
+  //     User.setToken(null);
+  //
+  //     if ( !$rootScope.modal || ($rootScope.modal && !$rootScope.modal.isShown()) ) {
+  //       loadLoginModal().then(function() {
+  //         $rootScope.state.error = "Your session has expired"
+  //         $rootScope.modal.show();
+  //       })
+  //     }
+  //   } else if (response.status !== -1 && response.error.data) {
+  //     navigator.notification.alert(response.error.data.message, null, "Server not responding", "OK")
+  //   } else if (response.error.status === 422 && response.error.data) {
+  //     navigator.notification.alert(response.error.data.message, null, "Server not responding", "OK")
+  //   } else if (response.error.status === -1) {
+  //     navigator.notification.alert("We couldn't reach the server. Try again later.", null, "Server not responding", "OK")
+  //   } else {
+  //     navigator.notification.alert("Something went wrong", null, "Contact support@denguechat.com", "OK")
+  //   }
+  // })
 
   $rootScope.$on(denguechat.env.auth.success, function(event, data) {
     if ($rootScope.modal)
-      $rootScope.modal.remove().then(function() {
-        $ionicHistory.clearHistory()
-        $state.go("app.posts", {}, {reload: true})
-      })
+      $rootScope.modal.remove()
   })
 
   $rootScope.$on(denguechat.env.auth.failure, function(event, data) {
-    User.setToken(null);
-    if ( !$rootScope.modal || ($rootScope.modal && !$rootScope.modal.isShown()) ) {
-      loadLoginModal().then(function() {
-        $rootScope.state.error = data.message
-        $rootScope.modal.show();
-      })
-    }
+    $rootScope.failedAuth()
   })
+
+  $rootScope.failedAuth = function() {
+    User.destroy().then(function(p) {
+      return $ionicPush.unregister()
+    }).finally(function() {
+      if ( !$rootScope.modal || ($rootScope.modal && !$rootScope.modal.isShown()) ) {
+        loadLoginModal().then(function() {
+          $rootScope.state.error = "You need to login before continuing"
+          $rootScope.modal.show();
+        })
+      }
+    })
+  }
 })
 .config(function($stateProvider, $urlRouterProvider) {
   // if none of the above states are matched, use this as the fallback
@@ -132,6 +154,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   $stateProvider
   .state('app', {
     url: '/app',
+    cache: false,
     abstract: true,
     templateUrl: 'templates/menu.html',
     controller: 'AppCtrl'

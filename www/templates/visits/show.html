@@ -1,4 +1,4 @@
-<ion-view view-title="{{visit.visited_at}}">
+<ion-view view-title="{{visit.visited_at | formatDate}}">
 
   <ion-nav-buttons side="right">
     <button class="button button-icon button-clear ion-edit" ui-sref="app.location.visit.edit({visit_id: visit._id})"></button>

@@ -19,26 +19,6 @@ angular.module('starter.services')
     breedingsDB:    new PouchDB("breeding_sites"),
     eliminationsDB: new PouchDB("eliminations"),
 
-
-    createPostNeighborhoodView: function() {
-      // document that tells PouchDB/CouchDB
-      // to build up an index on doc.name
-      var ddoc = {
-        _id: '_design/posts',
-        synced: true,
-        views: {
-          by_neighborhood_id: {
-            map: function (doc) { emit(doc.neighborhood_id); }.toString()
-          }
-        }
-      }
-      this.postsDB.put(ddoc).then(function () {
-        // success!
-      }).catch(function (err) {
-        // some error (maybe a 409, because it already exists?)
-      });
-    },
-
     createLocationNeighborhoodView: function() {
       // document that tells PouchDB/CouchDB
       // to build up an index on doc.name
