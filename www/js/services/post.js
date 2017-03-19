@@ -119,10 +119,9 @@ angular.module('starter.services')
     getFromCloud: function(limit, offset) {
       thisPost = this
       return User.get().then(function(user) {
-        nid = user.neighborhood.id
         return $http({
           method: "GET",
-          url:    denguechat.env.baseURL + "posts?mobile=1&neighborhood_id=" + nid + "&limit=" + limit + "&offset=" + offset,
+          url:    denguechat.env.baseURL + "posts?mobile=1&city_id=" + user.neighborhood.city_id + "&limit=" + limit + "&offset=" + offset,
           headers: {
            "Authorization": "Bearer " + user.token
          }
