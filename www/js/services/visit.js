@@ -8,7 +8,7 @@ https://www.firebase.com/docs/web/guide/login/password.html
 angular.module('starter.services')
 .factory('Visit', function($http, User, Pouch, $q, Backoff, Inspection) {
   var backoff = new Backoff({ min: 1000, max: 60000 });
-  var whitelistedKeys = ["id", "visited_at", "location", "location_id", "inspections", "color", "classification"];
+  var whitelistedKeys = ["id", "visited_at", "location", "inspections", "color", "classification"];
 
   var cleanAddress = function(address) {
     return address.toLowerCase();
@@ -141,7 +141,6 @@ angular.module('starter.services')
         changed = false
         for (var key in _.pick(visit, whitelistedKeys)) {
           if (doc[key] != visit[key]) {
-            console.log(key)
             changed  = true
             doc[key] = visit[key]
           }
