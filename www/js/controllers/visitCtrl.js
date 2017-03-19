@@ -13,8 +13,8 @@ angular.module('starter.controllers')
     });
 
     Visit.get($state.params.visit_id).then(function(response) {
-      $scope.visit               = response
-      $scope.inspection.visit_id = $scope.visit.id
+      $scope.visit            = response
+      $scope.inspection.visit = {id: response.id, pouchdb_id: response._id}
 
       if (!response.inspections || response.inspections.length == 0) {
         $scope.inspections = []

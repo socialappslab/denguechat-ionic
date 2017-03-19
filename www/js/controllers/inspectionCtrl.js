@@ -10,29 +10,32 @@ angular.module('starter.controllers')
     User.get().then(function(user) {
       $scope.breeding_sites = user.breeding_sites
 
-      Inspection.get($state.params.inspection_id).then(function(response) {
-        $scope.inspection = response
+      Visit.get($state.params.visit_id).then(function(visit) {
+        $scope.visit = visit
 
-        if ($scope.inspection.report.breeding_site) {
-          for (var i=0; i < $scope.breeding_sites.length; i++) {
-            if ($scope.breeding_sites[i].id == $scope.inspection.report.breeding_site.id)
-              $scope.inspection.report.breeding_site = $scope.breeding_sites[i]
+        Inspection.get($state.params.inspection_id).then(function(response) {
+          $scope.inspection       = response
+          $scope.inspection.visit = {id: visit.id, pouchdb_id: visit._id}
+
+          if ($scope.inspection.report.breeding_site) {
+            $scope.inspection.report.breeding_site = _.find($scope.breeding_sites, function(bs) { return bs.id == $scope.inspection.report.breeding_site.id})
           }
-        }
 
-        if ($scope.inspection.report.elimination_method) {
-          for (var i=0; i < $scope.inspection.report.breeding_site.elimination_methods.length; i++) {
-            if ($scope.inspection.report.breeding_site.elimination_methods[i].id == $scope.inspection.report.elimination_method.id)
-              $scope.inspection.report.elimination_method = $scope.inspection.report.breeding_site.elimination_methods[i]
+          if ($scope.inspection.report.elimination_method) {
+            $scope.inspection.report.elimination_method = _.find($scope.inspection.report.breeding_site.elimination_methods, function(em) { return em.id == $scope.inspection.report.elimination_method.id})
           }
-        }
 
-        if ($scope.inspection.report.eliminated_at) {
-          $scope.inspection.report.eliminated_at = new Date($scope.inspection.report.eliminated_at)
-        }
+          if ($scope.inspection.report.eliminated_at) {
+            $scope.inspection.report.eliminated_at = new Date($scope.inspection.report.eliminated_at)
+          }
 
-        $ionicLoading.hide()
+          $ionicLoading.hide()
+        })
+
+
       })
+
+
     });
   })
 
