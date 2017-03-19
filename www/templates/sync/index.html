@@ -1,4 +1,10 @@
 <ion-view view-title="Sync">
+
+  <ion-nav-buttons side="right">
+    <button class="button button-icon button-clear ion-ios-trash-outline" ng-click="destroyDatabases()"></button>
+  </ion-nav-buttons>
+
+
   <ion-content>
     <ion-list>
       <ion-item class="item-icon-left item-text-wrap" ng-click="syncNow('posts')">

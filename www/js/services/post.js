@@ -278,7 +278,7 @@ angular.module('starter.services')
 
 
 
-      })
+      }).catch(console.log.bind(console));
 
     },
 
