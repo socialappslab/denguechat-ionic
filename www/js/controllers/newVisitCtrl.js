@@ -3,7 +3,7 @@ angular.module('starter.controllers')
   $scope.visit = {};
 
   Location.get($state.params.id).then(function(loc) {
-    $scope.visit.location_id = loc.id;
+    $scope.visit.location = {id: loc.id, pouchdb_id: loc._id, address: loc.address}
   })
 
   $scope.create = function() {

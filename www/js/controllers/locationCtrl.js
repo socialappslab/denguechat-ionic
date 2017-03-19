@@ -1,16 +1,16 @@
 angular.module('starter.controllers')
-.controller('locationCtrl', ['$scope', "$state", 'Location', '$ionicLoading', '$ionicHistory', "$ionicSlideBoxDelegate", 'LocationQuiz', '$ionicLoading', "$ionicModal", "Visit", function($scope, $state, Location, $ionicLoading, $ionicHistory, $ionicSlideBoxDelegate, LocationQuiz, $ionicLoading, $ionicModal, Visit) {
+.controller('locationCtrl', ['$scope', "$state", 'Location', '$ionicLoading', "moment", '$ionicHistory', "$ionicSlideBoxDelegate", 'LocationQuiz',"$ionicModal", "Visit", function($scope, $state, Location, $ionicLoading, moment, $ionicHistory, $ionicSlideBoxDelegate, LocationQuiz, $ionicModal, Visit) {
   $scope.state    = {firstLoad: true, pageIndex: 0};
   $scope.params   = {search: ""};
   $scope.visit    = {}
   $scope.location = {}
 
   $scope.$on("$ionicView.loaded", function() {
-    $ionicLoading.show({hideOnStateChange: true})
+    $ionicLoading.show({template: "<ion-spinner></ion-spinner><br>Cargando hogares...", hideOnStateChange: true})
 
     Location.get($state.params.id).then(function(loc) {
       $scope.location       = loc
-      $scope.visit.location = {id: loc.id, address: loc.address} 
+      $scope.visit.location = {id: loc.id, pouchdb_id: loc._id, address: loc.address}
 
       if (!$scope.location.visits || $scope.location.visits.length == 0) {
         $scope.visits = []

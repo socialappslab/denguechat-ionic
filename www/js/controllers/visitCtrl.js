@@ -29,17 +29,6 @@ angular.module('starter.controllers')
     })
   })
 
-  // $scope.refresh = function() {
-  //   Visit.get($state.params.location_id, $state.params.visit_date, $state.params.visit_id).then(function(response) {
-  //     $scope.visit = response.visit
-  //   }, function(response) {
-  //     $scope.$emit(denguechat.env.error, {error: response})
-  //   }).finally(function() {
-  //     $scope.state.firstLoad = false;
-  //     $scope.$broadcast('scroll.refreshComplete');
-  //   });
-  // }
-
   $scope.showNewInspectionModal = function() {
     // Create the login modal that we will use later
     return $ionicModal.fromTemplateUrl('templates/inspections/new.html', {
