@@ -18,12 +18,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 })
 
 
-.run(function($ionicPlatform, $rootScope, $ionicModal, User, $state, $ionicHistory, Pouch, Post, Location, Visit, Inspection) {
-  User.get().then(function(user) {
-    $rootScope.user = user;
-    console.log(user)
-  })
-
+.run(function($ionicPlatform, $rootScope, $ionicModal, User, $state, $ionicHistory, Pouch, Post, Location, Visit, Inspection, $ionicSideMenuDelegate) {
   Pouch.createLocationNeighborhoodView()
 
   $ionicPlatform.ready(function() {
@@ -147,6 +142,18 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     })
   }
+
+  // Avoid keeping the sidemenu stale.
+  $rootScope.$watch(function () {
+    return $ionicSideMenuDelegate.isOpen(true);
+  }, function(isOpen) {
+    if (isOpen == true) {
+      User.get().then(function(user) {
+        $rootScope.user = user;
+      })
+    }
+  })
+
 })
 .config(function($stateProvider, $urlRouterProvider) {
   // if none of the above states are matched, use this as the fallback
