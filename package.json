@@ -22,11 +22,19 @@
     "cordova-plugin-splashscreen",
     "cordova-plugin-statusbar",
     "ionic-plugin-keyboard",
-    "cordova-plugin-crosswalk-webview",
     "cordova-plugin-dialogs",
-    "cordova-plugin-camera"
+    "cordova-plugin-camera@2.4.1"
   ],
   "cordovaPlatforms": [
-    "android"
+    {
+      "platform": "ios",
+      "version": "4.3.1",
+      "locator": "ios@4.3.1"
+    },
+    {
+      "platform": "android",
+      "version": "6.1.0",
+      "locator": "android@6.1.0"
+    }
   ]
 }
