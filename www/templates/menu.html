@@ -36,8 +36,15 @@
       <div class="spacer" style="width: 100%; height: 34px; border-top: 1px solid white;"></div>
       <ion-list>
         <ion-item menu-close ui-sref="app.posts" class="item-icon-left side-menu-item" active-page-highlight="">
+          <!-- <i class="icon ion-ios-chatbubble-outline"></i> -->
+          {{user.neighborhood.city.name || "Mi Ciudad"}}
+        </ion-item>
+
+        <ion-item menu-close ui-sref="app.posts" class="item-icon-left side-menu-item item-text-wrap" active-page-highlight="">
           <i class="icon ion-ios-chatbubble-outline"></i>
           Mi Comunidad
+          <br>
+          {{user.neighborhood.name}}
         </ion-item>
         <ion-item menu-close ui-sref="app.locations" class="item-icon-left side-menu-item" active-page-highlight="">
           <i class="icon ion-ios-home-outline"></i>
