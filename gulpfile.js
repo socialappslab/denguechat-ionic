@@ -70,7 +70,11 @@ gulp.task('ios', function() {
     .pipe(preprocess({context: { ENV: 'IOS', DEBUG: true}}))
     .pipe(gulp.dest('./www/js/'));
 });
-
+gulp.task('staging', function() {
+  gulp.src('./environment.js')
+    .pipe(preprocess({context: { ENV: 'STAGING'}}))
+    .pipe(gulp.dest('./www/js/'));
+});
 gulp.task('production', function() {
   gulp.src('./environment.js')
     .pipe(preprocess({context: { ENV: 'PRODUCTION'}}))

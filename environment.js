@@ -23,6 +23,11 @@ denguechat.env = {
   mainURL: "http://localhost:5000/",
   debug: true
   // @endif
+  // @if ENV == 'STAGING'
+  baseURL: "http://denguetorpedo-staging.herokuapp.com/api/v0/",
+  mainURL: "http://denguetorpedo-staging.herokuapp.com/",
+  debug: false
+  // @endif
   // @if ENV == 'PRODUCTION'
   baseURL: "https://www.denguechat.com/api/v0/",
   mainURL: "https://www.denguechat.com/",
