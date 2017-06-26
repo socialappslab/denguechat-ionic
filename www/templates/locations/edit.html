@@ -1,16 +1,18 @@
-<ion-view view-title="Edit {{location.address}}">
+<ion-view view-title="Editar {{location.address}}">
 
   <form ng-submit="update()">
     <ion-content class="has-footer" scroll="false">
       <div class="list">
-        <label class="item item-input">
-          <span class="input-label">Address</span>
-          <input type="text" class="text-right" ng-model="location.address">
-        </label>
         <label class="item item-input item-select">
-          <div class="input-label">Neighborhood</div>
+          <div class="input-label">Comunidad</div>
           <select ng-model="location.neighborhood_id" ng-options="n.id as n.name for n in neighborhoods"></select>
         </label>
+
+        <label class="item item-input">
+          <span class="input-label">Codigo</span>
+          <input type="text" class="text-right" ng-model="location.address">
+        </label>
+
 
 
         <div class="item row">
@@ -41,8 +43,8 @@
     </ion-content>
 
     <ion-footer-bar keyboard-attach class="bar bar-footer bar-balanced">
-      <div class="buttons full-width">
-        <button class="button button-clear" type="submit">Update</div>
+      <div class="buttons full-width" style="width: 100%;">
+        <button class="button button-clear" type="submit" style="width: 100%;">Actualizar</div>
       </div>
     </ion-footer-bar>
   </form>

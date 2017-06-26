@@ -2,10 +2,10 @@
   <div class="tabs-striped tabs-top">
     <div class="tabs">
       <a class="tab-item" ng-class="{'active': state.pageIndex === 0}" ng-click="transitionToPageIndex(0)">
-        Visits
+        Visitas
       </a>
       <a class="tab-item" ng-class="{'active': state.pageIndex === 1}" ng-click="transitionToPageIndex(1)">
-        Questions
+        Preguntas
       </a>
     </div>
   </div>
@@ -27,7 +27,7 @@
           </div> -->
 
           <ion-item ng-if="visits.length == 0" class="text-center item-text-wrap">
-            <h2>No visits found. Why not add one?</h2>
+            <h2>No se encontraron visitas. Añadir una.</h2>
           </ion-item>
 
 
@@ -35,11 +35,11 @@
             <!-- <i class="{{visit.inspections_count == 0 ? 'icon ion-ios-circle-outline' : 'icon ion-ios-circle-filled'}}" ng-style="{'color': visit.color}"></i> -->
 
             <h2>{{visit.visited_at | formatDate}}</h2>
-            <p>{{visit.inspections.length || 0}} inspections</p>
+            <p>{{visit.inspections.length || 0}} inspeciones</p>
             <i class="icon ion-ios-arrow-right"></i>
           </ion-item>
           <ion-item ng-if="visits.length == 0 && state.firstLoad == false" class="text-center">
-            <h2>No visits found</h2>
+            <h2>No se encontraron visitas</h2>
           </ion-item>
         </ion-list>
       </ion-slide>
@@ -81,8 +81,8 @@
   </ion-content>
 
   <ion-footer-bar keyboard-attach class="bar bar-footer bar-balanced">
-    <div class="title" ng-if="state.pageIndex == 0" ng-click="showNewVisitModal()">Add a visit</div>
-    <div class="title" ng-click="saveQuestions()" ng-if="state.pageIndex == 1">Save questions</div>
+    <div class="title" ng-if="state.pageIndex == 0" ng-click="showNewVisitModal()">Agregar visita</div>
+    <div class="title" ng-click="saveQuestions()" ng-if="state.pageIndex == 1">Guardar</div>
   </ion-footer-bar>
 
   <!-- <div class="tabs-striped tabs-top">

@@ -12,7 +12,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
 .filter('formatDate', function ($filter, moment) {
   return function (time) {
-    date = moment(time, "YYYY-MM-DD").format("MMM DD, YYYY")
+    date = moment(time, "YYYY-MM-DD").format("DD MMM, YYYY")
     return $filter('date')(date, '');
   }
 })
@@ -148,8 +148,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     return $ionicSideMenuDelegate.isOpen(true);
   }, function(isOpen) {
     if (isOpen == true) {
-      User.get().then(function(user) {
-        $rootScope.user = user;
+      User.current().then(function(user) {
+        $rootScope.user = user.data.user;
+        return User.save(user.data.user)
+      }).catch(function() {
+        return User.get().then(function(user) {
+          $rootScope.user = user
+        })
       })
     }
   })

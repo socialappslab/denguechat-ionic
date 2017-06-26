@@ -1,18 +1,18 @@
 <ion-modal-view class="login-modal">
   <ion-header-bar class="bar bar-header bar-stable">
     <h1 class="title">Add a location</h1>
-    <button class="button button-clear button-positive" ng-click="closeNewLocationModal()">Cancel</button>
+    <button class="button button-clear button-positive" ng-click="closeNewLocationModal()">Cancelar</button>
   </ion-header-bar>
 
   <form ng-submit="create()">
     <ion-content has-bouncing="false" scroll="false">
       <div class="list" style="margin-bottom: 0px;">
         <label class="item item-input item-select">
-          <div class="input-label">Neighborhood</div>
+          <div class="input-label">Comunidad</div>
           <select ng-model="location.neighborhood_id" ng-options="n.id as n.name for n in neighborhoods"></select>
         </label>
         <label class="item item-input">
-          <span class="input-label">Address</span>
+          <span class="input-label">Codigo</span>
           <input type="text" class="text-right" ng-model="location.address">
         </label>
 
@@ -43,8 +43,8 @@
     </ion-content>
 
     <ion-footer-bar keyboard-attach class="bar bar-footer bar-balanced">
-      <div class="buttons full-width">
-        <button class="button button-clear" type="submit">Add</div>
+      <div class="buttons full-width" style="width: 100%;">
+        <button class="button button-clear" type="submit" style="width: 100%;">Agregar</div>
       </div>
     </ion-footer-bar>
   </form>

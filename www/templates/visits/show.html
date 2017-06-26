@@ -1,28 +1,28 @@
-<ion-view view-title="{{visit.visited_at | formatDate}}">
+<ion-view view-title="{{visit.visited_at}}">
 
   <ion-nav-buttons side="right">
     <button class="button button-icon button-clear ion-edit" ui-sref="app.location.visit.edit({visit_id: visit._id})"></button>
   </ion-nav-buttons>
 
   <ion-content class="has-footer">
-    <!-- <ion-refresher pulling-text="Pull to refresh..." on-refresh="refresh()"></ion-refresher> -->
+    <!-- <ion-refresher pulling-text="Tirar para actualizar..." on-refresh="refresh()"></ion-refresher> -->
 
     <ion-item ng-if="inspections.length == 0" class="text-center item-text-wrap">
-      <h2>No inspections found. Why not add one?</h2>
+      <h2>No se encontraron criaderos. Tirar para actualizar.</h2>
     </ion-item>
 
     <ion-item class="item-icon-left item-icon-right item-text-wrap" ng-repeat="ins in inspections" ui-sref="app.location.visit.inspection({inspection_id: ins._id})">
       <i class="icon ion-ios-circle-filled" ng-style="{'color': ins.color}"></i>
-      <h2>{{ins.report.breeding_site.description}}</h2>
-      <p>{{ins.report.field_identifier}}</p>
-      <p>{{ins.report.report}}</p>
+      <h2>{{ins.breeding_site.description}}</h2>
+      <p ng-if="ins.report.field_identifier">Código de criadero: {{ins.field_identifier}}</p>
+      <p>{{ins.description}}</p>
       <i class="icon ion-ios-arrow-right"></i>
     </ion-item>
 
   </ion-content>
 
   <div class="bar bar-footer bar-balanced">
-    <div class="title" ng-click="showNewInspectionModal()">Add an inspection</div>
+    <div class="title" ng-click="showNewInspectionModal()">Agregar inspecion</div>
   </div>
 
 </ion-view>

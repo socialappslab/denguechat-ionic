@@ -16,13 +16,15 @@
     <!-- <ion-header-bar class="bar-stable">
       <h1 class="title">Menu</h1>
     </ion-header-bar> -->
-    <ion-content scroll="false" padding="false" style="top:0px !important;" class="side-menu-left side-menu-gradient">
+    <ion-content padding="false" style="top:0px !important;" class="side-menu-left side-menu-gradient">
       <div class="spacer" style="width: 268px; height: 32px;"></div>
       <div class="profile-image">
-        <img src="img/profile.png" style="display: block; width: 40%; height: auto; margin-left: auto; margin-right: auto;">
+
+        <img ng-src="{{user.profile_photo}}" style="display: block; width: 40%; height: auto; margin-left: auto; margin-right: auto;">
       </div>
       <h3 style="color:white; text-align:center;">{{user.display_name}}</h3>
       <p style="color:white; text-align:center;">{{user.neighborhood.name}}</p>
+      <p style="color:white; text-align:center;">{{user.city.name}}</p>
       <div class="row">
         <div class="col">
           <h4 style="color:white; text-align:center;">{{user.total_points}}</h4>
@@ -35,16 +37,13 @@
       </div>
       <div class="spacer" style="width: 100%; height: 34px; border-top: 1px solid white;"></div>
       <ion-list>
-        <ion-item menu-close ui-sref="app.posts" class="item-icon-left side-menu-item" active-page-highlight="">
-          <!-- <i class="icon ion-ios-chatbubble-outline"></i> -->
-          {{user.neighborhood.city.name || "Mi Ciudad"}}
-        </ion-item>
+
 
         <ion-item menu-close ui-sref="app.posts" class="item-icon-left side-menu-item item-text-wrap" active-page-highlight="">
           <i class="icon ion-ios-chatbubble-outline"></i>
           Mi Comunidad
-          <br>
-          {{user.neighborhood.name}}
+          <!-- <br>
+          {{user.neighborhood.name}} -->
         </ion-item>
         <ion-item menu-close ui-sref="app.locations" class="item-icon-left side-menu-item" active-page-highlight="">
           <i class="icon ion-ios-home-outline"></i>
@@ -59,7 +58,7 @@
     </ion-content>
 
     <ion-footer-bar align-title="center" class="bar-stable">
-      <h1 class="title" ng-click="logout()">Logout</h1>
+      <h1 class="title" ng-click="logout()">Salir</h1>
     </ion-footer-bar>
 
 

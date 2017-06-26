@@ -75,12 +75,15 @@ angular.module('starter.services')
       })
     },
     current: function() {
-      return $http({
-        method: "GET",
-        url:    denguechat.env.baseURL + "sessions/current",
-        headers: {
-         "Authorization": "Bearer " + this.getToken()
-        }
+      return this.getToken().then(function(token) {
+        return $http({
+          method: "GET",
+          url:    denguechat.env.baseURL + "sessions/current",
+          headers: {
+
+           "Authorization": "Bearer " + token
+          }
+        })
       })
     },
   };

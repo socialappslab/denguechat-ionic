@@ -1,4 +1,4 @@
-<ion-view view-title="Locations">
+<ion-view view-title="Lugares">
   <!-- <div class="content bar-subheader">
     <form ng-submit="searchByAddress()">
       <div class="list">
@@ -20,7 +20,7 @@
   </ion-nav-buttons> -->
 
   <ion-content class="has-footer">
-    <ion-refresher pulling-text="Pull to refresh..." on-refresh="refresh()"></ion-refresher>
+    <ion-refresher pulling-text="Tirar para actualizar..." on-refresh="refresh()"></ion-refresher>
 
     <ion-list>
       <ion-item class="item-icon-right" ng-repeat="location in locations" ui-sref="app.location({id: location._id})">
@@ -30,7 +30,7 @@
         <i class="icon ion-ios-arrow-right"></i>
       </ion-item>
       <ion-item ng-if="locations.length == 0 && state.firstLoad == false && state.loading == false" class="text-center item-text-wrap">
-        <h2>No locations found. Have you visited any locations? Try pulling down to refresh.</h2>
+        <h2>No se encontraron lugares. Tirar para actualizar.</h2>
       </ion-item>
     </ion-list>
   </ion-content>

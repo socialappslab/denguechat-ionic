@@ -8,7 +8,7 @@
             <input type="text" ng-model="params.search" placeholder="Search by date...">
           </label>
           <button type="submit" class="button button-small button-clear button-positive" ng-disabled="params.search.length == 0">
-            Search
+            Buscar
           </button>
         </div>
       </div>
@@ -21,7 +21,7 @@
 
 
   <ion-content class="has-subheader">
-    <ion-refresher pulling-text="Pull to refresh..." on-refresh="refresh()"></ion-refresher>
+    <ion-refresher pulling-text="Tirar para actualizar..." on-refresh="refresh()"></ion-refresher>
 
     <ion-list>
       <ion-item ng-if="state.firstLoad == true" class="text-center">
@@ -35,7 +35,7 @@
         <i class="icon ion-ios-arrow-right"></i>
       </ion-item>
       <ion-item ng-if="visits.length == 0 && state.firstLoad == false" class="text-center">
-        <h2>No visits found. Have you visited any locations?</h2>
+        <h2>No se encontraron visitas. Tirar para actualizar.</h2>
       </ion-item>
     </ion-list>
   </ion-content>

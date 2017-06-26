@@ -111,9 +111,10 @@ angular.module('starter.controllers')
           $scope.closeModal()
         })
       })
-    }).catch(function(rese) {
-      $ionicLoading.hide()
+    }).catch(function(res) {
       $scope.$emit(denguechat.error, res)
+    }).finally(function() {
+      $ionicLoading.hide()
     })
   }
 

@@ -14,6 +14,10 @@ angular.module('starter.controllers')
 
     Visit.get($state.params.visit_id).then(function(response) {
       $scope.visit            = response
+
+      if ($scope.visit.visited_at)
+        $scope.visit.visited_at = new Date($scope.visit.visited_at)
+
       $scope.inspection.visit = {id: response.id, pouchdb_id: response._id}
 
       if (!response.inspections || response.inspections.length == 0) {
@@ -23,6 +27,11 @@ angular.module('starter.controllers')
         Inspection.getAll(response.inspections).then(function(inspections) {
           $ionicLoading.hide()
           $scope.inspections = inspections
+
+          _.each($scope.inspections, function(ins) {
+            ins.color = Inspection.color(ins)
+          })
+
           $scope.$apply()
         })
       }

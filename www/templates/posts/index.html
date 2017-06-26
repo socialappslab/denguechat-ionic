@@ -4,11 +4,11 @@
   </ion-nav-buttons>
 
   <ion-content>
-    <ion-refresher pulling-text="Pull to refresh..." on-refresh="refresh()"></ion-refresher>
+    <ion-refresher pulling-text="Tirar para actualizar..." on-refresh="refresh()"></ion-refresher>
 
 
-    <ion-item ng-if="posts.length == 0" class="text-center">
-      <h2>No posts found. Try pulling down to refresh.</h2>
+    <ion-item ng-if="posts.length == 0" class="text-center item-text-wrap">
+      <h2>No se ha encontrado publicaciones. Tirar para actualizar</h2>
     </ion-item>
 
     <div class="list card post" ng-repeat="post in posts">
