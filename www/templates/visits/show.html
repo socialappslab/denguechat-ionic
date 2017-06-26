@@ -13,9 +13,9 @@
 
     <ion-item class="item-icon-left item-icon-right item-text-wrap" ng-repeat="ins in inspections" ui-sref="app.location.visit.inspection({inspection_id: ins._id})">
       <i class="icon ion-ios-circle-filled" ng-style="{'color': ins.color}"></i>
-      <h2>{{ins.report.breeding_site.description}}</h2>
-      <p ng-if="ins.report.field_identifier">Código de criadero: {{ins.report.field_identifier}}</p>
-      <p>{{ins.report.description}}</p>
+      <h2>{{ins.breeding_site.description}}</h2>
+      <p ng-if="ins.field_identifier">Código de criadero: {{ins.field_identifier}}</p>
+      <p>Descripción: {{ins.description}}</p>
       <i class="icon ion-ios-arrow-right"></i>
     </ion-item>
 

@@ -17,16 +17,16 @@ angular.module('starter.controllers')
           $scope.inspection       = response
           $scope.inspection.visit = {id: visit.id, pouchdb_id: visit._id}
 
-          if ($scope.inspection.report.breeding_site) {
-            $scope.inspection.report.breeding_site = _.find($scope.breeding_sites, function(bs) { return bs.id == $scope.inspection.report.breeding_site.id})
+          if ($scope.inspection.breeding_site) {
+            $scope.inspection.breeding_site = _.find($scope.breeding_sites, function(bs) { return bs.id == $scope.inspection.breeding_site.id})
           }
 
-          if ($scope.inspection.report.elimination_method) {
-            $scope.inspection.report.elimination_method = _.find($scope.inspection.report.breeding_site.elimination_methods, function(em) { return em.id == $scope.inspection.report.elimination_method.id})
+          if ($scope.inspection.elimination_method) {
+            $scope.inspection.elimination_method = _.find($scope.inspection.breeding_site.elimination_methods, function(em) { return em.id == $scope.inspection.elimination_method.id})
           }
 
-          if ($scope.inspection.report.eliminated_at) {
-            $scope.inspection.report.eliminated_at = new Date($scope.inspection.report.eliminated_at)
+          if ($scope.inspection.eliminated_at) {
+            $scope.inspection.eliminated_at = new Date($scope.inspection.eliminated_at)
           }
 
           $ionicLoading.hide()
@@ -71,14 +71,14 @@ angular.module('starter.controllers')
 
   $scope.loadCamera = function() {
     // $cordovaCamera.getPicture({saveToPhotoAlbum: true, quality: 50, allowEdit: true, correctOrientation: true, targetWidth: 750, targetHeight: 750, destinationType: 0}).then(function(base64) {
-    //   $scope.inspection.report.before_photo = "data:image/jpeg;base64," + base64
+    //   $scope.inspection.before_photo = "data:image/jpeg;base64," + base64
     // }).catch(function(res) {
     //   navigator.notification.alert(JSON.stringify(res), null)
     //   $scope.$emit(clovi.env.error, res)
     // })
     if (navigator.camera) {
       navigator.camera.getPicture(function(base64) {
-        $scope.inspection.report.before_photo = "data:image/jpeg;base64," + base64
+        $scope.inspection.before_photo = "data:image/jpeg;base64," + base64
         $scope.$apply()
       }, function(response) {
       }, {saveToPhotoAlbum: true, destinationType: 0})
@@ -89,14 +89,14 @@ angular.module('starter.controllers')
 
   $scope.loadAfterCamera = function() {
     // $cordovaCamera.getPicture({saveToPhotoAlbum: true, quality: 50, allowEdit: true, correctOrientation: true, targetWidth: 750, targetHeight: 750, destinationType: 0}).then(function(base64) {
-    //   $scope.inspection.report.after_photo = "data:image/jpeg;base64," + base64
+    //   $scope.inspection.after_photo = "data:image/jpeg;base64," + base64
     // }).catch(function(res) {
     //   navigator.notification.alert(JSON.stringify(res), null)
     //   $scope.$emit(clovi.env.error, res)
     // })
     if (navigator.camera) {
       navigator.camera.getPicture(function(base64) {
-        $scope.inspection.report.after_photo = "data:image/jpeg;base64," + base64
+        $scope.inspection.after_photo = "data:image/jpeg;base64," + base64
         $scope.$apply()
       }, function(res) {
         $scope.$emit(denguechat.error, res)

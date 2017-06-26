@@ -8,7 +8,6 @@ https://www.firebase.com/docs/web/guide/login/password.html
 angular.module('starter.services')
 .factory('Inspection', function($http, User, Pouch, $q, Backoff) {
   var backoff = new Backoff({ min: 1000, max: 60000 });
-  var whitelistedKeys = ["id", "visit_id", "visit", "position", "location", "protected", "chemically_treated", "larvae", "pupae", "larvae", "report", "color", "created_at"];
 
   // Pouch.inspectionsDB.destroy()
   return {
@@ -23,12 +22,13 @@ angular.module('starter.services')
       if (inspection.eliminated_at)
         return "#2ecc71"
 
-      if(inspection.larvae || inspection.pupae)
-        return "#e74c3c";
       if (inspection.protected)
         return "#2ecc71"
 
-      return "#f1c40f"
+      if(inspection.larvae || inspection.pupae)
+        return "#e74c3c";
+      else
+        return "#f1c40f"
     },
 
     get: function(document_id) {
@@ -125,7 +125,7 @@ angular.module('starter.services')
         // equal what's stored in DB. This allows us to sync data bidirectionally
         // without overwriting with trivial values.
         changed = false
-        for (var key in _.pick(visit, whitelistedKeys)) {
+        for (var key in visit) {
           if (doc[key] != visit[key]) {
             changed  = true
             doc[key] = visit[key]

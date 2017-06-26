@@ -7,20 +7,20 @@
     <div class="list">
       <label class="item item-input item-select">
         <div class="input-label">Criadero</div>
-        <select ng-model="inspection.report.breeding_site" ng-options="bs as bs.description for bs in breeding_sites"></select>
+        <select ng-model="inspection.breeding_site" ng-options="bs as bs.description for bs in breeding_sites"></select>
       </label>
       <label class="item item-input">
         <div class="input-label">Descripción</div>
-        <input type="text" class="text-right" ng-model="inspection.report.report">
+        <input type="text" class="text-right" ng-model="inspection.description">
       </label>
       <label class="item item-input">
         <div class="input-label">Codigo de criadero</div>
-        <input type="text" class="text-right" ng-model="inspection.report.field_identifier">
+        <input type="text" class="text-right" ng-model="inspection.field_identifier">
       </label>
       <li class="item item-toggle">
        Protegido
        <label class="toggle toggle-balanced">
-         <input type="checkbox" ng-model="inspection.report.protected">
+         <input type="checkbox" ng-model="inspection.protected">
          <div class="track">
            <div class="handle"></div>
          </div>
@@ -29,7 +29,7 @@
       <li class="item item-toggle">
        Abatizado
        <label class="toggle toggle-balanced">
-         <input type="checkbox" ng-model="inspection.report.chemically_treated">
+         <input type="checkbox" ng-model="inspection.chemically_treated">
          <div class="track">
            <div class="handle"></div>
          </div>
@@ -38,7 +38,7 @@
       <li class="item item-toggle">
        Larvas
        <label class="toggle toggle-balanced">
-         <input type="checkbox" ng-model="inspection.report.larvae">
+         <input type="checkbox" ng-model="inspection.larvae">
          <div class="track">
            <div class="handle"></div>
          </div>
@@ -47,7 +47,7 @@
       <li class="item item-toggle">
        Pupas
        <label class="toggle toggle-balanced">
-         <input type="checkbox" ng-model="inspection.report.pupae">
+         <input type="checkbox" ng-model="inspection.pupae">
          <div class="track">
            <div class="handle"></div>
          </div>
@@ -55,8 +55,8 @@
       </li>
       <li class="item item-icon-right" ng-click="loadCamera()">
         Foto de criadero
-        <i class="icon ion-ios-camera-outline" ng-if="!inspection.report.before_photo"></i>
-        <img style="height:50px; max-width: 50px; float:right;" src="{{inspection.report.before_photo}}" ng-if="!!inspection.report.before_photo"></img>
+        <i class="icon ion-ios-camera-outline" ng-if="!inspection.before_photo"></i>
+        <img style="height:50px; max-width: 50px; float:right;" src="{{inspection.before_photo}}" ng-if="!!inspection.before_photo"></img>
       </li>
     </div>
   </ion-content>

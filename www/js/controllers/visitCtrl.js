@@ -1,7 +1,7 @@
 angular.module('starter.controllers')
 .controller('visitCtrl', ['$scope', '$state', 'Visit', "$ionicModal", "$ionicLoading", "Inspection", "User", "$cordovaCamera", function($scope, $state, Visit, $ionicModal, $ionicLoading, Inspection, User, $cordovaCamera) {
   $scope.visit       = {};
-  $scope.inspection  = {report: {}};
+  $scope.inspection  = {};
   $scope.inspections = []
 
   $scope.$on("$ionicView.loaded", function() {
