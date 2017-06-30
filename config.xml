@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget android-versionCode="7" id="com.denguechat.denguechat" ios-CFBundleVersion="0.1.7" version="0.1.7" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="8" id="com.denguechat.denguechat" ios-CFBundleVersion="0.1.8" version="0.1.8" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>DengueChat</name>
   <description>
     Involucra a las comunidades en l a lucha contra el Dengue, Chunkungunya y Zika.
