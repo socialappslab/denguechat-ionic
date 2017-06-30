@@ -21,7 +21,7 @@
       <div class="profile-image">
         <img ng-src="{{user.picture}}" style="display: block; width: 40%; height: auto; margin-left: auto; margin-right: auto;">
       </div>
-      <h3 style="color:white; text-align:center;" ui-sref="app.profile">
+      <h3 style="color:white; text-align:center;" ui-sref="app.profile" menu-close>
         {{user.display_name}}
         <i class="icon ion-edit" ng-if="user.id"></i>
       </h3>

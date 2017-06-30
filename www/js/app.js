@@ -84,6 +84,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     console.log("clovi.env.error: " + JSON.stringify(response))
     console.log("---------------\n\n\n")
 
+    if (response.status == 401) {
+      $rootScope.failedAuth()
+      return
+    }
+
+
     // If this is a PouchDB not found error, then let's quietly suppress it.
     if (response.status == 404 && response.name == "not_found") {
       return
@@ -94,10 +100,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       return
     }
 
-    // if (response.status == 401) {
-    //   $rootScope.failedAuth()
-    //   return
-    // }
 
     navigator.notification.alert(JSON.stringify(response), null)
   })
@@ -136,9 +138,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
 
   $rootScope.failedAuth = function() {
-    User.destroy().then(function(p) {
-      return $ionicPush.unregister()
-    }).finally(function() {
+    User.destroy().finally(function() {
       if ( !$rootScope.modal || ($rootScope.modal && !$rootScope.modal.isShown()) ) {
         loadLoginModal().then(function() {
           $rootScope.state.error = "You need to login before continuing"

@@ -28,6 +28,8 @@ angular.module('starter.controllers')
 
     User.update($scope.user).catch(function(res) {
       $scope.$emit(denguechat.error, res)
+    }).catch(function(res) {
+      $scope.$emit(denguechat.error, res)
     }).finally(function() {
       $ionicLoading.hide()
     })
