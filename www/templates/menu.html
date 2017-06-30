@@ -19,10 +19,12 @@
     <ion-content padding="false" style="top:0px !important;" class="side-menu-left side-menu-gradient">
       <div class="spacer" style="width: 268px; height: 32px;"></div>
       <div class="profile-image">
-
         <img ng-src="{{user.picture}}" style="display: block; width: 40%; height: auto; margin-left: auto; margin-right: auto;">
       </div>
-      <h3 style="color:white; text-align:center;">{{user.display_name}}</h3>
+      <h3 style="color:white; text-align:center;" ui-sref="app.profile">
+        {{user.display_name}}
+        <i class="icon ion-edit" ng-if="user.id"></i>
+      </h3>
       <p style="color:white; text-align:center;">{{user.neighborhood.name}}</p>
       <p style="color:white; text-align:center;">{{user.city.name}}</p>
       <div class="row">

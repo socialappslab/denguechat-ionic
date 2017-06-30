@@ -19,16 +19,18 @@ angular.module('starter.services')
     },
 
     color: function(inspection) {
+      // NOTE: This order is important as the presence of pupae, even if it's
+      // protected, means it's positive.
       if (inspection.eliminated_at)
-        return "#2ecc71"
-
-      if (inspection.protected)
         return "#2ecc71"
 
       if(inspection.larvae || inspection.pupae)
         return "#e74c3c";
-      else
-        return "#f1c40f"
+
+      if (inspection.protected)
+        return "#2ecc71"
+
+      return "#f1c40f"
     },
 
     get: function(document_id) {

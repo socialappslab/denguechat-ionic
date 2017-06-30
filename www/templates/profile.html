@@ -1,0 +1,39 @@
+<ion-view view-title="Perfil">
+  <form ng-submit="update()">
+    <ion-content class="has-footer">
+      <div class="list">
+        <a class="item item-avatar" ng-click="loadCamera()">
+          <img src="img/photo.png" ng-if="!user.picture">
+          <img ng-src="{{user.picture}}" ng-if="!!user.picture">
+          <h2>{{user.display_name}}</h2>
+          <p ng-if="!user.picture">No photo added. Tap to add a photo.</p>
+          <p ng-if="!!user.picture">Tap to take a new profile photo.</p>
+        </a>
+
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">Nombre</span>
+          <input type="text" ng-model="user.name">
+        </label>
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">Nombre de usuario</span>
+          <input type="text" ng-model="user.username">
+        </label>
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">Email</span>
+          <input type="text" ng-model="user.email">
+        </label>
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">Comunidad</span>
+          <select ng-model="user.neighborhood_id" ng-options="n.id as (n.name) for n in user.neighborhoods"></select>
+        </label>
+      </div>
+    </ion-content>
+
+
+    <div class="bar bar-footer bar-balanced">
+      <div class="row" style="padding: 0px;">
+        <button type="submit" class="col button button-clear">Guardar</button>
+      </div>
+    </div>
+  </form>
+</ion-view>

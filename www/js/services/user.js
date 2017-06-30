@@ -64,6 +64,18 @@ angular.module('starter.services')
         }
       })
     },
+    update: function(user) {
+      return this.getToken().then(function(token) {
+        return $http({
+          method: "PUT",
+          url:    denguechat.env.baseURL + "users/" + user.id,
+          data:   {
+            user: user
+          },
+          headers: { "Authorization": "Bearer " + token }
+        })
+      })
+    },
     session: function(username, password) {
       return $http({
         method: "POST",
@@ -79,10 +91,7 @@ angular.module('starter.services')
         return $http({
           method: "GET",
           url:    denguechat.env.baseURL + "sessions/current",
-          headers: {
-
-           "Authorization": "Bearer " + token
-          }
+          headers: { "Authorization": "Bearer " + token }
         })
       })
     },

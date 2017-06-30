@@ -89,6 +89,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       return
     }
 
+    if (response.data) {
+      navigator.notification.alert(response.data.message, null)
+      return
+    }
+
     // if (response.status == 401) {
     //   $rootScope.failedAuth()
     //   return
@@ -170,6 +175,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     abstract: true,
     templateUrl: 'templates/menu.html',
     controller: 'AppCtrl'
+  })
+  .state('app.profile', {
+    url: '/profile',
+    cache: false,
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/profile.html',
+        controller: 'profileCtrl'
+      }
+    }
   })
   .state('app.posts', {
     url: '/posts',
