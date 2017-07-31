@@ -66,6 +66,7 @@ angular.module('starter.services')
     },
     update: function(user) {
       return this.getToken().then(function(token) {
+        console.log(token)
         return $http({
           method: "PUT",
           url:    denguechat.env.baseURL + "users/" + user.id,

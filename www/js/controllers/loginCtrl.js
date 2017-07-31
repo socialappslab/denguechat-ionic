@@ -17,7 +17,7 @@ angular.module('starter.controllers')
         $scope.$emit(denguechat.env.auth.success, {})
       })
     }).catch(function(res) {
-      $scope.$emit(denugechat.error, res)
+      $scope.$emit(denguechat.error, res)
     }).finally(function() {
       $scope.state.loading = false;
     })

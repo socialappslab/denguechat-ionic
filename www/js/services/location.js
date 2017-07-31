@@ -140,10 +140,6 @@ angular.module('starter.services')
         loc         = locations.shift();
         loc.user_id = user.id
         loc_doc_id  = thisLocation.documentID(user, loc)
-        console.log("\n\n\n")
-        console.log(loc)
-        console.log("\n\n\n")
-
         thisLocation.save(loc_doc_id, loc, {remote: false, synced: true}).then(function(doc) {
           document_ids.push(loc_doc_id)
 

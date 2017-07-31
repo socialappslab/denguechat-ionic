@@ -1,5 +1,5 @@
 <ion-view view-title="{{location.address}}">
-  <div class="tabs-striped tabs-top">
+  <div class="tabs-striped tabs-top" ng-if="user.location_questionnaire.length > 0">
     <div class="tabs">
       <a class="tab-item" ng-class="{'active': state.pageIndex === 0}" ng-click="transitionToPageIndex(0)">
         Visitas
@@ -14,7 +14,7 @@
   </ion-nav-buttons>
 
 
-  <ion-content class="has-subheader has-footer">
+  <ion-content class="has-footer" ng-class="{'has-subheader': user.location_questionnaire.length > 0}">
     <!-- <ion-refresher pulling-text="Pull to refresh..." on-refresh="refresh()"></ion-refresher> -->
 
 
@@ -47,13 +47,13 @@
 
       <ion-slide>
         <div class="list" style="overflow-y:scroll; height: 100%;">
-          <div ng-repeat="q in location.questions">
-            <div class="item item-divider" ng-if="!q.parent">
+          <div class="card list" ng-repeat="q in location.questions" ng-show="shouldDisplay(q)">
+            <!-- <div class="item item-divider" ng-if="!q.parent">
               {{q.body}}
-            </div>
+            </div> -->
 
-            <div class="item" ng-if="q.type == 'radio'" ng-show="shouldDisplay(q)">
-              <h2 ng-if="!!q.parent">{{q.body}}</h2>
+            <div class="item" ng-if="q.type == 'radio'">
+              <h2>{{q.body}}</h2>
               <div class="row">
                 <div class="col">
                   <div class="text-center">
@@ -65,16 +65,22 @@
               </div>
             </div>
 
-            <label class="item item-input item-stacked-label" ng-if="q.type != 'radio'" ng-show="shouldDisplay(q)">
-              <span class="input-label">{{q.body}}</span>
+            <div class="item" ng-if="q.type == 'checkbox'">
+              <h2>{{q.body}}</h2>
+
+              <ion-list>
+                <ion-checkbox ng-repeat="ac in q.answer_choices" ng-model="ac.selected">{{ac.body}}</ion-checkbox>
+              </ion-list>
+            </div>
+
+            <label class="item item-input item-stacked-label" ng-if="q.type == 'text' || q.type == 'number' || q.type == 'date'">
+              <h2>{{q.body}}</h2>
               <input type="text" ng-if="q.type == 'text'" ng-model="q.answer">
               <input type="number" min="0" ng-if="q.type == 'number'" ng-model="q.answer">
               <input type="date" ng-if="q.type == 'date'" ng-model="q.answer">
             </label>
           </div>
         </div>
-
-
       </ion-slide>
     </ion-slide-box>
 

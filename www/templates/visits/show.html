@@ -1,28 +1,77 @@
 <ion-view view-title="{{visit.visited_at}}">
-
+  <div class="tabs-striped tabs-top" ng-if="user.visit_questionnaire.length > 0">
+    <div class="tabs">
+      <a class="tab-item" ng-class="{'active': state.pageIndex === 0}" ng-click="transitionToPageIndex(0)">
+        Inspecciones
+      </a>
+      <a class="tab-item" ng-class="{'active': state.pageIndex === 1}" ng-click="transitionToPageIndex(1)">
+        Preguntas
+      </a>
+    </div>
+  </div>
   <ion-nav-buttons side="right">
     <button class="button button-icon button-clear ion-edit" ui-sref="app.location.visit.edit({visit_id: visit._id})"></button>
   </ion-nav-buttons>
 
-  <ion-content class="has-footer">
+  <ion-content class="has-footer" ng-class="{'has-subheader': user.visit_questionnaire.length > 0}">
     <!-- <ion-refresher pulling-text="Tirar para actualizar..." on-refresh="refresh()"></ion-refresher> -->
 
-    <ion-item ng-if="inspections.length == 0" class="text-center item-text-wrap">
-      <h2>No se encontraron criaderos. Tirar para actualizar.</h2>
-    </ion-item>
+    <ion-slide-box on-slide-changed="changeTimeline($index)" does-continue="false" show-pager="false">
+      <ion-slide>
+        <ion-item ng-if="inspections.length == 0" class="text-center item-text-wrap">
+          <h2>No se encontraron criaderos. Tirar para actualizar.</h2>
+        </ion-item>
 
-    <ion-item class="item-icon-left item-icon-right item-text-wrap" ng-repeat="ins in inspections" ui-sref="app.location.visit.inspection({inspection_id: ins._id})">
-      <i class="icon ion-ios-circle-filled" ng-style="{'color': ins.color}"></i>
-      <h2>{{ins.breeding_site.description}}</h2>
-      <p ng-if="ins.field_identifier">Código de criadero: {{ins.field_identifier}}</p>
-      <p>Descripción: {{ins.description}}</p>
-      <i class="icon ion-ios-arrow-right"></i>
-    </ion-item>
+        <ion-item class="item-icon-left item-icon-right item-text-wrap" ng-repeat="ins in inspections" ui-sref="app.location.visit.inspection({inspection_id: ins._id})">
+          <i class="icon ion-ios-circle-filled" ng-style="{'color': ins.color}"></i>
+          <h2>{{ins.breeding_site.description}}</h2>
+          <p ng-if="ins.field_identifier">Código de criadero: {{ins.field_identifier}}</p>
+          <p>Descripción: {{ins.description}}</p>
+          <i class="icon ion-ios-arrow-right"></i>
+        </ion-item>
+      </ion-slide>
+
+      <ion-slide>
+        <div class="list" style="overflow-y:scroll; height: 100%;">
+          <div class="card list" ng-repeat="q in visit.questions" ng-show="shouldDisplay(q)">
+            <div class="item" ng-if="q.type == 'radio'">
+              <h2>{{q.body}}</h2>
+              <div class="row">
+                <div class="col">
+                  <div class="text-center">
+                    <button class="button" style="margin-right: 5px;" ng-repeat="ac in q.answer_choices" ng-class="{'button-balanced': ac.id == q.answer}" ng-click="q.answer = ac.id">
+                      {{ac.body}}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="item" ng-if="q.type == 'checkbox'">
+              <h2>{{q.body}}</h2>
+              <ion-list>
+                <ion-checkbox ng-repeat="ac in q.answer_choices" ng-model="ac.selected">{{ac.body}}</ion-checkbox>
+              </ion-list>
+            </div>
+
+            <label class="item item-input item-stacked-label" ng-if="q.type == 'text' || q.type == 'number' || q.type == 'date'">
+              <h2>{{q.body}}</h2>
+              <input type="text" ng-if="q.type == 'text'" ng-model="q.answer">
+              <input type="number" min="0" ng-if="q.type == 'number'" ng-model="q.answer">
+              <input type="date" ng-if="q.type == 'date'" ng-model="q.answer">
+            </label>
+          </div>
+        </div>
+      </ion-slide>
+
 
   </ion-content>
 
-  <div class="bar bar-footer bar-balanced">
-    <div class="title" ng-click="showNewInspectionModal()">Agregar inspecion</div>
-  </div>
+  <ion-footer-bar keyboard-attach class="bar bar-footer bar-balanced">
+    <div class="title" ng-if="state.pageIndex == 0" ng-click="showNewInspectionModal()">Agregar inspecion</div>
+    <div class="title" ng-click="saveQuestions()" ng-if="state.pageIndex == 1">Guardar</div>
+  </ion-footer-bar>
+
+
 
 </ion-view>

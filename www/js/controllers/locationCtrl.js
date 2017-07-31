@@ -18,7 +18,6 @@ angular.module('starter.controllers')
       } else {
         Visit.getAll($scope.location.visits).then(function(visits) {
           $scope.visits = visits
-          console.log(visits)
           $ionicLoading.hide();
         })
       }
@@ -80,6 +79,7 @@ angular.module('starter.controllers')
 
     Location.save($state.params.id, $scope.location, {remote: true}).then(function(response) {
       $ionicLoading.hide()
+      $scope.transitionToPageIndex(0)
     })
   }
 

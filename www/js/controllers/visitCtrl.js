@@ -1,8 +1,9 @@
 angular.module('starter.controllers')
-.controller('visitCtrl', ['$scope', '$state', 'Visit', "$ionicModal", "$ionicLoading", "Inspection", "User", "$cordovaCamera", function($scope, $state, Visit, $ionicModal, $ionicLoading, Inspection, User, $cordovaCamera) {
+.controller('visitCtrl', ['$scope', '$state', 'Visit', "$ionicModal", "$ionicLoading", "Inspection", "User", "$cordovaCamera", "$ionicSlideBoxDelegate", "Questionnaire", function($scope, $state, Visit, $ionicModal, $ionicLoading, Inspection, User, $cordovaCamera, $ionicSlideBoxDelegate, Questionnaire) {
   $scope.visit       = {};
   $scope.inspection  = {};
-  $scope.inspections = []
+  $scope.inspections = [];
+  $scope.state       = {pageIndex: 0};
 
   $scope.$on("$ionicView.loaded", function() {
     // alert("LOADED")
@@ -37,6 +38,19 @@ angular.module('starter.controllers')
       }
     })
   })
+
+  $scope.shouldDisplay = function(q) {
+    return Questionnaire.shouldDisplay(q, $scope.visit.questions)
+  }
+
+
+  $scope.saveQuestions = function() {
+    $ionicLoading.show({hideOnStateChange: true})
+    Visit.save($state.params.visit_id, $scope.visit, {remote: false}).then(function(response) {
+      $ionicLoading.hide()
+      $scope.transitionToPageIndex(0)
+    })
+  }
 
   $scope.showNewInspectionModal = function() {
     // Create the login modal that we will use later
@@ -120,5 +134,15 @@ angular.module('starter.controllers')
     } else {
       alert("Camera not supported!")
     }
+  }
+
+
+  $scope.changeTimeline = function(pageIndex) {
+    $scope.state.pageIndex = pageIndex
+  }
+
+  $scope.transitionToPageIndex = function(pageIndex) {
+    $scope.state.pageIndex = pageIndex
+    $ionicSlideBoxDelegate.slide(pageIndex);
   }
 }] )
