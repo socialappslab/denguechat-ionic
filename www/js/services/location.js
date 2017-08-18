@@ -194,6 +194,8 @@ angular.module('starter.services')
         // equal what's stored in DB. This allows us to sync data bidirectionally
         // without overwriting with trivial values.
         changed = false
+
+        // TODO: Remove the whitelisting...
         for (var key in _.pick(location, whitelistedKeys)) {
           if (doc[key] != location[key]) {
             changed  = true

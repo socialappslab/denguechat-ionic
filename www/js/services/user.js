@@ -34,6 +34,8 @@ angular.module('starter.services')
       })
     },
     destroy: function() {
+            console.log(Pouch.usersDB.adapter);
+
       return this.get().then(function(doc) {
         return Pouch.usersDB.remove(doc)
       })

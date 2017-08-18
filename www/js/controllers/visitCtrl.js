@@ -14,7 +14,7 @@ angular.module('starter.controllers')
     });
 
     Visit.get($state.params.visit_id).then(function(response) {
-      $scope.visit            = response
+      $scope.visit = response
 
       if ($scope.visit.visited_at)
         $scope.visit.visited_at = new Date($scope.visit.visited_at)
@@ -36,6 +36,8 @@ angular.module('starter.controllers')
           $scope.$apply()
         })
       }
+    }).catch(function(response) {
+      $scope.$emit(denguechat.error, {error: response})
     })
   })
 
@@ -80,6 +82,7 @@ angular.module('starter.controllers')
     $scope.inspection.created_at = (new Date()).toISOString()
     $scope.inspection.color      = Inspection.color($scope.inspection)
     $scope.inspection.position   = $scope.inspections.length + 1
+    $scope.inspection.questions  = $scope.user.visit_questionnaire
 
     console.log("About to save inspection:")
     console.log(JSON.stringify($scope.inspection))
