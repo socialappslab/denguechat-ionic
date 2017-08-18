@@ -23,7 +23,8 @@
     "cordova-plugin-statusbar",
     "ionic-plugin-keyboard",
     "cordova-plugin-dialogs",
-    "cordova-plugin-camera@2.4.1"
+    "cordova-plugin-camera@2.4.1",
+    "cordova-plugin-sqlite-2"
   ],
   "cordovaPlatforms": [
     {
