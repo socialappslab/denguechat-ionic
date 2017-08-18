@@ -24,7 +24,7 @@ angular.module('starter.controllers')
     Location.getAll().then(function(locations) {
       $scope.locations = locations
     }).catch(function(res) {
-      navigator.notification.alert(JSON.stringify(res), null, "Problem getting all locations", "OK")
+      // navigator.notification.alert(JSON.stringify(res), null, "Problem getting all locations", "OK")
     }).finally(function(res) {
       $scope.state.loading   = false
       $scope.state.firstLoad = false;

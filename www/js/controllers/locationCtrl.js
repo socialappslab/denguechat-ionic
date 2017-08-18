@@ -21,6 +21,8 @@ angular.module('starter.controllers')
           $ionicLoading.hide();
         })
       }
+    }).catch(function(response) {
+      $ionicLoading.hide();
     })
   })
 
@@ -37,7 +39,7 @@ angular.module('starter.controllers')
       Location.save($state.params.id, $scope.location, {remote: false}).then(function(res) {
         $ionicLoading.hide().then(function() {
           $scope.closeNewVisitModal()
-          $state.reload()
+          $state.go("app.location.visit", {visit_id: doc_id})
         })
       }, function(err) {console.log(err)})
     }, function(response) {
@@ -52,19 +54,9 @@ angular.module('starter.controllers')
 
     $scope.state.loading = true
     Location.getFromCloud($scope.location).then(function(response) {
-      console.log(response)
-      // Let's parse the dates.
-      // for (var i=0; i < response.location.questions.length; i++) {
-      //   if (response.location.questions[i].type == "date" && response.location.questions[i].answer)
-      //     response.location.questions[i].answer = new Date(response.location.questions[i].answer)
-      // }
-      //
-      // $scope.visits    = response.location.visits
-
       $scope.state.firstLoad = false;
       $scope.state.loading   = false;
       $scope.$broadcast('scroll.refreshComplete');
-
     }, function(response) {
       $scope.state.firstLoad = false;
       $scope.state.loading   = false;

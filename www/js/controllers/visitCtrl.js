@@ -14,7 +14,7 @@ angular.module('starter.controllers')
     });
 
     Visit.get($state.params.visit_id).then(function(response) {
-      $scope.visit            = response
+      $scope.visit = response
 
       if ($scope.visit.visited_at)
         $scope.visit.visited_at = new Date($scope.visit.visited_at)
