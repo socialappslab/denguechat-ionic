@@ -131,8 +131,9 @@ angular.module('starter.controllers')
 
       $ionicLoading.show()
       doc_id = Location.documentID($scope.user, $scope.location)
-      $scope.location.user_id = $scope.user.id
-      $scope.location.visits  = []
+      $scope.location.user_id   = $scope.user.id
+      $scope.location.visits    = []
+      $scope.location.questions = $scope.user.location_questionnaire
       Location.save(doc_id, $scope.location, {remote: true, synced: false}).then(function(response) {
         $scope.location = {}
 
