@@ -36,6 +36,8 @@ angular.module('starter.controllers')
           $scope.$apply()
         })
       }
+    }).catch(function(response) {
+      $scope.$emit(denguechat.error, {error: response})
     })
   })
 
