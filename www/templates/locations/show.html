@@ -15,25 +15,15 @@
 
 
   <ion-content class="has-footer" ng-class="{'has-subheader': user.location_questionnaire.length > 0}">
-    <!-- <ion-refresher pulling-text="Pull to refresh..." on-refresh="refresh()"></ion-refresher> -->
-
-
     <ion-slide-box on-slide-changed="changeTimeline($index)" does-continue="false" show-pager="false">
       <ion-slide>
         <ion-list>
-          <!-- <div class="item item-balanced text-center" style="font-weight: 500; font-size:17px;" ui-sref="app.visits.new">
-            <i class="icon ion-plus"></i>
-            Add a visit
-          </div> -->
-
           <ion-item ng-if="visits.length == 0" class="text-center item-text-wrap">
             <h2>No se encontraron visitas. Añadir una.</h2>
           </ion-item>
 
 
           <ion-item class="item-icon-right item-icon-left" ng-repeat="visit in visits" ui-sref="app.location.visit({visit_id: visit._id})">
-            <!-- <i class="{{visit.inspections_count == 0 ? 'icon ion-ios-circle-outline' : 'icon ion-ios-circle-filled'}}" ng-style="{'color': visit.color}"></i> -->
-
             <h2>{{visit.visited_at | formatDate}}</h2>
             <p>{{visit.inspections.length || 0}} inspeciones</p>
             <i class="icon ion-ios-arrow-right"></i>
@@ -48,18 +38,16 @@
       <ion-slide>
         <div class="list" style="overflow-y:scroll; height: 100%;">
           <div class="card list" ng-repeat="q in location.questions" ng-show="shouldDisplay(q)">
-            <!-- <div class="item item-divider" ng-if="!q.parent">
-              {{q.body}}
-            </div> -->
-
-            <div class="item" ng-if="q.type == 'radio'">
+            <div class="item item-text-wrap" ng-if="q.type == 'radio'">
               <h2>{{q.body}}</h2>
               <div class="row">
                 <div class="col">
                   <div class="text-center">
-                    <button class="button" style="margin-right: 5px;" ng-repeat="ac in q.answer_choices" ng-class="{'button-balanced': ac.id == q.answer}" ng-click="q.answer = ac.id">
+
+                    <button class="button" style="margin-right: 5px; margin-bottom: 5px;" ng-repeat="ac in q.answer_choices track by $index" ng-class="{'button-balanced': ac.id == q.answer}" ng-click="q.answer = ac.id">
                       {{ac.body}}
                     </button>
+
                   </div>
                 </div>
               </div>
@@ -90,18 +78,4 @@
     <div class="title" ng-if="state.pageIndex == 0" ng-click="showNewVisitModal()">Agregar visita</div>
     <div class="title" ng-click="saveQuestions()" ng-if="state.pageIndex == 1">Guardar</div>
   </ion-footer-bar>
-
-  <!-- <div class="tabs-striped tabs-top">
-    <div class="tabs">
-      <a class="tab-item" ui-sref-active="active" ui-sref="app.location.visits">
-        Visits
-      </a>
-      <a class="tab-item" ui-sref-active="active" ui-sref="app.location.questions">
-        Questions
-      </a>
-    </div>
-  </div>
-
-  <div ui-view name="visits"></div>
-  <div ui-view name="questions"></div> -->
 </ion-view>
