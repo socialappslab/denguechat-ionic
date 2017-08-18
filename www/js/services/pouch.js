@@ -10,14 +10,14 @@ angular.module('starter.services')
     // See https://pouchdb.com/guides/compact-and-destroy.html
     // to understand why we use auto compaction.
     // HINT: We don't use revisions at all.
-    usersDB:        new PouchDB("users", {adapter: 'cordova-sqlite'}),
-    postsDB:        new PouchDB("posts", {adapter: 'cordova-sqlite', auto_compaction: true}),
-    visitsDB:       new PouchDB("visits", {adapter: 'cordova-sqlite', auto_compaction: true}),
-    locationsDB:    new PouchDB("locations", {adapter: 'cordova-sqlite', auto_compaction: true}),
-    inspectionsDB:  new PouchDB("inspections", {adapter: 'cordova-sqlite', auto_compaction: true}),
-    syncDB:         new PouchDB("sync", {adapter: 'cordova-sqlite'}),
-    breedingsDB:    new PouchDB("breeding_sites", {adapter: 'cordova-sqlite'}),
-    eliminationsDB: new PouchDB("eliminations", {adapter: 'cordova-sqlite'}),
+    usersDB:        new PouchDB("users"),
+    postsDB:        new PouchDB("posts", {auto_compaction: true}),
+    visitsDB:       new PouchDB("visits", {auto_compaction: true}),
+    locationsDB:    new PouchDB("locations", {auto_compaction: true}),
+    inspectionsDB:  new PouchDB("inspections", {auto_compaction: true}),
+    syncDB:         new PouchDB("sync"),
+    breedingsDB:    new PouchDB("breeding_sites"),
+    eliminationsDB: new PouchDB("eliminations"),
 
     createLocationNeighborhoodView: function() {
       // document that tells PouchDB/CouchDB
