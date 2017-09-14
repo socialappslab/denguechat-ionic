@@ -1,4 +1,4 @@
-<ion-view view-title="Sync">
+<ion-view view-title="Sincronizar">
 
   <ion-nav-buttons side="right">
     <button class="button button-icon button-clear ion-ios-trash-outline" ng-click="destroyDatabases()"></button>
@@ -10,44 +10,44 @@
       <ion-item class="item-icon-left item-text-wrap" ng-click="syncNow('posts')">
         <i class="icon ion-ios-refresh-empty" ng-if="posts.length > 0"></i>
         <i class="icon ion-ios-checkmark-empty" ng-if="posts.length == 0"></i>
-        <h2 ng-if="posts.length > 0">{{posts.length}} posts changes waiting to sync. Click to retry now.</h2>
-        <h2 ng-if="posts.length == 0">Posts all synced!</h2>
+        <h2 ng-if="posts.length > 0">{{posts.length}} mensajes no sincronizados. Haga clic para volver a intentarlo.</h2>
+        <h2 ng-if="posts.length == 0">Mensajes sincronizado!</h2>
         <div ng-if="posts.length > 0">
-          <p>{{post.syncStatus.backoff.attempts}} attempts</p>
-          <p>Last known error: {{post.syncStatus.error}}</p>
+          <p>{{post.syncStatus.backoff.attempts}} intentos</p>
+          <p>Último error conocido: {{post.syncStatus.error}}</p>
         </div>
       </ion-item>
 
       <ion-item class="item-icon-left item-text-wrap" ng-click="syncNow('locations')">
         <i class="icon ion-ios-refresh-empty" ng-if="locations.length > 0"></i>
         <i class="icon ion-ios-checkmark-empty" ng-if="locations.length == 0"></i>
-        <h2 ng-if="locations.length > 0">{{locations.length}} location changes waiting to sync. Click to retry now.</h2>
-        <h2 ng-if="locations.length == 0">Locations all synced!</h2>
+        <h2 ng-if="locations.length > 0">{{locations.length}} hogares no sincronizados. Haga clic para volver a intentarlo.</h2>
+        <h2 ng-if="locations.length == 0">Hogares sincronizado!</h2>
         <div ng-if="locations.length > 0">
-          <p>{{location.syncStatus.backoff.attempts}} attempts</p>
-          <p>Last known error: {{location.syncStatus.error}}</p>
+          <p>{{location.syncStatus.backoff.attempts}} intentos</p>
+          <p>Último error conocido: {{location.syncStatus.error}}</p>
         </div>
       </ion-item>
 
       <ion-item class="item-icon-left item-text-wrap" ng-click="syncNow('visits')">
         <i class="icon ion-ios-refresh-empty" ng-if="visits.length > 0"></i>
         <i class="icon ion-ios-checkmark-empty" ng-if="visits.length == 0"></i>
-        <h2 ng-if="visits.length > 0">{{visits.length}} visit changes waiting to sync. Click to retry now.</h2>
-        <h2 ng-if="visits.length == 0">Visits all synced!</h2>
+        <h2 ng-if="visits.length > 0">{{visits.length}} visitas no sincronizados. Haga clic para volver a intentarlo.</h2>
+        <h2 ng-if="visits.length == 0">Visitas sincronizado!</h2>
         <div ng-if="visits.length > 0">
-          <p>{{visit.syncStatus.backoff.attempts}} attempts</p>
-          <p>Last known error: {{visit.syncStatus.error}}</p>
+          <p>{{visit.syncStatus.backoff.attempts}} intentos</p>
+          <p>Último error conocido: {{visit.syncStatus.error}}</p>
         </div>
       </ion-item>
 
       <ion-item class="item-icon-left item-text-wrap" ng-click="syncNow('inspections')">
         <i class="icon ion-ios-refresh-empty" ng-if="inspections.length > 0"></i>
         <i class="icon ion-ios-checkmark-empty" ng-if="inspections.length == 0"></i>
-        <h2 ng-if="inspections.length > 0">{{inspections.length}} inspection changes waiting to sync. Click to retry now.</h2>
-        <h2 ng-if="inspections.length == 0">Inspections all synced!</h2>
+        <h2 ng-if="inspections.length > 0">{{inspections.length}} inspecciones no sincronizados. Haga clic para volver a intentarlo.</h2>
+        <h2 ng-if="inspections.length == 0">Inspecciones sincronizado!</h2>
         <div ng-if="inspections.length > 0">
-          <p>{{inspection.syncStatus.backoff.attempts}} attempts</p>
-          <p>Last known error: {{inspection.syncStatus.error}}</p>
+          <p>{{inspection.syncStatus.backoff.attempts}} intentos</p>
+          <p>Último error conocido: {{inspection.syncStatus.error}}</p>
         </div>
       </ion-item>
     </ion-list>

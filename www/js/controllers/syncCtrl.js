@@ -19,7 +19,7 @@ angular.module('starter.controllers')
   }
 
   $scope.destroyDatabases = function() {
-    t = window.confirm("This will destroy all databases. Are you sure?")
+    t = window.confirm("Esto destruirá todos los datos sin conexión. ¿Estás seguro?")
     if (!t)
       return false
 
