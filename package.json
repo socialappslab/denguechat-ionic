@@ -23,7 +23,15 @@
     "cordova-plugin-statusbar",
     "ionic-plugin-keyboard",
     "cordova-plugin-dialogs",
-    "cordova-plugin-camera@2.4.1"
+    "cordova-plugin-camera@2.4.1",
+    {
+      "variables": {
+        "XWALK_VERSION": "18+"
+      },
+      "locator": "cordova-plugin-crosswalk-webview",
+      "id": "cordova-plugin-camera"
+    },
+    "cordova-plugin-crosswalk-certificate"
   ],
   "cordovaPlatforms": [
     {
