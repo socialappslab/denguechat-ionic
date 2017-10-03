@@ -15,5 +15,9 @@
       "version": "12.41.296.5"
     }
   ],
-  "app_id": "e2738a1d"
+  "app_id": "e2738a1d",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic1"
 }
