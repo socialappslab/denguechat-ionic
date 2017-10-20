@@ -11,7 +11,7 @@ angular.module('starter.controllers')
 
   $scope.login = function(){
     $scope.state = {loading: true, error: null}
-
+/*
     User.session($scope.user.username, $scope.user.password).then(function(response) {
       return User.save(response.data.user).then(function(doc) {
         $scope.$emit(denguechat.env.auth.success, {})
@@ -20,7 +20,34 @@ angular.module('starter.controllers')
       $scope.$emit(denguechat.error, res)
     }).finally(function() {
       $scope.state.loading = false;
-    })
+    })*/
+
+    cordova.plugin.http.acceptAllCerts(true, function() {
+      console.log('SSL pinning success!');
+      console.log("request to: " + denguechat.env.baseURL + "sessions");
+      console.log("whit params: " + $scope.user.username + "/" + $scope.user.password)
+  
+    cordova.plugin.http.post(denguechat.env.baseURL + "sessions", {
+      username: $scope.user.username,
+      password: $scope.user.password
+    }, { Authorization: "OAuth2: token" }, function(response) {
+      // prints 200
+      console.log(response.status);
+      $scope.$emit(denguechat.env.auth.success, {})
+    }, function(response) {
+      // prints 403
+      console.log(response.status);
+  
+      //prints Permission denied
+      console.log(response.error);
+      console.log("Error: " + JSON.stringify(response));
+    });
+
+  }, function() {
+    console.log('error :(');
+});
+
+
   }
 
   $scope.signup = function(){
