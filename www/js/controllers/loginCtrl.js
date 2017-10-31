@@ -25,7 +25,7 @@ angular.module('starter.controllers')
     cordova.plugin.http.acceptAllCerts(true, function() {
       console.log('SSL pinning success!');
       console.log("request to: " + denguechat.env.baseURL + "sessions");
-      console.log("whit params: " + $scope.user.username + "/" + $scope.user.password)
+      console.log("with params: " + $scope.user.username + "/" + $scope.user.password)
   
     cordova.plugin.http.post(denguechat.env.baseURL + "sessions", {
       username: $scope.user.username,

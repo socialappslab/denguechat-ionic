@@ -7,7 +7,10 @@
 
 angular.module('starter.services', [])
 
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.directives', 'ngSanitize', 'underscore', 'angularMoment', 'Backo', 'ngCordova'])
+angular.module('starter', [
+  'ionic', 'starter.controllers', 'starter.services', 'starter.directives', 'ngSanitize', 
+  'underscore', 'angularMoment', 'Backo', 'ngCordova', 'cordovaHTTP'
+])
 
 
 .filter('formatDate', function ($filter, moment) {
