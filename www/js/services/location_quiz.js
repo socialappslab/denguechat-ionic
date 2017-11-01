@@ -6,35 +6,31 @@ is returned via password authentication:
 https://www.firebase.com/docs/web/guide/login/password.html
 */
 angular.module('starter.services')
-.factory('LocationQuiz', function($http, User) {
-  return {
-    questions: function() {
-      return $http({
-        method: "GET",
-        url:    denguechat.env.baseURL + "locations/questions",
-        headers: {
-         "Authorization": "Bearer " + User.getToken()
-       }
-      })
-    },
-    shouldDisplay: function(question, questions) {
-      if (question.code == "informed_consent")
-        return true
+  .factory('LocationQuiz', function (User, cordovaHTTP) {
+    return {
+      questions: function () {
+        return User.getToken().then(function (token) {
+          return cordovaHTTP.get(denguechat.env.baseURL + 'locations/questions', {}, { 'Authorization': 'Bearer ' + token });
+        });
+      },
+      shouldDisplay: function (question, questions) {
+        if (question.code == "informed_consent")
+          return true
 
-      for (var i=0; i < questions.length; i++) {
-        if (questions[i].code == "informed_consent" && questions[i].answer == 1)
-          return false
+        for (var i = 0; i < questions.length; i++) {
+          if (questions[i].code == "informed_consent" && questions[i].answer == 1)
+            return false
+        }
+
+        if (!question.parent)
+          return true
+
+        for (var i = 0; i < questions.length; i++) {
+          if (questions[i].code == question.parent.code)
+            parentQ = questions[i]
+        }
+
+        return question.parent.display.indexOf(parentQ.answer) != -1
       }
-
-      if (!question.parent)
-        return true
-
-      for (var i=0; i < questions.length; i++) {
-        if (questions[i].code == question.parent.code)
-          parentQ = questions[i]
-      }
-
-      return question.parent.display.indexOf(parentQ.answer) != -1
-    }
-  };
-})
+    };
+  })

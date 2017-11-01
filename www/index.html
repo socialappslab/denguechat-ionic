@@ -81,7 +81,17 @@
 
   </head>
 
-  <body ng-app="starter">
+  <body id="starter">
     <ion-nav-view></ion-nav-view>
   </body>
+
+  <script type="text/javascript">
+    // we need to bootstrap this way so that cordovaHTTP starts correctly.
+    
+    document.addEventListener('deviceready', deviceready, false);
+
+    function deviceready() {
+      angular.bootstrap(document, ['starter']);
+    }
+  </script>
 </html>
