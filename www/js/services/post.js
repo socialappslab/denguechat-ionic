@@ -117,9 +117,9 @@ angular.module('starter.services')
         return User.get().then(function (user) {
           return cordovaHTTP.get(denguechat.env.baseURL + 'posts?mobile=1&city_id=' + user.neighborhood.city_id + '&limit=' + limit + '&offset=' + offset, {},
             {
-              'Authorization': 'Bearer ' + token
+              'Authorization': 'Bearer ' + user.token
             }).then(function (res) {
-              return thisPost.saveMultiple(user, res.data.posts, [], null)
+              return thisPost.saveMultiple(user, res.data.posts || [], [], null)
             });
         })
       },
@@ -147,7 +147,7 @@ angular.module('starter.services')
       sendToCloud: function (changes) {
         return User.get().then(function (user) {
           return cordovaHTTP.put(denguechat.env.baseURL + 'sync/post', { changes: changes },
-            { 'Authorization': 'Bearer ' + token });
+            { 'Authorization': 'Bearer ' + user.token });
         });
       },
 

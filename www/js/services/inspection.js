@@ -153,7 +153,7 @@ angular.module('starter.services')
         return User.get().then(function (user) {
           return cordovaHTTP.put(denguechat.env.baseURL + 'sync/inspection', {
             changes: changes
-          }, { 'Authorization': 'Bearer ' + token });
+          }, { 'Authorization': 'Bearer ' + user.token });
         });
       },
 

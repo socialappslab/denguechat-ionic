@@ -164,7 +164,7 @@ angular.module('starter.services')
         return User.get().then(function (user) {
           return cordovaHTTP.put(denguechat.env.baseURL + 'sync/visit', {
             changes: changes
-          }, { 'Authorization': 'Bearer ' + token });
+          }, { 'Authorization': 'Bearer ' + user.token });
         });
       },
 
@@ -238,7 +238,7 @@ angular.module('starter.services')
         thisVisit = this
         return User.get().then(function (user) {
           return cordovaHTTP.get(denguechat.env.baseURL + 'visits/mobile', {},
-            { 'Authorization': 'Bearer ' + token }).then(function (res) {
+            { 'Authorization': 'Bearer ' + user.token }).then(function (res) {
               return thisVisit.saveMultiple(res.data.visits, [], null)
             });
         });
