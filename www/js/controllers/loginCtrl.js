@@ -15,7 +15,9 @@ angular
 
       cordovaHTTP.acceptAllCerts(true).then(function () {
         User.session($scope.user.username, $scope.user.password).then(function (response) {
-          return User.save(response.data.user).then(function (doc) {
+          var parsedData  = JSON.parse(response.data);
+          var user = parsedData.user;
+          return User.save(user).then(function (doc) {
             $scope.$emit(denguechat.env.auth.success, {});
           })
         }).catch(function (res) {
