@@ -21,8 +21,10 @@ angular.module('starter', [
   })
 
 
-  .run(function ($ionicPlatform, $rootScope, $ionicModal, User, $state, $ionicHistory, Pouch, Post, Location, Visit, Inspection, $ionicSideMenuDelegate) {
-    Pouch.createLocationNeighborhoodView()
+  .run(function ($ionicPlatform, $rootScope, $ionicModal, User, $state, $ionicHistory, 
+                 Pouch, Post, Location, Visit, Inspection, $ionicSideMenuDelegate) {
+    cordova.plugin.http.setDataSerializer('json');
+    Pouch.createLocationNeighborhoodView();
 
     $ionicPlatform.ready(function () {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
