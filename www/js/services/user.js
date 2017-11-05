@@ -47,11 +47,9 @@ angular.module('starter.services')
 
       create: function (username, password) {
         return cordovaHTTP.post(denguechat.env.baseURL + 'registrations', {
-          user: {
-            username: username,
-            password: password
-          }
-        });
+          username: username,
+          password: password
+        }, { 'content-type': 'application/json'});
       },
 
       update: function (user) {

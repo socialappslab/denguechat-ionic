@@ -40,8 +40,12 @@ angular
       $scope.state.error = true
 
       User.create($scope.user.username, $scope.user.password).then(function (response) {
+        console.log(JSON.stringify(response))
+        response.data = JSON.parse(response.data)
         $scope.login()
       }, function (error) {
+        console.log(JSON.stringify(error))
+        error.data = JSON.parse(error.data)
         if (error.data.errors.username)
           $scope.state.error = "Username " + error.data.errors.username[0]
         else if (error.data.errors.password)

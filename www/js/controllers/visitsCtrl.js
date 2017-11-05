@@ -8,6 +8,7 @@ angular.module('starter.controllers')
     $scope.visits     = []
     $scope.state.loading = true
     Visit.search($scope.params.search).then(function(response) {
+      response.data = JSON.parse(response.data);
       $scope.visits = response.data.visits
     }, function(response) {
       $scope.$emit(denguechat.env.error, {error: response})
@@ -43,5 +44,4 @@ angular.module('starter.controllers')
       $scope.refresh()
     }
   })
-
 }])

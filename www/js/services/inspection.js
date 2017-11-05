@@ -53,7 +53,6 @@ angular.module('starter.services')
         })
       },
 
-
       syncUnsyncedDocuments: function () {
         thisInspection = this
         Pouch.inspectionsDB.changes({
@@ -65,7 +64,7 @@ angular.module('starter.services')
         }).then(function (changes) {
           if (changes.results.length > 0) {
             console.log("Changes still to be synced:")
-            console.log(changes)
+            console.log(JSON.stringify(changes))
             console.log("------")
             thisInspection.syncMultiple(changes.results)
           }
@@ -97,7 +96,7 @@ angular.module('starter.services')
 
         duration = backoff.duration()
         console.log("Running syncMultiple with documents:")
-        console.log(documents)
+        console.log(JSON.stringify(documents))
         console.log("-----")
 
         doc = documents.shift()
@@ -188,17 +187,17 @@ angular.module('starter.services')
           }).then(function (changes) {
             if (changes.results.length > 0) {
               console.log("Changes to be sent to the cloud:")
-              console.log(changes)
+              console.log(JSON.stringify(changes))
               console.log("-----")
 
               return thisInspection.sendToCloud(changes).then(function (res) {
                 console.log("Successful response form cloud...")
-                console.log(res)
+                console.log(JSON.stringify(res))
                 console.log("------")
 
                 // Reset backoff.
                 backoff.reset();
-
+                res.data = JSON.parse(res.data)
                 // Update the ins model.
                 for (var key in res.data.inspection) {
                   ins[key] = res.data.inspection[key]
@@ -215,11 +214,7 @@ angular.module('starter.services')
               })
             }
           })
-
-
-
         })
-
       }
     };
   })

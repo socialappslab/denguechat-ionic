@@ -28,7 +28,7 @@ angular.module('starter.services')
         thisLocation = this
         return User.get().then(function (user) {
           console.log("\n\n\n")
-          console.log(user)
+          console.log(JSON.stringify(user))
           console.log("\n\n\n")
           return Pouch.locationsDB.find({
             selector: {
@@ -42,7 +42,7 @@ angular.module('starter.services')
             return res.docs
           }, function (err) {
             console.log("Something is wrong...")
-            console.log(err)
+            console.log(JSON.stringify(err))
           })
         })
       },
@@ -73,7 +73,8 @@ angular.module('starter.services')
           return cordovaHTTP.get(denguechat.env.baseURL + 'locations/mobile', {}, {
             'Authorization': 'Bearer ' + user.token
           }).then(function (res) {
-            return thisLocation.saveMultiple(user, res.data.locations, [], null)
+            res.data = JSON.parse(res.data)
+            return thisLocation.saveMultiple(user, res.data.locations || [], [], null)
           });
         });
 
@@ -84,6 +85,7 @@ angular.module('starter.services')
           return cordovaHTTP.get(denguechat.env.baseURL + 'locations/' + cleanAddress(doc.address), {}, {
             'Authorization': 'Bearer ' + user.token
           }).then(function (res) {
+            res.data = JSON.parse(res.data)
             doc_id = thisLocation.documentID(user, res.data.location);
             return thisLocation.save(doc_id, res.data.location, { remote: false, synced: true });
           });
@@ -106,7 +108,7 @@ angular.module('starter.services')
         }).then(function (changes) {
           if (changes.results.length > 0) {
             console.log("Changes still to be synced:")
-            console.log(changes)
+            console.log(JSON.stringify(changes))
             console.log("------")
             thisLocation.syncMultiple(changes.results)
           }
@@ -254,17 +256,17 @@ angular.module('starter.services')
           }).then(function (changes) {
             if (changes.results.length > 0) {
               console.log("Changes to be sent to the cloud:")
-              console.log(changes)
+              console.log(JSON.stringify(changes))
               console.log("-----")
 
               return thisLocation.sendToCloud(changes).then(function (res) {
-                console.log("Successful response form cloud...")
-                console.log(res)
+                console.log("Successful response from cloud...")
+                console.log(JSON.stringify(res))
                 console.log("------")
 
                 // Reset backoff.
                 backoff.reset();
-
+                res.data = JSON.parse(res.data)
                 // Update the location model.
                 for (var key in res.data.location) {
                   location[key] = res.data.location[key]
@@ -274,7 +276,7 @@ angular.module('starter.services')
                 return Pouch.locationsDB.put(location)
               }, function (res) {
                 console.log("Failed with error:");
-                console.log(res)
+                console.log(JSON.stringify(res))
                 thisLocation.syncStatus.error = res;
                 console.log("------")
                 thisLocation.sync(location._id)

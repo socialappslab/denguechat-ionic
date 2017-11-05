@@ -32,6 +32,7 @@ angular.module('starter.controllers')
     $ionicLoading.show({template: "<ion-spinner></ion-spinner><br>Cargando los posts de denguechat.com...", hideOnStateChange: true})
 
     Post.getFromCloud(20, offset).then(function(response) {
+      // Posts from cloud are insertedin couchDB in the getFromCloud callback
       return Post.getAll().then(function(posts) {
         $scope.posts = posts
         $scope.$broadcast('scroll.refreshComplete');

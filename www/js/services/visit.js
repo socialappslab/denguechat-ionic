@@ -66,7 +66,7 @@ angular.module('starter.services')
         }).then(function (changes) {
           if (changes.results.length > 0) {
             console.log("Changes still to be synced:")
-            console.log(changes)
+            console.log(JSON.stringify(changes));
             console.log("------")
             thisVisit.syncMultiple(changes.results)
           }
@@ -108,7 +108,7 @@ angular.module('starter.services')
 
         duration = backoff.duration()
         console.log("Running syncMultiple with documents:")
-        console.log(documents)
+        console.log(JSON.stringify(documents))
         console.log("-----")
 
         doc = documents.shift()
@@ -186,7 +186,7 @@ angular.module('starter.services')
         thisVisit = this
         return Pouch.visitsDB.get(document_id).then(function (visit) {
           console.log("Sync starting for document:")
-          console.log(visit)
+          console.log(JSON.stringify(visit))
 
           // TODO: REmove last sync sec
           return Pouch.visitsDB.changes({
@@ -199,17 +199,17 @@ angular.module('starter.services')
           }).then(function (changes) {
             if (changes.results.length > 0) {
               console.log("Changes to be sent to the cloud:")
-              console.log(changes)
+              console.log(JSON.stringify(changes))
               console.log("-----")
 
               return thisVisit.sendToCloud(changes).then(function (res) {
-                console.log("Successful response form cloud...")
-                console.log(res)
+                console.log("Successful response from cloud...")
+                console.log(JSON.stringify(res))
                 console.log("------")
 
                 // Reset backoff.
                 backoff.reset();
-
+                res.data = JSON.parse(res.data)
                 // Update the visit model.
                 for (var key in res.data.visit) {
                   visit[key] = res.data.visit[key]
@@ -239,6 +239,7 @@ angular.module('starter.services')
         return User.get().then(function (user) {
           return cordovaHTTP.get(denguechat.env.baseURL + 'visits/mobile', {},
             { 'Authorization': 'Bearer ' + user.token }).then(function (res) {
+              res.data = JSON.parse(res.data)
               return thisVisit.saveMultiple(res.data.visits, [], null)
             });
         });

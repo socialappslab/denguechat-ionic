@@ -119,6 +119,8 @@ angular.module('starter.services')
             {
               'Authorization': 'Bearer ' + user.token
             }).then(function (res) {
+              console.log("Posts from cloud: "+JSON.stringify(res))
+              res.data = JSON.parse(res.data)
               return thisPost.saveMultiple(user, res.data.posts || [], [], null)
             });
         })
@@ -233,17 +235,17 @@ angular.module('starter.services')
           }).then(function (changes) {
             if (changes.results.length > 0) {
               console.log("Changes to be sent to the cloud:")
-              console.log(changes)
+              console.log(JSON.stringify(changes))
               console.log("-----")
 
               return thisPost.sendToCloud(changes).then(function (res) {
-                console.log("Successful response form cloud...")
-                console.log(res)
+                console.log("Successful response from cloud...")
+                console.log(JSON.stringify(res))
                 console.log("------")
 
                 // Reset backoff.
                 backoff.reset();
-
+                res.data = JSON.parse(res.data)
                 // Update the post model.
                 for (var key in res.data.post) {
                   post[key] = res.data.post[key]
@@ -253,7 +255,7 @@ angular.module('starter.services')
                 return Pouch.postsDB.put(post)
               }, function (res) {
                 console.log("Failed with error:");
-                console.log(res)
+                console.log(JSON.stringify(res))
                 thisPost.syncStatus.error = res;
                 console.log("------")
                 thisPost.sync(post._id)
