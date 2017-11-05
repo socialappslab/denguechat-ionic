@@ -29,8 +29,8 @@ denguechat.env = {
   debug: false
   // @endif
   // @if ENV == 'PRODUCTION'
-  baseURL: "https://www.denguechat.com/api/v0/",
-  mainURL: "https://www.denguechat.com/",
+  baseURL: "https://www.denguechat.org/api/v0/",
+  mainURL: "https://www.denguechat.org/",
   debug: false
   // @endif
 }
