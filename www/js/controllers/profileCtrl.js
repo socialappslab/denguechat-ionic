@@ -4,11 +4,11 @@ angular.module('starter.controllers')
   $ionicLoading.show({hideOnStateChange: true})
 
   User.current().then(function(user) {
-    console.log("Retrieved current User: "+JSON.stringify(user))
     user.data = JSON.parse(user.data)
     $scope.user = user.data.user;
     return User.save(user.data.user)
   }).catch(function(res) {
+    console.log("Error when getting current user: "+JSON.stringify(res))
     $scope.$emit(denguechat.error, res)
   }).finally(function() {
     $ionicLoading.hide()

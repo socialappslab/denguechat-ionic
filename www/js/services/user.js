@@ -69,7 +69,6 @@ angular.module('starter.services')
 
       current: function () {
         return this.getToken().then(function (token) {
-          console.log("getToken: "+token)
           return cordovaHTTP.get(denguechat.env.baseURL + 'sessions/current', {},
             { 'Authorization': 'Bearer ' + token }
           );

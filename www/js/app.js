@@ -21,7 +21,7 @@ angular.module('starter', [
   })
 
 
-  .run(function ($ionicPlatform, $rootScope, $ionicModal, User, $state, $ionicHistory, 
+  .run(function ($ionicPlatform, $rootScope, $ionicModal, User, $state, $ionicHistory,
                  Pouch, Post, Location, Visit, Inspection, $ionicSideMenuDelegate) {
     cordova.plugin.http.setDataSerializer('json');
     Pouch.createLocationNeighborhoodView();
@@ -159,6 +159,7 @@ angular.module('starter', [
     }, function (isOpen) {
       if (isOpen == true) {
         User.current().then(function (user) {
+          user.data = JSON.parse(user.data)
           $rootScope.user = user.data.user;
           return User.save(user.data.user)
         }).catch(function () {
