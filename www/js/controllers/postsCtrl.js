@@ -100,23 +100,43 @@ angular.module('starter.controllers')
 
   $scope.createPost = function() {
     $ionicLoading.show({template: "<ion-spinner></ion-spinner><br>Creando post...", hideOnStateChange: true})
-
-
     $scope.post.created_at      = new Date()
-    doc_id = Post.documentID($scope.post.user, $scope.post)
-    Post.save(doc_id, $scope.post, {remote: true, synced: false}).then(function(response) {
-      return Post.get(doc_id).then(function(doc) {
-        $scope.posts.unshift(doc)
-        $scope.post = {};
-        $ionicLoading.hide().then(function() {
-          $scope.closeModal()
+    if (!$scope.post.user || !$scope.post.user.id) {
+      User.get().then(function(user) {
+        $scope.post.user_id = user.id
+        $scope.post.user    = user
+        $scope.post.neighborhood_id = user.neighborhood.id
+        doc_id = Post.documentID($scope.post.user, $scope.post)
+        Post.save(doc_id, $scope.post, {remote: true, synced: false}).then(function(response) {
+          return Post.get(doc_id).then(function(doc) {
+            $scope.posts.unshift(doc)
+            $scope.post = {};
+            $ionicLoading.hide().then(function() {
+              $scope.closeModal()
+            })
+          })
+        }).catch(function(res) {
+          $scope.$emit(denguechat.error, res)
+        }).finally(function() {
+          $ionicLoading.hide()
         })
       })
-    }).catch(function(res) {
-      $scope.$emit(denguechat.error, res)
-    }).finally(function() {
-      $ionicLoading.hide()
-    })
+    } else {
+      doc_id = Post.documentID($scope.post.user, $scope.post)
+      Post.save(doc_id, $scope.post, {remote: true, synced: false}).then(function(response) {
+        return Post.get(doc_id).then(function(doc) {
+          $scope.posts.unshift(doc)
+          $scope.post = {};
+          $ionicLoading.hide().then(function() {
+            $scope.closeModal()
+          })
+        })
+      }).catch(function(res) {
+        $scope.$emit(denguechat.error, res)
+      }).finally(function() {
+        $ionicLoading.hide()
+      })
+    }
   }
 
 
