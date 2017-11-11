@@ -228,8 +228,8 @@ angular.module("starter.controllers").controller("locationsCtrl", [
             position.coords.latitude,
             position.coords.longitude
           );
-          $scope.loadMap(latLng);
           $scope.state.loadingGeo = false;
+          $scope.loadMap(latLng);
         },
         function(error) {
           err = JSON.stringify(error);

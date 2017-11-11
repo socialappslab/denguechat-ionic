@@ -108,4 +108,5 @@
         <variable name="CONTENT_AUTHORITY" value="$PACKAGE_NAME" />
         <variable name="ALWAYS_USAGE_DESCRIPTION" value="This app requires background location tracking" />
     </plugin>
+    <plugin name="cordova-plugin-geolocation" spec="^3.0.0" />
 </widget>
