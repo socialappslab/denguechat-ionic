@@ -11,6 +11,7 @@
         "cordova-plugin-crosswalk-certificate": "^2.0.1",
         "cordova-plugin-crosswalk-webview": "^2.3.0",
         "cordova-plugin-file": "^4.3.3",
+        "cordova-plugin-mauron85-background-geolocation": "^2.3.1",
         "cordova-plugin-sqlite-2": "^1.0.4",
         "cordova-plugin-sslcertificatechecker": "^5.1.0",
         "cordova-plugin-whitelist": "^1.3.2",
@@ -73,7 +74,16 @@
             "cordova-plugin-sqlite-2": {},
             "cordova-plugin-whitelist": {},
             "cordova-plugin-sslcertificatechecker": {},
-            "cordova-plugin-advanced-http": {}
+            "cordova-plugin-advanced-http": {},
+            "cordova-plugin-mauron85-background-geolocation": {
+                "ICON": "@mipmap/icon",
+                "SMALL_ICON": "@mipmap/icon",
+                "ACCOUNT_NAME": "@string/app_name",
+                "ACCOUNT_LABEL": "@string/app_name",
+                "ACCOUNT_TYPE": "$PACKAGE_NAME.account",
+                "CONTENT_AUTHORITY": "$PACKAGE_NAME",
+                "ALWAYS_USAGE_DESCRIPTION": "This app requires background location tracking"
+            }
         }
     }
 }
