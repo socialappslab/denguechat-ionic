@@ -34,7 +34,7 @@
       <ion-slide>
         <div class="list" style="overflow-y:scroll; height: 100%;">
           <div class="card list" ng-repeat="q in visit.questions" ng-show="shouldDisplay(q)">
-            <div class="item" ng-if="q.type == 'radio'">
+            <div class="item item-text-wrap" ng-if="q.type == 'radio'">
               <h2>{{q.body}}</h2>
               <div class="row">
                 <div class="col">
@@ -47,14 +47,14 @@
               </div>
             </div>
 
-            <div class="item" ng-if="q.type == 'checkbox'">
+            <div class="item item-text-wrap" ng-if="q.type == 'checkbox'">
               <h2>{{q.body}}</h2>
               <ion-list>
                 <ion-checkbox ng-repeat="ac in q.answer_choices" ng-model="ac.selected">{{ac.body}}</ion-checkbox>
               </ion-list>
             </div>
 
-            <label class="item item-input item-stacked-label" ng-if="q.type == 'text' || q.type == 'number' || q.type == 'date'">
+            <label class="item item-input item-stacked-label item-text-wrap" ng-if="q.type == 'text' || q.type == 'number' || q.type == 'date'">
               <h2>{{q.body}}</h2>
               <input type="text" ng-if="q.type == 'text'" ng-model="q.answer">
               <input type="number" min="0" ng-if="q.type == 'number'" ng-model="q.answer">

@@ -5,15 +5,13 @@ angular.module("starter.controllers").controller("locationsCtrl", [
   "$ionicModal",
   "User",
   "$state",
-  "$cordovaGeolocation",
   function(
     $scope,
     Location,
     $ionicLoading,
     $ionicModal,
     User,
-    $state,
-    $cordovaGeolocation
+    $state
   ) {
     $scope.locations = [];
     $scope.state = { firstLoad: true, loadingGeo: false };
@@ -217,33 +215,30 @@ angular.module("starter.controllers").controller("locationsCtrl", [
 
     $scope.loadGeo = function() {
       // Map-related tasks
-      var options = { timeout: 10000, enableHighAccuracy: true };
+      var options = { enableHighAccuracy: true, timeout: 5000, maximumAge: 3000 };
 
-      $cordovaGeolocation.getCurrentPosition(options).then(
-        function(position) {
-          $scope.location.latitude = position.coords.latitude;
-          $scope.location.longitude = position.coords.longitude;
+      navigator.geolocation.getCurrentPosition(function(position) {
+        $scope.state.loadingGeo = false;
+        $scope.location.latitude = position.coords.latitude;
+        $scope.location.longitude = position.coords.longitude;
 
-          var latLng = new google.maps.LatLng(
-            position.coords.latitude,
-            position.coords.longitude
-          );
-          $scope.state.loadingGeo = false;
-          $scope.loadMap(latLng);
-        },
-        function(error) {
-          err = JSON.stringify(error);
-          navigator.notification.alert(
-            "ERROR: " +
-              err +
-              " | Could not get the current position. Either GPS signals are weak or GPS has been switched off",
-            null,
-            "GPS issues",
-            "OK"
-          );
-          $scope.state.loadingGeo = false;
-        }
-      );
+        var latLng = new google.maps.LatLng(
+          position.coords.latitude,
+          position.coords.longitude
+        );
+        $scope.loadMap(latLng);
+      }, function(error) {
+        $scope.state.loadingGeo = false;        
+        err = JSON.stringify(error);
+        navigator.notification.alert(
+          "ERROR: " +
+            err +
+            " | Could not get the current position. Either GPS signals are weak or GPS has been switched off",
+          null,
+          "GPS issues",
+          "OK"
+        );
+      }, options);
     };
 
     $scope.loadMap = function(latLng) {
