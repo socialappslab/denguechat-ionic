@@ -13,10 +13,11 @@
         <div class="input-label">Descripción</div>
         <input type="text" class="text-right" ng-model="inspection.description">
       </label>
-      <label class="item item-input">
-        <div class="input-label">Codigo de criadero</div>
-        <input type="text" class="text-right" ng-model="inspection.field_identifier">
-      </label>
+      <div class="item item-input">
+        <div class="input-label">Código de criadero</div>
+        <input type="text" class="text-right" ng-model="$parent.inspection.field_identifier">
+        <button ng-if="breeding_sites_codes" class="button" style="min-height: 0px; line-height: 0px; background-color:white" ng-click="showSuggestedCodesModal()"> <i class="ion-help"></i></button> 
+      </div>
       <li class="item item-toggle">
        Protegido
        <label class="toggle toggle-balanced">

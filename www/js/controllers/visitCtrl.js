@@ -1,39 +1,20 @@
-angular.module("starter.controllers").controller("visitCtrl", [
-  "$scope",
-  "$state",
-  "Visit",
-  "$ionicModal",
-  "$ionicLoading",
-  "Inspection",
-  "User",
-  "$cordovaCamera",
-  "$ionicSlideBoxDelegate",
-  "Questionnaire",
-  function(
-    $scope,
-    $state,
-    Visit,
-    $ionicModal,
-    $ionicLoading,
-    Inspection,
-    User,
-    $cordovaCamera,
-    $ionicSlideBoxDelegate,
-    Questionnaire
-  ) {
-    $scope.visit = {};
-    $scope.inspection = {};
-    $scope.inspections = [];
-    $scope.state = { pageIndex: 0 };
+angular.module('starter.controllers')
+.controller('visitCtrl', ['$scope', '$state', 'Visit', "$ionicModal", "$ionicLoading", "Inspection", "User", "$cordovaCamera", "$ionicSlideBoxDelegate", "Questionnaire", function($scope, $state, Visit, $ionicModal, $ionicLoading, Inspection, User, $cordovaCamera, $ionicSlideBoxDelegate, Questionnaire) {
+  $scope.visit       = {};
+  $scope.inspection  = {};
+  $scope.inspections = [];
+  $scope.state       = {pageIndex: 0};
 
-    $scope.$on("$ionicView.loaded", function() {
-      // alert("LOADED")
-      $ionicLoading.show({ hideOnStateChange: true });
+  $scope.$on("$ionicView.loaded", function() {
+    // alert("LOADED")
+    $ionicLoading.show({hideOnStateChange: true})
 
-      User.get().then(function(user) {
-        $scope.breeding_sites = user.breeding_sites;
-      });
-
+    User.get().then(function(user) {      
+      $scope.breeding_sites = user.breeding_sites
+    });
+    User.current().then(function(current) {
+      $scope.breeding_sites_codes = current.data.user.breeding_sites_codes     
+    });
     Visit.get($state.params.visit_id).then(function(response) {
       $scope.visit           = response
       $scope.visit.questions = $scope.user.visit_questionnaire
@@ -62,10 +43,53 @@ angular.module("starter.controllers").controller("visitCtrl", [
             });
           }
         })
-        .catch(function(response) {
-          $scope.$emit(denguechat.error, { error: response });
-        });
+    .catch(function(response) {
+      $scope.$emit(denguechat.error, {error: response})
+    })
+  });
+
+  $scope.shouldDisplay = function(q) {
+    return Questionnaire.shouldDisplay(q, $scope.visit.questions)
+  }
+
+
+  $scope.saveQuestions = function() {
+    $ionicLoading.show({hideOnStateChange: true})
+    Visit.save($state.params.visit_id, $scope.visit, {remote: false}).then(function(response) {
+      $ionicLoading.hide()
+      $scope.transitionToPageIndex(0)
+    })
+  }
+  $scope.showSuggestedCodesModal = function(){
+    return $ionicModal.fromTemplateUrl('templates/inspections/suggestedcodes.html', {
+      scope: $scope,
+      animation: 'slide-in-up',
+      backdropClickToClose: true,
+      hardwareBackButtonClose: true
+    }).then(function(modal) {
+      $scope.suggestedModal = modal;
+      modal.show()
     });
+  }
+  $scope.closeSuggestedModal = function() {
+    $scope.suggestedModal.hide().then(function() {
+      $scope.suggestedModal.remove();
+    })
+  }
+
+  $scope.showNewInspectionModal = function() {
+    // Create the login modal that we will use later
+    return $ionicModal.fromTemplateUrl('templates/inspections/new.html', {
+      scope: $scope,
+      animation: 'slide-in-up',
+      focusFirstInput: true,
+      backdropClickToClose: false,
+      hardwareBackButtonClose: false
+    }).then(function(modal) {
+      $scope.modal = modal;
+      modal.show()
+    });
+  }
 
     $scope.shouldDisplay = function(q) {
       return Questionnaire.shouldDisplay(q, $scope.visit.questions);

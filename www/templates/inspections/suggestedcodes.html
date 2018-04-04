@@ -1,0 +1,13 @@
+<ion-modal-view>
+    <ion-header-bar class="bar bar-header bar-stable">
+       <h1 class = "title">Códigos</h1>
+       <button class="button button-clear button-positive" ng-click="closeSuggestedModal()">Cerrar</button>
+
+    </ion-header-bar>
+     
+    <ion-content>
+        <div ng-repeat="item in breeding_sites_codes" class="item">{{item.code}} ({{item.description}})</div>
+        </div>
+    </ion-content>
+
+ </ion-modal-view>
