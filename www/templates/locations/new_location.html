@@ -13,7 +13,7 @@
         </label>
         <label class="item item-input">
           <span class="input-label">Codigo</span>
-          <input type="text" class="text-right" ng-model="location.address">
+          <input autofocus type="text" class="text-right" ng-model="location.address">
         </label>
 
         <label class="item item-input item-text-wrap" ng-if="user.city.country == 'Colombia'">
@@ -38,7 +38,7 @@
           </div> -->
         </div>
 
-        <div class="item text-center" ng-if="state.loadingGeo == true">
+        <div class="item text-center" ng-if="state.loadingGeo">
           <ion-spinner></ion-spinner>
         </div>
       </div>
